@@ -1,19 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consumer - Company Reviews</title>
+    <title>Consumy - Real-time Customer Feedback</title>
     <style>
         :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --success: #2ecc71;
-            --warning: #f39c12;
-            --danger: #e74c3c;
+            --primary: #0066CC;
+            --secondary: #FFCC00;
+            --accent: #FF6600;
+            --dark: #333333;
+            --light: #F5F7FA;
+            --gray: #6C757D;
         }
         
         * {
@@ -24,16 +22,18 @@
         }
         
         body {
-            background-color: #f5f7fa;
-            color: #333;
+            background-color: white;
+            color: var(--dark);
             line-height: 1.6;
         }
         
         header {
-            background-color: var(--primary);
-            color: white;
+            background-color: white;
             padding: 1rem 2rem;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
         .header-content {
@@ -45,14 +45,35 @@
         }
         
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: white;
+            display: flex;
+            align-items: center;
             text-decoration: none;
         }
         
-        .logo span {
-            color: var(--secondary);
+        .pacman-logo {
+            width: 40px;
+            height: 40px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            position: relative;
+            margin-right: 10px;
+        }
+        
+        .pacman-logo::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 20px solid transparent;
+            border-right: 20px solid white;
+            top: 0;
+            left: 0;
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
         }
         
         nav ul {
@@ -65,20 +86,20 @@
         }
         
         nav ul li a {
-            color: white;
+            color: var(--dark);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
         }
         
         nav ul li a:hover {
-            color: var(--secondary);
+            color: var(--primary);
         }
         
         .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, #004C99 100%);
             color: white;
-            padding: 4rem 2rem;
+            padding: 5rem 2rem;
             text-align: center;
         }
         
@@ -98,244 +119,190 @@
             opacity: 0.9;
         }
         
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .search-box {
+        .hero-buttons {
             display: flex;
-            background: white;
-            border-radius: 50px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .search-box input {
-            flex: 1;
-            border: none;
-            padding: 1rem 1.5rem;
-            font-size: 1rem;
-            outline: none;
-        }
-        
-        .search-box button {
-            background: var(--secondary);
-            color: white;
-            border: none;
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .search-box button:hover {
-            background: #2980b9;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        .section-title {
-            margin-bottom: 2rem;
-            text-align: center;
-            color: var(--primary);
-        }
-        
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
             justify-content: center;
-        }
-        
-        .filter-btn {
-            background: white;
-            border: 1px solid #ddd;
-            padding: 0.5rem 1rem;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .filter-btn.active {
-            background: var(--secondary);
-            color: white;
-            border-color: var(--secondary);
-        }
-        
-        .company-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .company-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .company-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .company-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .company-name {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-        
-        .company-industry {
-            color: #777;
-            font-size: 0.9rem;
-        }
-        
-        .company-stats {
-            padding: 1.5rem;
-        }
-        
-        .stat {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-        
-        .stat-label {
-            color: #777;
-        }
-        
-        .fixscore {
-            font-weight: 600;
-            color: var(--success);
-        }
-        
-        .fixscore.low {
-            color: var(--danger);
-        }
-        
-        .fixscore.medium {
-            color: var(--warning);
-        }
-        
-        .response-time {
-            font-weight: 600;
-        }
-        
-        .company-actions {
-            padding: 1.5rem;
-            background: #f9f9f9;
-            display: flex;
-            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
         }
         
         .btn {
-            padding: 0.7rem 1.2rem;
+            padding: 0.8rem 1.5rem;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
         
         .btn-primary {
             background: var(--secondary);
-            color: white;
+            color: var(--dark);
         }
         
         .btn-primary:hover {
-            background: #2980b9;
+            background: #E6B800;
+            transform: translateY(-2px);
         }
         
         .btn-outline {
             background: transparent;
-            border: 1px solid var(--secondary);
-            color: var(--secondary);
-        }
-        
-        .btn-outline:hover {
-            background: var(--secondary);
+            border: 2px solid white;
             color: white;
         }
         
-        .message-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+            transform: translateY(-2px);
         }
         
-        .modal-content {
+        .partners {
+            padding: 2rem;
+            background: var(--light);
+        }
+        
+        .partners h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--gray);
+        }
+        
+        .partner-logos {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .partner-logo {
+            font-weight: 700;
+            color: var(--dark);
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .partner-logo:hover {
+            opacity: 1;
+        }
+        
+        .features {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
             background: white;
             border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
             padding: 2rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
         
-        .modal-header {
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--light);
+            border-radius: 50%;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
             margin-bottom: 1.5rem;
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
+            color: var(--primary);
             font-size: 1.5rem;
-            cursor: pointer;
-            color: #777;
         }
         
-        .form-group {
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .testimonials {
+            padding: 5rem 2rem;
+            background: var(--light);
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
             margin-bottom: 1.5rem;
         }
         
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
+        .testimonial-author {
+            display: flex;
+            align-items: center;
         }
         
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
         }
         
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
+        .cta {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #004C99 100%);
+            color: white;
+        }
+        
+        .cta h2 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
         }
         
         footer {
             background: var(--dark);
             color: white;
             padding: 3rem 2rem;
-            margin-top: 4rem;
         }
         
         .footer-content {
@@ -378,8 +345,15 @@
                 font-size: 2rem;
             }
             
-            .company-grid {
-                grid-template-columns: 1fr;
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                margin-bottom: 1rem;
             }
         }
     </style>
@@ -387,12 +361,15 @@
 <body>
     <header>
         <div class="header-content">
-            <a href="#" class="logo">Consumer<span>.</span></a>
+            <a href="#" class="logo">
+                <div class="pacman-logo"></div>
+                <div class="logo-text">Consumy</div>
+            </a>
             <nav>
                 <ul>
                     <li><a href="#">Home</a></li>
-                    <li><a href="#">Companies</a></li>
-                    <li><a href="#">About</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Pricing</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
             </nav>
@@ -401,269 +378,142 @@
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Find Dutch Companies with the Best FixScores</h1>
-            <p>See how companies handle customer issues and contact managers directly</p>
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text" placeholder="Search for companies...">
-                    <button>Search</button>
+            <h1>Voorkomen imagoschade en zorg voor omzetgroei</h1>
+            <p>Real-time customer feedback vôôdat de sterren vallen</p>
+            <p>Directe actiegerichte feedback in real-time voor grote én kleine bedrijven</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">Get started</a>
+                <a href="#" class="btn btn-outline">Request a demo</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="partners">
+        <h3>Vertrouwd door toonaangevende bedrijven</h3>
+        <div class="partner-logos">
+            <div class="partner-logo">Heineken</div>
+            <div class="partner-logo">VAN DER VALK</div>
+            <div class="partner-logo">ZARA</div>
+            <div class="partner-logo">AMC</div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2 class="section-title">Gather customer feedback in real time</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Feedback</h3>
+                <p>Get instant feedback from your customers on their experiences. Receive and evaluate feedback from your customers before it goes public, and resolve any issues to improve satisfaction.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Fixscore</h3>
+                <p>Address issues and polish updated feedback with a Fixscore. Monitor your company's performance and see how quickly you resolve customer issues.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎁</div>
+                <h3>Beloningen</h3>
+                <p>Reward customers for their valuable feedback with discounts and special offers. Build loyalty and encourage more customers to share their experiences.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <h2 class="section-title">What our customers are saying</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Consumy makes it easy to collect feedback and improve our services. The real-time alerts help us address issues before they escalate."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MJ</div>
+                    <div>
+                        <strong>Marieke Jansen</strong>
+                        <p>Customer Service Manager, Retail</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"An indispensable tool for understanding our customers' needs. The Fixscore system motivates our team to resolve issues quickly."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">TV</div>
+                    <div>
+                        <strong>Thomas de Vries</strong>
+                        <p>Operations Director, Hospitality</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Fast, efficient, and user-friendly. Highly recommended! We've seen a significant improvement in our customer satisfaction ratings."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">ES</div>
+                    <div>
+                        <strong>Eva Smit</strong>
+                        <p>Marketing Lead, E-commerce</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="container">
-        <h2 class="section-title">Dutch Companies</h2>
-        
-        <div class="filters">
-            <button class="filter-btn active">All Industries</button>
-            <button class="filter-btn">Retail</button>
-            <button class="filter-btn">Technology</button>
-            <button class="filter-btn">Services</button>
-            <button class="filter-btn">Food & Beverage</button>
-            <button class="filter-btn">Healthcare</button>
-        </div>
-        
-        <div class="company-grid" id="companyGrid">
-            <!-- Companies will be dynamically inserted here -->
-        </div>
-    </div>
-
-    <div class="message-modal" id="messageModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Message Manager</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <form id="messageForm">
-                <div class="form-group">
-                    <label for="companyName">Company</label>
-                    <input type="text" id="companyName" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="managerName">Manager</label>
-                    <input type="text" id="managerName" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="userName">Your Name</label>
-                    <input type="text" id="userName" required>
-                </div>
-                <div class="form-group">
-                    <label for="userEmail">Your Email</label>
-                    <input type="email" id="userEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Send Message</button>
-            </form>
-        </div>
-    </div>
+    <section class="cta">
+        <h2>Start gathering feedback today</h2>
+        <p>Join thousands of companies that use Consumy to prevent reputation damage and drive revenue growth.</p>
+        <a href="#" class="btn btn-primary">Try It Now</a>
+    </section>
 
     <footer>
         <div class="footer-content">
             <div class="footer-section">
-                <h3>About Consumer</h3>
-                <p>Consumer helps customers make informed decisions by providing transparent information about how companies handle issues and complaints.</p>
+                <h3>About Consumy</h3>
+                <p>Consumy helps businesses collect real-time feedback from customers before issues become public, preventing reputation damage and driving growth.</p>
             </div>
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <p><a href="#" style="color: white;">Home</a></p>
-                <p><a href="#" style="color: white;">Companies</a></p>
-                <p><a href="#" style="color: white;">Submit a Review</a></p>
-                <p><a href="#" style="color: white;">Contact Us</a></p>
+                <p><a href="#" style="color: white;">Features</a></p>
+                <p><a href="#" style="color: white;">Pricing</a></p>
+                <p><a href="#" style="color: white;">Contact</a></p>
             </div>
             <div class="footer-section">
                 <h3>Contact Info</h3>
-                <p>Email: info@consumer.nl</p>
+                <p>Email: info@consumy.nl</p>
                 <p>Phone: +31 20 123 4567</p>
                 <p>Address: Keizersgracht 123, Amsterdam</p>
             </div>
         </div>
         <div class="copyright">
-            <p>&copy; 2023 Consumer. All rights reserved.</p>
+            <p>&copy; 2023 Consumy. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Dutch companies data
-        const companies = [
-            { id: 1, name: "Albert Heijn", industry: "Retail", fixScore: 8.2, reviews: 1245, responseTime: "1.5 days", manager: "Pieter van Dijk" },
-            { id: 2, name: "Bol.com", industry: "E-commerce", fixScore: 7.8, reviews: 892, responseTime: "2 days", manager: "Marieke Jansen" },
-            { id: 3, name: "Philips", industry: "Electronics", fixScore: 8.5, reviews: 756, responseTime: "3 days", manager: "Thomas de Vries" },
-            { id: 4, name: "ING Bank", industry: "Finance", fixScore: 7.2, reviews: 1103, responseTime: "4 days", manager: "Sanne Bakker" },
-            { id: 5, name: "KLM", industry: "Aviation", fixScore: 6.9, reviews: 987, responseTime: "5 days", manager: "Lars van der Berg" },
-            { id: 6, name: "Heineken", industry: "Beverage", fixScore: 8.7, reviews: 543, responseTime: "2 days", manager: "Eva Smit" },
-            { id: 7, name: "ASML", industry: "Technology", fixScore: 9.1, reviews: 321, responseTime: "3 days", manager: "David Meijer" },
-            { id: 8, name: "Jumbo", industry: "Retail", fixScore: 8.0, reviews: 765, responseTime: "1 day", manager: "Lisa de Boer" },
-            { id: 9, name: "Rabobank", industry: "Finance", fixScore: 7.5, reviews: 832, responseTime: "3 days", manager: "Jeroen van Leeuwen" },
-            { id: 10, name: "Shell", industry: "Energy", fixScore: 6.5, reviews: 654, responseTime: "5 days", manager: "Anna Mulder" },
-            { id: 11, name: "Unilever", industry: "Consumer Goods", fixScore: 8.3, reviews: 432, responseTime: "2 days", manager: "Mark de Groot" },
-            { id: 12, name: "Ahold Delhaize", industry: "Retail", fixScore: 8.1, reviews: 567, responseTime: "1.5 days", manager: "Femke Visser" },
-            { id: 13, name: "ASN Bank", industry: "Finance", fixScore: 9.0, reviews: 298, responseTime: "2 days", manager: "Rik van Dam" },
-            { id: 14, name: "Booking.com", industry: "Travel", fixScore: 7.7, reviews: 876, responseTime: "1 day", manager: "Sofia van den Brink" },
-            { id: 15, name: "TomTom", industry: "Technology", fixScore: 8.4, reviews: 345, responseTime: "3 days", manager: "Kevin Peters" },
-            { id: 16, name: "NS", industry: "Transportation", fixScore: 6.8, reviews: 1209, responseTime: "4 days", manager: "Laura van der Meer" },
-            { id: 17, name: "Zalando", industry: "E-commerce", fixScore: 7.9, reviews: 678, responseTime: "2 days", manager: "Niels de Jong" },
-            { id: 18, name: "Aegon", industry: "Insurance", fixScore: 7.1, reviews: 543, responseTime: "5 days", manager: "Julia van der Linden" },
-            { id: 19, name: "AkzoNobel", industry: "Chemicals", fixScore: 8.6, reviews: 234, responseTime: "3 days", manager: "Maarten van der Velden" },
-            { id: 20, name: "Adyen", industry: "Fintech", fixScore: 9.2, reviews: 187, responseTime: "1 day", manager: "Emma de Ruiter" },
-            { id: 21, name: "Coolblue", industry: "Retail", fixScore: 8.8, reviews: 765, responseTime: "1 day", manager: "Tim van der Heijden" },
-            { id: 22, name: "Bunq", industry: "Banking", fixScore: 8.5, reviews: 432, responseTime: "1 day", manager: "Sara van der Wal" },
-            { id: 23, name: "Takeaway.com", industry: "Food Delivery", fixScore: 7.4, reviews: 654, responseTime: "2 days", manager: "Daan van der Laan" },
-            { id: 24, name: "Miele", industry: "Appliances", fixScore: 8.9, reviews: 321, responseTime: "3 days", manager: "Lotte van der Horst" },
-            { id: 25, name: "Tony's Chocolonely", industry: "Food", fixScore: 9.3, reviews: 298, responseTime: "1 day", manager: "Jasper van der Veen" },
-            { id: 26, name: "Tikkie", industry: "Fintech", fixScore: 8.7, reviews: 543, responseTime: "1 day", manager: "Nina van der Pol" },
-            { id: 27, name: "VanMoof", industry: "Transportation", fixScore: 7.6, reviews: 432, responseTime: "4 days", manager: "Ruben van der Berg" },
-            { id: 28, name: "Bolletje", industry: "Food", fixScore: 8.2, reviews: 198, responseTime: "2 days", manager: "Iris van der Zee" },
-            { id: 29, name: "G-Star RAW", industry: "Fashion", fixScore: 7.8, reviews: 345, responseTime: "3 days", manager: "Milan van der Sman" },
-            { id: 30, name: "Bugaboo", industry: "Baby Products", fixScore: 8.4, reviews: 267, responseTime: "2 days", manager: "Fenna van der Stap" },
-            { id: 31, name: "Miffy", industry: "Toys", fixScore: 9.0, reviews: 154, responseTime: "1 day", manager: "Stijn van der Ploeg" },
-            { id: 32, name: "Rituals", industry: "Cosmetics", fixScore: 8.6, reviews: 543, responseTime: "2 days", manager: "Luna van der Hee" },
-            { id: 33, name: "Hema", industry: "Retail", fixScore: 7.9, reviews: 876, responseTime: "2 days", manager: "Thijs van der Beek" },
-            { id: 34, name: "Blokker", industry: "Retail", fixScore: 6.9, reviews: 654, responseTime: "4 days", manager: "Roos van der Weide" },
-            { id: 35, name: "Pathe", industry: "Entertainment", fixScore: 7.5, reviews: 432, responseTime: "3 days", manager: "Sem van der Plas" },
-            { id: 36, name: "Basic-Fit", industry: "Fitness", fixScore: 7.2, reviews: 567, responseTime: "4 days", manager: "Noa van der Kooi" },
-            { id: 37, name: "Gamma", industry: "Home Improvement", fixScore: 8.1, reviews: 345, responseTime: "2 days", manager: "Lars van der Aa" },
-            { id: 38, name: "Dyson", industry: "Electronics", fixScore: 8.7, reviews: 432, responseTime: "3 days", manager: "Evi van der Brug" },
-            { id: 39, name: "Action", industry: "Retail", fixScore: 7.3, reviews: 987, responseTime: "3 days", manager: "Finn van der Gouw" },
-            { id: 40, name: "TUI", industry: "Travel", fixScore: 6.7, reviews: 654, responseTime: "5 days", manager: "Lieve van der Ham" }
-        ];
-
-        // DOM elements
-        const companyGrid = document.getElementById('companyGrid');
-        const messageModal = document.getElementById('messageModal');
-        const messageForm = document.getElementById('messageForm');
-        const closeModal = document.querySelector('.close-modal');
-        const companyNameInput = document.getElementById('companyName');
-        const managerNameInput = document.getElementById('managerName');
-
-        // Render companies
-        function renderCompanies(companiesToRender) {
-            companyGrid.innerHTML = '';
+        // Simple animation for the Pacman logo
+        document.addEventListener('DOMContentLoaded', function() {
+            const pacman = document.querySelector('.pacman-logo');
             
-            companiesToRender.forEach(company => {
-                const fixscoreClass = company.fixScore >= 8.5 ? '' : 
-                                     company.fixScore >= 7 ? 'medium' : 'low';
-                
-                const companyCard = document.createElement('div');
-                companyCard.className = 'company-card';
-                companyCard.innerHTML = `
-                    <div class="company-header">
-                        <h3 class="company-name">${company.name}</h3>
-                        <p class="company-industry">${company.industry}</p>
-                    </div>
-                    <div class="company-stats">
-                        <div class="stat">
-                            <span class="stat-label">FixScore</span>
-                            <span class="fixscore ${fixscoreClass}">${company.fixScore}/10</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Reviews</span>
-                            <span>${company.reviews}</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Avg. Response Time</span>
-                            <span class="response-time">${company.responseTime}</span>
-                        </div>
-                    </div>
-                    <div class="company-actions">
-                        <button class="btn btn-outline view-reviews">View Reviews</button>
-                        <button class="btn btn-primary message-manager" data-id="${company.id}">Message Manager</button>
-                    </div>
-                `;
-                
-                companyGrid.appendChild(companyCard);
-            });
+            function animatePacman() {
+                pacman.style.transform = 'rotate(0deg)';
+                setTimeout(() => {
+                    pacman.style.transform = 'rotate(30deg)';
+                }, 500);
+                setTimeout(() => {
+                    pacman.style.transform = 'rotate(0deg)';
+                }, 1000);
+            }
             
-            // Add event listeners to message buttons
-            document.querySelectorAll('.message-manager').forEach(button => {
-                button.addEventListener('click', function() {
-                    const companyId = parseInt(this.getAttribute('data-id'));
-                    openMessageModal(companyId);
-                });
-            });
-        }
-
-        // Open message modal
-        function openMessageModal(companyId) {
-            const company = companies.find(c => c.id === companyId);
-            if (company) {
-                companyNameInput.value = company.name;
-                managerNameInput.value = company.manager;
-                messageModal.style.display = 'flex';
-            }
-        }
-
-        // Close modal
-        closeModal.addEventListener('click', function() {
-            messageModal.style.display = 'none';
-        });
-
-        // Handle form submission
-        messageForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Your message has been sent to the manager. Thank you!');
-            messageModal.style.display = 'none';
-            messageForm.reset();
-        });
-
-        // Close modal when clicking outside
-        window.addEventListener('click', function(e) {
-            if (e.target === messageModal) {
-                messageModal.style.display = 'none';
-            }
-        });
-
-        // Filter functionality
-        document.querySelectorAll('.filter-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                this.classList.add('active');
-                
-                const filter = this.textContent;
-                if (filter === 'All Industries') {
-                    renderCompanies(companies);
+            // Animate every 3 seconds
+            setInterval(animatePacman, 3000);
+            
+            // Add scroll effect to header
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                if (window.scrollY > 50) {
+                    header.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
                 } else {
-                    const filteredCompanies = companies.filter(company => 
-                        company.industry === filter
-                    );
-                    renderCompanies(filteredCompanies);
+                    header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
                 }
             });
         });
-
-        // Search functionality
-        const searchInput = document.querySelector('.search-box input');
-        const searchButton = document.querySelector('.search-box button');
-        
-        function performSearch() {
-            const searchTerm = searchInput.value.toLowerCase();
-            if (searchTerm.trim() === '') {
-                renderCompanies(companies);
-                return;
-            }
-            
-            const filteredCompanies = companies.filter(company => 
-                company.name.toLowerCase().includes(searchTerm) || 
-                company.industry.toLowerCase().includes(searchTerm)
-            );
-            
-            renderCompanies(filteredCompanies);
-        }
-        
-        searchButton.addEventListener('click', performSearch);
-        searchInput.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                performSearch();
-            }
-        });
-
-        // Initial render
-        renderCompanies(companies);
     </script>
 </body>
 </html>
