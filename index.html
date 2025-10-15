@@ -17,6 +17,8 @@
             color: white;
             overflow: hidden;
             height: 100vh;
+            transform-origin: 0 0;
+            transition: transform 0.3s ease;
         }
 
         .screen {
@@ -70,6 +72,16 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
+        }
+
+        @keyframes wheelSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
 
         /* Start Menu */
@@ -475,6 +487,7 @@
             align-items: center;
             justify-content: center;
             z-index: 2000;
+            overflow: hidden;
         }
 
         .wheelspin-overlay.active {
@@ -483,8 +496,8 @@
 
         .wheel-container {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: 500px;
+            height: 500px;
         }
 
         .wheel {
@@ -493,27 +506,26 @@
             border-radius: 50%;
             background: conic-gradient(
                 from 0deg,
-                #ff6b35 0deg 45deg,
-                #f72585 45deg 90deg,
-                #7209b7 90deg 135deg,
-                #4361ee 135deg 180deg,
-                #3a0ca3 180deg 225deg,
-                #560bad 225deg 270deg,
-                #b5179e 270deg 315deg,
-                #f72585 315deg 360deg
+                #ff6b35 0deg 36deg,
+                #f72585 36deg 72deg,
+                #7209b7 72deg 108deg,
+                #4361ee 108deg 144deg,
+                #3a0ca3 144deg 180deg,
+                #560bad 180deg 216deg,
+                #b5179e 216deg 252deg,
+                #f72585 252deg 288deg,
+                #ff6b35 288deg 324deg,
+                #ffd700 324deg 360deg
             );
             animation: none;
-            border: 10px solid #ffd700;
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+            border: 15px solid #ffd700;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
         }
 
         .wheel.spinning {
-            animation: spin 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(2520deg); }
+            animation: wheelSpin 0.2s linear infinite;
         }
 
         .wheel-center {
@@ -521,8 +533,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             background: #1a1a3e;
             border-radius: 50%;
             display: flex;
@@ -530,7 +542,22 @@
             justify-content: center;
             font-size: 24px;
             font-weight: bold;
-            border: 5px solid #ffd700;
+            border: 8px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+            z-index: 10;
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 60px;
+            background: #ff6b35;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            z-index: 20;
+            filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.7));
         }
 
         .wheel-result {
@@ -539,9 +566,23 @@
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 30px;
+            border-radius: 10px;
+            border: 2px solid #ffd700;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #ffd700;
+            opacity: 0;
+            z-index: 30;
         }
 
         /* Settings */
@@ -593,6 +634,7 @@
             border-radius: 10px;
             margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
         }
 
         .progress-bar {
@@ -602,6 +644,7 @@
             border-radius: 15px;
             overflow: hidden;
             margin: 15px 0;
+            position: relative;
         }
 
         .progress-fill {
@@ -613,6 +656,23 @@
             justify-content: center;
             color: white;
             font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            z-index: 3;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }
 
         /* Battlepass */
@@ -843,7 +903,7 @@
             animation: raceStart 1s infinite;
         }
 
-        /* New Settings Styles */
+        /* Settings */
         .slider-container {
             display: flex;
             align-items: center;
@@ -876,72 +936,6 @@
             padding: 8px 15px;
             font-size: 16px;
             cursor: pointer;
-        }
-
-        /* Leaderboard */
-        .leaderboard {
-            background: rgba(40, 40, 60, 0.8);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .leaderboard-title {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #ffd700;
-        }
-
-        .leaderboard-entry {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .leaderboard-position {
-            font-weight: bold;
-            color: #4361ee;
-        }
-
-        /* Sponsors */
-        .sponsor-card {
-            background: rgba(40, 40, 60, 0.8);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sponsor-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .sponsor-reward {
-            color: #ffd700;
-            font-weight: bold;
-        }
-
-        /* Multiplayer */
-        .multiplayer-room {
-            background: rgba(40, 40, 60, 0.8);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .room-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .room-players {
-            color: #888;
-            margin-bottom: 10px;
         }
 
         /* Dynamic Background */
@@ -982,7 +976,6 @@
                 <button class="btn" onclick="startGame()">Start Game</button>
                 <button class="btn" onclick="showSettings()">Settings</button>
                 <button class="btn" onclick="showCredits()">Credits</button>
-                <button class="btn" onclick="showLeaderboard()">Leaderboard</button>
             </div>
         </div>
     </div>
@@ -994,10 +987,8 @@
                 <button class="nav-btn active" onclick="showTab('garage')">🏎️ Garage</button>
                 <button class="nav-btn" onclick="showTab('race')">🏁 Race</button>
                 <button class="nav-btn" onclick="showTab('upgrades')">🔧 Upgrades</button>
-                <button class="nav-btn" onclick="showTab('sponsors')">💼 Sponsors</button>
                 <button class="nav-btn" onclick="showTab('achievements')">🏆 Achievements</button>
                 <button class="nav-btn" onclick="showTab('tournaments')">🏆 Tournaments</button>
-                <button class="nav-btn" onclick="showTab('multiplayer')">🌐 Multiplayer</button>
                 <button class="nav-btn" onclick="showTab('daily')">📅 Daily Rewards</button>
                 <button class="nav-btn" onclick="showTab('battlepass')">⭐ Battlepass</button>
                 <button class="nav-btn" onclick="showTab('settings')">⚙️ Settings</button>
@@ -1035,8 +1026,8 @@
                     <div class="stat-value" id="fuel">100%</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Tire Wear</div>
-                    <div class="stat-value" id="tireWear">100%</div>
+                    <div class="stat-label">Lap</div>
+                    <div class="stat-value" id="currentLap">1/1</div>
                 </div>
             </div>
 
@@ -1083,7 +1074,6 @@
             <div style="text-align: center; margin-top: 20px;">
                 <button class="btn" onclick="pitStop()" id="pitStopBtn" style="margin-right: 10px;">Pit Stop</button>
                 <button class="btn" onclick="useBoost()" id="boostBtn" style="margin-right: 10px;">Use Boost (3)</button>
-                <button class="btn" onclick="useNitro()" id="nitroBtn" style="margin-right: 10px;">Use Nitro (2)</button>
                 <button class="btn" onclick="endRace()">End Race</button>
             </div>
         </div>
@@ -1097,14 +1087,15 @@
     <!-- Wheelspin Overlay -->
     <div class="wheelspin-overlay" id="wheelspinOverlay">
         <div>
-            <h2 style="text-align: center; margin-bottom: 30px; color: #ffd700;">🎊 LEVEL UP WHEELSPIN! 🎊</h2>
+            <h2 style="text-align: center; margin-bottom: 30px; color: #ffd700; font-size: 36px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);">🎊 LEVEL UP WHEELSPIN! 🎊</h2>
             <div class="wheel-container">
                 <div class="wheel" id="wheel"></div>
                 <div class="wheel-center">SPIN!</div>
+                <div class="wheel-pointer"></div>
                 <div class="wheel-result" id="wheelResult"></div>
             </div>
             <div style="text-align: center; margin-top: 30px;">
-                <button class="btn" id="spinBtn" onclick="spinWheel()">SPIN THE WHEEL!</button>
+                <button class="btn" id="spinBtn" onclick="spinWheel()" style="font-size: 24px; padding: 15px 40px;">SPIN THE WHEEL!</button>
             </div>
         </div>
     </div>
@@ -1122,25 +1113,7 @@
                 crashesEnabled: true,
                 musicVolume: 50,
                 sfxVolume: 70,
-                difficulty: "normal",
-                graphicsQuality: "high",
-                showFPS: false,
-                language: "english",
-                controlScheme: "keyboard",
-                screenMode: "windowed",
-                vSync: true,
-                motionBlur: true,
-                // New settings
-                tireWear: true,
-                weatherEffects: true,
-                dynamicCamera: true,
-                raceAssists: false,
-                damageVisuals: true,
-                opponentCount: 5,
-                dayNightCycle: false,
-                postProcessing: true,
-                uiScale: 100,
-                colorBlindMode: "none"
+                displayScale: 100
             },
             battlepass: {
                 tier: 0,
@@ -1150,6 +1123,7 @@
             raceMode: 'normal',
             circuitType: 'small',
             difficultyMode: 'easy',
+            laps: 1,
             // New features
             achievements: [],
             upgrades: {},
@@ -1159,26 +1133,9 @@
             },
             tournaments: [],
             boosts: 3,
-            nitros: 2,
             fuel: 100,
-            tireWear: 100,
             pitStopAvailable: true,
             sponsors: [],
-            multiplayer: {
-                username: "Player" + Math.floor(Math.random() * 1000),
-                rank: 1500,
-                matches: 0
-            },
-            leaderboard: [],
-            // New features
-            season: 1,
-            reputation: 50,
-            teamMembers: [],
-            researchPoints: 0,
-            customizations: {},
-            challenges: [],
-            replayMode: false,
-            ghostRacer: null,
             stats: {
                 racesCompleted: 0,
                 totalEarnings: 0,
@@ -1241,9 +1198,7 @@
             { id: 'qte_master', name: 'QTE Master', description: 'Complete 50 QTEs successfully', reward: 1000, unlocked: false },
             { id: 'insane_racer', name: 'Insane Racer', description: 'Complete 10 races on insane difficulty', reward: 5000, unlocked: false },
             { id: 'level_20', name: 'Racing Veteran', description: 'Reach level 20', reward: 3000, unlocked: false },
-            { id: 'garage_king', name: 'Garage King', description: 'Own all cars', reward: 10000, unlocked: false },
-            { id: 'sponsor_magnet', name: 'Sponsor Magnet', description: 'Sign 5 sponsors', reward: 2000, unlocked: false },
-            { id: 'tournament_champ', name: 'Tournament Champion', description: 'Win 3 tournaments', reward: 5000, unlocked: false }
+            { id: 'garage_king', name: 'Garage King', description: 'Own all cars', reward: 10000, unlocked: false }
         ];
 
         // Upgrade Database
@@ -1252,10 +1207,7 @@
             turbo: { name: 'Turbo Charger', levels: 3, costMultiplier: 2000, effect: 'acceleration' },
             suspension: { name: 'Sport Suspension', levels: 4, costMultiplier: 1500, effect: 'handling' },
             brakes: { name: 'Performance Brakes', levels: 3, costMultiplier: 1200, effect: 'handling' },
-            tires: { name: 'Racing Tires', levels: 4, costMultiplier: 800, effect: 'handling' },
-            nitro: { name: 'Nitro System', levels: 2, costMultiplier: 3000, effect: 'nitro' },
-            aero: { name: 'Aerodynamics', levels: 3, costMultiplier: 1800, effect: 'handling' },
-            transmission: { name: 'Race Transmission', levels: 3, costMultiplier: 1600, effect: 'acceleration' }
+            tires: { name: 'Racing Tires', levels: 4, costMultiplier: 800, effect: 'handling' }
         };
 
         // Tournament Database
@@ -1265,15 +1217,6 @@
             { id: 3, name: 'Pro Championship', entryFee: 5000, prize: 20000, levelReq: 10, carReq: 8 },
             { id: 4, name: 'Elite Series', entryFee: 10000, prize: 50000, levelReq: 15, carReq: 12 },
             { id: 5, name: 'Master Grand Prix', entryFee: 25000, prize: 100000, levelReq: 20, carReq: 15 }
-        ];
-
-        // Sponsor Database
-        const sponsors = [
-            { id: 1, name: 'Speed Fuel', reward: 1000, requirement: 'Complete 5 races', active: false },
-            { id: 2, name: 'Turbo Tires', reward: 2000, requirement: 'Reach level 5', active: false },
-            { id: 3, name: 'Performance Parts Co.', reward: 3000, requirement: 'Own 3 cars', active: false },
-            { id: 4, name: 'Racing Gear Pro', reward: 5000, requirement: 'Win a tournament', active: false },
-            { id: 5, name: 'Elite Motors', reward: 10000, requirement: 'Reach level 15', active: false }
         ];
 
         // Initialize battlepass rewards
@@ -1296,25 +1239,6 @@
                 if (!gameState.upgrades[upgrade]) {
                     gameState.upgrades[upgrade] = 0;
                 }
-            }
-        }
-
-        // Initialize sponsors
-        function initSponsors() {
-            gameState.sponsors = JSON.parse(JSON.stringify(sponsors));
-        }
-
-        // Initialize leaderboard
-        function initLeaderboard() {
-            if (gameState.leaderboard.length === 0) {
-                gameState.leaderboard = [
-                    { name: 'SpeedRacer99', level: 35, money: 1250000 },
-                    { name: 'DriftKing42', level: 28, money: 850000 },
-                    { name: 'TurboMaster', level: 25, money: 620000 },
-                    { name: 'RacePro', level: 22, money: 480000 },
-                    { name: 'Velocity', level: 20, money: 350000 },
-                    { name: gameState.multiplayer.username, level: gameState.level, money: gameState.money }
-                ].sort((a, b) => b.level - a.level);
             }
         }
 
@@ -1361,10 +1285,9 @@
         function startGame() {
             initBattlepass();
             initUpgrades();
-            initSponsors();
-            initLeaderboard();
             checkDailyRewards();
             createDynamicBackground();
+            applyDisplayScale();
             showScreen('mainMenu');
             showTab('garage');
         }
@@ -1382,9 +1305,10 @@
             showNotification('Created by Pro Racing Studios\nSpecial thanks to our beta testers!', 'info');
         }
 
-        function showLeaderboard() {
-            showScreen('mainMenu');
-            showTab('leaderboard');
+        // Apply display scale
+        function applyDisplayScale() {
+            const scale = gameState.settings.displayScale / 100;
+            document.body.style.transform = `scale(${scale})`;
         }
 
         // Tab management
@@ -1404,17 +1328,11 @@
                 case 'upgrades':
                     showUpgradesTab(content);
                     break;
-                case 'sponsors':
-                    showSponsors(content);
-                    break;
                 case 'achievements':
                     showAchievements(content);
                     break;
                 case 'tournaments':
                     showTournaments(content);
-                    break;
-                case 'multiplayer':
-                    showMultiplayer(content);
                     break;
                 case 'daily':
                     showDailyRewards(content);
@@ -1424,9 +1342,6 @@
                     break;
                 case 'settings':
                     showSettingsTab(content);
-                    break;
-                case 'leaderboard':
-                    showLeaderboardTab(content);
                     break;
             }
         }
@@ -1447,8 +1362,8 @@
                         <div class="stat-value">${gameState.ownedCars.length}/40</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-label">Reputation</div>
-                        <div class="stat-value">${gameState.reputation}</div>
+                        <div class="stat-label">Boosts</div>
+                        <div class="stat-value">${gameState.boosts}</div>
                     </div>
                 </div>
                 
@@ -1458,9 +1373,8 @@
                         <span>Click for details</span>
                     </div>
                     <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${(gameState.xp / gameState.xpNeeded) * 100}%">
-                            ${gameState.xp} / ${gameState.xpNeeded} XP
-                        </div>
+                        <div class="progress-fill" style="width: ${(gameState.xp / gameState.xpNeeded) * 100}%"></div>
+                        <div class="progress-text">${gameState.xp} / ${gameState.xpNeeded} XP</div>
                     </div>
                 </div>
                 
@@ -1538,6 +1452,20 @@
                     </div>
                     
                     <div class="setup-section">
+                        <div class="setup-title">Laps</div>
+                        <div class="mode-buttons">
+                            <button class="mode-btn ${gameState.laps === 1 ? 'selected' : ''}" onclick="selectLaps(1)">
+                                1 Lap<br>
+                                <small>Standard race</small>
+                            </button>
+                            <button class="mode-btn ${gameState.laps === 2 ? 'selected' : ''}" onclick="selectLaps(2)">
+                                2 Laps<br>
+                                <small>2x money, higher crash risk</small>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="setup-section">
                         <div class="setup-title">Driver Instructions</div>
                         <div class="mode-buttons">
                             <button class="mode-btn ${gameState.raceMode === 'slow' ? 'selected' : ''}" onclick="selectRaceMode('slow')">
@@ -1588,6 +1516,11 @@
 
         function selectCircuit(type) {
             gameState.circuitType = type;
+            showTab('race');
+        }
+
+        function selectLaps(laps) {
+            gameState.laps = laps;
             showTab('race');
         }
 
@@ -1645,62 +1578,6 @@
                 gameState.upgrades[upgradeType] = nextLevel;
                 showNotification(`${upgradeData.name} upgraded to level ${nextLevel}!`, 'success');
                 showTab('upgrades');
-            }
-        }
-
-        function showSponsors(content) {
-            const activeSponsors = gameState.sponsors.filter(s => s.active);
-            content.innerHTML = `
-                <h2>Sponsors</h2>
-                <p style="margin-bottom: 20px; color: #888;">Sign sponsors to earn extra money and reputation</p>
-                
-                <div class="stats-bar">
-                    <div class="stat-box">
-                        <div class="stat-label">Active Sponsors</div>
-                        <div class="stat-value">${activeSponsors.length}/5</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Total Earnings</div>
-                        <div class="stat-value">$${activeSponsors.reduce((sum, s) => sum + s.reward, 0).toLocaleString()}</div>
-                    </div>
-                </div>
-                
-                ${gameState.sponsors.map(sponsor => {
-                    const canSign = !sponsor.active && 
-                        (sponsor.requirement.includes('level') ? gameState.level >= parseInt(sponsor.requirement.match(/\d+/)[0]) :
-                         sponsor.requirement.includes('races') ? gameState.stats.racesCompleted >= 5 :
-                         sponsor.requirement.includes('cars') ? gameState.ownedCars.length >= 3 :
-                         sponsor.requirement.includes('tournament') ? gameState.tournamentsWon >= 1 : true);
-                    
-                    return `
-                        <div class="sponsor-card" style="${sponsor.active ? 'border-color: #10b981;' : ''}">
-                            <div class="sponsor-name">${sponsor.name}</div>
-                            <div style="margin-bottom: 10px;">
-                                <div>Requirement: ${sponsor.requirement}</div>
-                                <div class="sponsor-reward">Reward: $${sponsor.reward.toLocaleString()}</div>
-                            </div>
-                            <button class="btn" ${!canSign ? 'disabled' : ''} onclick="signSponsor(${sponsor.id})" 
-                                    style="padding: 10px 20px; font-size: 14px;">
-                                ${sponsor.active ? 'Signed' : canSign ? 'Sign Sponsor' : 'Requirements Not Met'}
-                            </button>
-                        </div>
-                    `;
-                }).join('')}
-            `;
-        }
-
-        function signSponsor(sponsorId) {
-            const sponsor = gameState.sponsors.find(s => s.id === sponsorId);
-            if (sponsor && !sponsor.active) {
-                sponsor.active = true;
-                gameState.money += sponsor.reward;
-                gameState.reputation += 10;
-                showNotification(`Signed ${sponsor.name}! +$${sponsor.reward} and +10 reputation`, 'success');
-                
-                // Check achievement
-                checkAchievement('sponsor_magnet', gameState.sponsors.filter(s => s.active).length >= 5);
-                
-                showTab('sponsors');
             }
         }
 
@@ -1788,58 +1665,6 @@
             } else {
                 showNotification(`Not enough money for entry fee!`, 'error');
             }
-        }
-
-        function showMultiplayer(content) {
-            content.innerHTML = `
-                <h2>Multiplayer</h2>
-                <p style="margin-bottom: 20px; color: #888;">Race against other players online</p>
-                
-                <div class="stats-bar">
-                    <div class="stat-box">
-                        <div class="stat-label">Username</div>
-                        <div class="stat-value">${gameState.multiplayer.username}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Rank</div>
-                        <div class="stat-value">${gameState.multiplayer.rank}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Matches</div>
-                        <div class="stat-value">${gameState.multiplayer.matches}</div>
-                    </div>
-                </div>
-                
-                <div style="margin: 20px 0;">
-                    <button class="btn" onclick="findMatch()" style="margin-right: 10px;">Find Match</button>
-                    <button class="btn" onclick="createRoom()">Create Room</button>
-                </div>
-                
-                <h3 style="margin: 20px 0;">Available Rooms</h3>
-                <div class="multiplayer-room">
-                    <div class="room-name">Pro Racers Lobby</div>
-                    <div class="room-players">3/8 players</div>
-                    <button class="btn" style="padding: 8px 15px; font-size: 14px;">Join Room</button>
-                </div>
-                
-                <div class="multiplayer-room">
-                    <div class="room-name">Beginner Friendly</div>
-                    <div class="room-players">5/8 players</div>
-                    <button class="btn" style="padding: 8px 15px; font-size: 14px;">Join Room</button>
-                </div>
-            `;
-        }
-
-        function findMatch() {
-            showNotification('Searching for opponents...', 'info');
-            setTimeout(() => {
-                showNotification('Match found! Starting race...', 'success');
-                startRaceWithCountdown();
-            }, 2000);
-        }
-
-        function createRoom() {
-            showNotification('Room created! Share code: RACE' + Math.floor(Math.random() * 10000), 'success');
         }
 
         function showDailyRewards(content) {
@@ -1987,155 +1812,13 @@
                 
                 <div class="setting-item">
                     <div>
-                        <div style="font-size: 18px;">Graphics Quality</div>
-                        <div style="color: #888; font-size: 14px;">Adjust visual quality and performance</div>
-                    </div>
-                    <select class="dropdown" onchange="updateSetting('graphicsQuality', this.value)">
-                        <option value="low" ${gameState.settings.graphicsQuality === 'low' ? 'selected' : ''}>Low</option>
-                        <option value="medium" ${gameState.settings.graphicsQuality === 'medium' ? 'selected' : ''}>Medium</option>
-                        <option value="high" ${gameState.settings.graphicsQuality === 'high' ? 'selected' : ''}>High</option>
-                        <option value="ultra" ${gameState.settings.graphicsQuality === 'ultra' ? 'selected' : ''}>Ultra</option>
-                    </select>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Show FPS</div>
-                        <div style="color: #888; font-size: 14px;">Display frames per second counter</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.showFPS ? 'active' : ''}" onclick="toggleSetting('showFPS')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Control Scheme</div>
-                        <div style="color: #888; font-size: 14px;">Choose your preferred control method</div>
-                    </div>
-                    <select class="dropdown" onchange="updateSetting('controlScheme', this.value)">
-                        <option value="keyboard" ${gameState.settings.controlScheme === 'keyboard' ? 'selected' : ''}>Keyboard</option>
-                        <option value="gamepad" ${gameState.settings.controlScheme === 'gamepad' ? 'selected' : ''}>Gamepad</option>
-                        <option value="touch" ${gameState.settings.controlScheme === 'touch' ? 'selected' : ''}>Touch</option>
-                    </select>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Screen Mode</div>
-                        <div style="color: #888; font-size: 14px;">Choose windowed or fullscreen mode</div>
-                    </div>
-                    <select class="dropdown" onchange="updateSetting('screenMode', this.value)">
-                        <option value="windowed" ${gameState.settings.screenMode === 'windowed' ? 'selected' : ''}>Windowed</option>
-                        <option value="fullscreen" ${gameState.settings.screenMode === 'fullscreen' ? 'selected' : ''}>Fullscreen</option>
-                    </select>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">V-Sync</div>
-                        <div style="color: #888; font-size: 14px;">Enable vertical synchronization</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.vSync ? 'active' : ''}" onclick="toggleSetting('vSync')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Motion Blur</div>
-                        <div style="color: #888; font-size: 14px;">Add motion blur effects during races</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.motionBlur ? 'active' : ''}" onclick="toggleSetting('motionBlur')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Tire Wear</div>
-                        <div style="color: #888; font-size: 14px;">Enable realistic tire degradation</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.tireWear ? 'active' : ''}" onclick="toggleSetting('tireWear')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Weather Effects</div>
-                        <div style="color: #888; font-size: 14px;">Enable dynamic weather during races</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.weatherEffects ? 'active' : ''}" onclick="toggleSetting('weatherEffects')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Dynamic Camera</div>
-                        <div style="color: #888; font-size: 14px;">Camera follows car movement dynamically</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.dynamicCamera ? 'active' : ''}" onclick="toggleSetting('dynamicCamera')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Race Assists</div>
-                        <div style="color: #888; font-size: 14px;">Enable driving assists for beginners</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.raceAssists ? 'active' : ''}" onclick="toggleSetting('raceAssists')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Damage Visuals</div>
-                        <div style="color: #888; font-size: 14px;">Show visual damage on cars</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.damageVisuals ? 'active' : ''}" onclick="toggleSetting('damageVisuals')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Opponent Count</div>
-                        <div style="color: #888; font-size: 14px;">Number of AI opponents in races</div>
-                    </div>
-                    <select class="dropdown" onchange="updateSetting('opponentCount', this.value)">
-                        <option value="3" ${gameState.settings.opponentCount === 3 ? 'selected' : ''}>3</option>
-                        <option value="5" ${gameState.settings.opponentCount === 5 ? 'selected' : ''}>5</option>
-                        <option value="8" ${gameState.settings.opponentCount === 8 ? 'selected' : ''}>8</option>
-                        <option value="12" ${gameState.settings.opponentCount === 12 ? 'selected' : ''}>12</option>
-                    </select>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Day/Night Cycle</div>
-                        <div style="color: #888; font-size: 14px;">Enable dynamic time of day changes</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.dayNightCycle ? 'active' : ''}" onclick="toggleSetting('dayNightCycle')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Post-Processing</div>
-                        <div style="color: #888; font-size: 14px;">Enable advanced visual effects</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.postProcessing ? 'active' : ''}" onclick="toggleSetting('postProcessing')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">UI Scale</div>
-                        <div style="color: #888; font-size: 14px;">Adjust the size of interface elements</div>
+                        <div style="font-size: 18px;">Display Scale</div>
+                        <div style="color: #888; font-size: 14px;">Adjust the game size for your screen</div>
                     </div>
                     <div class="slider-container">
-                        <input type="range" min="80" max="120" value="${gameState.settings.uiScale}" class="slider" onchange="updateSetting('uiScale', this.value)">
-                        <span>${gameState.settings.uiScale}%</span>
+                        <input type="range" min="50" max="150" value="${gameState.settings.displayScale}" class="slider" onchange="updateSetting('displayScale', this.value)">
+                        <span>${gameState.settings.displayScale}%</span>
                     </div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Color Blind Mode</div>
-                        <div style="color: #888; font-size: 14px;">Adjust colors for color vision deficiency</div>
-                    </div>
-                    <select class="dropdown" onchange="updateSetting('colorBlindMode', this.value)">
-                        <option value="none" ${gameState.settings.colorBlindMode === 'none' ? 'selected' : ''}>None</option>
-                        <option value="protanopia" ${gameState.settings.colorBlindMode === 'protanopia' ? 'selected' : ''}>Protanopia</option>
-                        <option value="deuteranopia" ${gameState.settings.colorBlindMode === 'deuteranopia' ? 'selected' : ''}>Deuteranopia</option>
-                        <option value="tritanopia" ${gameState.settings.colorBlindMode === 'tritanopia' ? 'selected' : ''}>Tritanopia</option>
-                    </select>
                 </div>
                 
                 <div style="text-align: center; margin-top: 30px;">
@@ -2150,7 +1833,10 @@
         }
 
         function updateSetting(setting, value) {
-            gameState.settings[setting] = value;
+            gameState.settings[setting] = parseInt(value);
+            if (setting === 'displayScale') {
+                applyDisplayScale();
+            }
             showTab('settings');
         }
 
@@ -2159,69 +1845,11 @@
                 crashesEnabled: true,
                 musicVolume: 50,
                 sfxVolume: 70,
-                difficulty: "normal",
-                graphicsQuality: "high",
-                showFPS: false,
-                language: "english",
-                controlScheme: "keyboard",
-                screenMode: "windowed",
-                vSync: true,
-                motionBlur: true,
-                tireWear: true,
-                weatherEffects: true,
-                dynamicCamera: true,
-                raceAssists: false,
-                damageVisuals: true,
-                opponentCount: 5,
-                dayNightCycle: false,
-                postProcessing: true,
-                uiScale: 100,
-                colorBlindMode: "none"
+                displayScale: 100
             };
+            applyDisplayScale();
             showTab('settings');
             showNotification('Settings reset to defaults!', 'success');
-        }
-
-        function showLeaderboardTab(content) {
-            // Update current player stats
-            const playerIndex = gameState.leaderboard.findIndex(entry => entry.name === gameState.multiplayer.username);
-            if (playerIndex !== -1) {
-                gameState.leaderboard[playerIndex].level = gameState.level;
-                gameState.leaderboard[playerIndex].money = gameState.money;
-            }
-            
-            // Sort by level
-            gameState.leaderboard.sort((a, b) => b.level - a.level);
-            
-            content.innerHTML = `
-                <h2>Global Leaderboard</h2>
-                <p style="margin-bottom: 20px; color: #888;">Compete with players worldwide</p>
-                
-                <div class="leaderboard">
-                    ${gameState.leaderboard.map((entry, index) => `
-                        <div class="leaderboard-entry" style="${entry.name === gameState.multiplayer.username ? 'background: rgba(67, 97, 238, 0.2);' : ''}">
-                            <div>
-                                <span class="leaderboard-position">#${index + 1}</span>
-                                <span style="margin-left: 10px;">${entry.name}</span>
-                                ${entry.name === gameState.multiplayer.username ? ' (You)' : ''}
-                            </div>
-                            <div>
-                                <span>Level ${entry.level}</span>
-                                <span style="margin-left: 15px; color: #ffd700;">$${entry.money.toLocaleString()}</span>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-                
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="btn" onclick="refreshLeaderboard()">Refresh</button>
-                </div>
-            `;
-        }
-
-        function refreshLeaderboard() {
-            showNotification('Leaderboard updated!', 'success');
-            showTab('leaderboard');
         }
 
         function checkAchievement(achievementId, condition) {
@@ -2242,7 +1870,8 @@
             qteActive: false,
             qteCount: 0,
             earnings: 0,
-            maxSpeed: 0
+            maxSpeed: 0,
+            currentLap: 1
         };
 
         // Enhanced race start with countdown
@@ -2286,12 +1915,12 @@
                 qteActive: false,
                 qteCount: 0,
                 earnings: 0,
-                maxSpeed: 0
+                maxSpeed: 0,
+                currentLap: 1
             };
             
-            // Reset fuel and tires
+            // Reset fuel
             gameState.fuel = 100;
-            gameState.tireWear = 100;
             gameState.pitStopAvailable = true;
             
             // Show/hide tracks based on circuit type
@@ -2353,16 +1982,16 @@
             let crashChance = 0;
             if (gameState.settings.crashesEnabled) {
                 if (gameState.difficultyMode === 'insane') {
-                    crashChance = gameState.insaneDifficulty;
+                    // For insane difficulty, start with lower crash chance but increase over time
+                    crashChance = Math.min(gameState.insaneDifficulty, 10 + (raceData.progress / 100) * gameState.insaneDifficulty);
                 } else {
                     crashChance = gameState.raceMode === 'fast' ? 20 : gameState.raceMode === 'normal' ? 10 : 5;
+                    
+                    // Increase crash chance for 2 laps
+                    if (gameState.laps === 2) {
+                        crashChance *= 1.5;
+                    }
                 }
-            }
-            
-            // Check for immediate crash in insane mode
-            if (gameState.difficultyMode === 'insane' && Math.random() * 100 < crashChance) {
-                await handleCrash();
-                return;
             }
             
             const raceInterval = setInterval(async () => {
@@ -2371,31 +2000,21 @@
                     return;
                 }
                 
-                // Update fuel and tire wear
+                // Update fuel
                 gameState.fuel -= (raceData.speed / 100) * 0.5;
-                if (gameState.settings.tireWear) {
-                    gameState.tireWear -= (raceData.speed / 100) * 0.3;
-                }
-                
                 if (gameState.fuel <= 0) {
                     gameState.fuel = 0;
                     showNotification('Out of fuel! Performance reduced.', 'error');
                 }
                 
-                if (gameState.tireWear <= 0) {
-                    gameState.tireWear = 0;
-                    showNotification('Tires worn out! Handling reduced.', 'error');
-                }
-                
                 const fuelMultiplier = gameState.fuel > 0 ? 1 : 0.5;
-                const tireMultiplier = gameState.tireWear > 30 ? 1 : Math.max(0.5, gameState.tireWear / 60);
                 
                 // Update progress
                 let speedMultiplier = 1;
                 if (gameState.raceMode === 'fast') speedMultiplier = 1.3;
                 if (gameState.raceMode === 'slow') speedMultiplier = 0.7;
                 
-                raceData.speed = (upgradedCar.speed * speedMultiplier * fuelMultiplier * tireMultiplier) + Math.random() * 10;
+                raceData.speed = (upgradedCar.speed * speedMultiplier * fuelMultiplier) + Math.random() * 10;
                 raceData.maxSpeed = Math.max(raceData.maxSpeed, raceData.speed);
                 raceData.progress += (raceData.speed / 100) * 2;
                 raceData.lapTime += 0.1;
@@ -2409,18 +2028,16 @@
                 document.getElementById('position').textContent = `${Math.round(raceData.progress)}%`;
                 document.getElementById('fuel').textContent = `${Math.round(gameState.fuel)}%`;
                 document.getElementById('fuelFill').style.width = `${gameState.fuel}%`;
-                document.getElementById('tireWear').textContent = `${Math.round(gameState.tireWear)}%`;
+                document.getElementById('currentLap').textContent = `${raceData.currentLap}/${gameState.laps}`;
                 
                 // Calculate earnings
                 const baseEarnings = (raceData.speed * 10) / (raceData.lapTime + 1);
-                raceData.earnings = Math.round(baseEarnings * speedMultiplier);
+                raceData.earnings = Math.round(baseEarnings * speedMultiplier * gameState.laps);
                 document.getElementById('raceMoney').textContent = `$${raceData.earnings}`;
                 
-                // Update boost and nitro buttons
+                // Update boost button
                 document.getElementById('boostBtn').textContent = `Use Boost (${gameState.boosts})`;
                 document.getElementById('boostBtn').disabled = gameState.boosts <= 0;
-                document.getElementById('nitroBtn').textContent = `Use Nitro (${gameState.nitros})`;
-                document.getElementById('nitroBtn').disabled = gameState.nitros <= 0;
                 
                 // Check for QTE
                 if (!raceData.qteActive && raceData.qteCount < maxQTE) {
@@ -2437,10 +2054,18 @@
                     return;
                 }
                 
-                // Check if race complete
+                // Check if lap complete
                 if (raceData.progress >= 100) {
-                    clearInterval(raceInterval);
-                    finishRace();
+                    if (raceData.currentLap < gameState.laps) {
+                        // Start next lap
+                        raceData.currentLap++;
+                        raceData.progress = 0;
+                        showNotification(`Lap ${raceData.currentLap}/${gameState.laps}`, 'info');
+                    } else {
+                        // Race complete
+                        clearInterval(raceInterval);
+                        finishRace();
+                    }
                 }
             }, 100);
         }
@@ -2541,10 +2166,9 @@
                     clearInterval(pitInterval);
                     overlay.classList.remove('active');
                     
-                    // Refuel and change tires
+                    // Refuel and continue
                     gameState.fuel = 100;
-                    gameState.tireWear = 100;
-                    showNotification('Pit stop complete! Fuel and tires refreshed.', 'success');
+                    showNotification('Pit stop complete! Fuel refilled.', 'success');
                     raceActive = true;
                 }
             }, 100);
@@ -2560,19 +2184,6 @@
                 const car = document.getElementById('carIcon');
                 car.classList.add('boost-animation');
                 setTimeout(() => car.classList.remove('boost-animation'), 1000);
-            }
-        }
-
-        function useNitro() {
-            if (gameState.nitros > 0) {
-                gameState.nitros--;
-                raceData.speed += 100;
-                showNotification('Nitro activated! +100 speed', 'success');
-                
-                // Visual effect
-                const car = document.getElementById('carIcon');
-                car.style.background = '#4361ee';
-                setTimeout(() => car.style.background = 'red', 1000);
             }
         }
 
@@ -2609,9 +2220,10 @@
         function finishRace() {
             raceActive = false;
             
-            // Award money
-            gameState.money += raceData.earnings;
-            gameState.stats.totalEarnings += raceData.earnings;
+            // Award money (multiplied by laps)
+            const totalEarnings = raceData.earnings * gameState.laps;
+            gameState.money += totalEarnings;
+            gameState.stats.totalEarnings += totalEarnings;
             gameState.stats.racesCompleted++;
             
             // Update best lap time
@@ -2627,9 +2239,9 @@
                 'insane': 3
             };
             
-            let xpGained = Math.round(50 * xpMultipliers[gameState.difficultyMode]);
+            let xpGained = Math.round(50 * xpMultipliers[gameState.difficultyMode] * gameState.laps);
             
-            // Special rewards for insane mode - FIXED
+            // Special rewards for insane mode
             if (gameState.difficultyMode === 'insane') {
                 gameState.money += 2000;
                 levelUp();
@@ -2654,7 +2266,7 @@
             checkAchievement('speed_demon', raceData.maxSpeed * 2 >= 200);
             checkAchievement('millionaire', gameState.money >= 1000000);
             
-            showNotification(`Race Complete! Earned $${raceData.earnings} and ${xpGained} XP!`, 'success');
+            showNotification(`Race Complete! Earned $${totalEarnings} and ${xpGained} XP!`, 'success');
             
             setTimeout(() => {
                 showScreen('mainMenu');
@@ -2673,9 +2285,8 @@
             
             // Add boost on level up
             gameState.boosts += 2;
-            gameState.nitros += 1;
             
-            showNotification(`🎉 LEVEL UP! You are now level ${gameState.level}! +2 boosts +1 nitro`, 'success');
+            showNotification(`🎉 LEVEL UP! You are now level ${gameState.level}! +2 boosts`, 'success');
             showNotification('📬 New Battlepass rewards available!', 'inbox');
             
             // Check level achievement
@@ -2708,6 +2319,9 @@
             btn.disabled = true;
             wheel.classList.add('spinning');
             
+            // Create confetti
+            createConfetti();
+            
             setTimeout(() => {
                 wheel.classList.remove('spinning');
                 
@@ -2733,14 +2347,31 @@
             }, 3000);
         }
 
+        function createConfetti() {
+            const container = document.getElementById('wheelspinOverlay');
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animation = `confetti ${Math.random() * 3 + 2}s linear forwards`;
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
         // Initialize game
         window.onload = () => {
             initBattlepass();
             initUpgrades();
-            initSponsors();
-            initLeaderboard();
             checkDailyRewards();
             createDynamicBackground();
+            applyDisplayScale();
             
             // Check for saved game
             const savedGame = localStorage.getItem('proRacingSimulator');
