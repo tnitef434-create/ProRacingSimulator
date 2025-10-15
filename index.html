@@ -3,2758 +3,667 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Racing Simulator - Enhanced Edition</title>
+    <title>Consumer - Company Reviews</title>
     <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary);
             color: white;
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        .screen {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .screen.active {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(0); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-
-        @keyframes countdown {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes raceStart {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        /* Start Menu */
-        .start-menu {
-            text-align: center;
-            position: relative;
-            z-index: 10;
-        }
-
-        .game-title {
-            font-size: 72px;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff6b35, #f72585, #7209b7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite;
-            text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
-        }
-
-        .game-subtitle {
-            font-size: 24px;
-            color: #ffd700;
-            margin-bottom: 40px;
-            font-weight: 300;
-            letter-spacing: 2px;
-        }
-
-        .start-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 40px;
-        }
-
-        .btn {
-            padding: 15px 40px;
-            font-size: 20px;
-            border: none;
-            border-radius: 50px;
-            background: linear-gradient(45deg, #4361ee, #7209b7);
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(67, 97, 238, 0.5);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::after {
-            left: 100%;
-        }
-
-        /* Main Menu */
-        .main-menu {
-            width: 90%;
-            max-width: 1400px;
-            height: 90vh;
-            background: rgba(20, 20, 40, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 30px rgba(67, 97, 238, 0.3);
-        }
-
-        .sidebar {
-            background: rgba(30, 30, 50, 0.8);
-            border-radius: 15px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-btn {
-            padding: 12px;
-            background: transparent;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
-            text-align: left;
-        }
-
-        .nav-btn:hover {
-            background: rgba(67, 97, 238, 0.3);
-            border-color: #4361ee;
-            transform: translateX(5px);
-        }
-
-        .nav-btn.active {
-            background: linear-gradient(45deg, #4361ee, #7209b7);
-            border-color: transparent;
-        }
-
-        .content-area {
-            background: rgba(30, 30, 50, 0.8);
-            border-radius: 15px;
-            padding: 30px;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .stat-box {
-            background: rgba(40, 40, 60, 0.8);
-            padding: 15px 25px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            flex: 1;
-            min-width: 150px;
-            transition: all 0.3s ease;
-        }
-
-        .stat-box:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #888;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #4361ee;
-        }
-
-        /* Cars Grid */
-        .cars-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .car-card {
-            background: rgba(40, 40, 60, 0.8);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .car-card:hover {
-            border-color: #4361ee;
-            transform: translateY(-5px);
-        }
-
-        .car-card.owned {
-            border-color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .car-card.selected {
-            border-color: #f72585;
-            animation: glow 2s infinite;
-        }
-
-        .car-card.locked {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .car-name {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .car-stats {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 10px;
-        }
-
-        .car-price {
-            font-size: 18px;
-            color: #ffd700;
-        }
-
-        .car-level {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #f72585;
-            padding: 2px 8px;
-            border-radius: 5px;
-            font-size: 11px;
-        }
-
-        /* Race Setup */
-        .race-setup {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .setup-section {
-            background: rgba(40, 40, 60, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .setup-title {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #4361ee;
-        }
-
-        .mode-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .mode-btn {
-            flex: 1;
-            padding: 15px;
-            background: rgba(30, 30, 50, 0.8);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .mode-btn:hover {
-            border-color: #4361ee;
-        }
-
-        .mode-btn.selected {
-            background: linear-gradient(45deg, #4361ee, #7209b7);
-            border-color: transparent;
-        }
-
-        /* Circuit View */
-        .circuit-container {
-            position: relative;
-            width: 800px;
-            height: 600px;
-            background: #111;
-            border-radius: 20px;
-            overflow: hidden;
-            margin: 20px auto;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .circuit {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        .track {
-            stroke: #444;
-            stroke-width: 80;
-            fill: none;
-        }
-
-        .track-center {
-            stroke: #fff;
-            stroke-width: 2;
-            fill: none;
-            stroke-dasharray: 10, 10;
-        }
-
-        .car-icon {
-            position: absolute;
-            width: 20px;
-            height: 10px;
-            background: red;
-            border-radius: 3px;
-            transition: all 0.1s linear;
-            transform-origin: center;
-        }
-
-        /* QTE Overlay */
-        .qte-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 30px;
-            border-radius: 15px;
-            border: 3px solid #ff6b35;
-            display: none;
-            z-index: 100;
-            box-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
-        }
-
-        .qte-overlay.active {
-            display: block;
-            animation: pulse 0.3s ease;
-        }
-
-        .qte-prompt {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .qte-arrow {
-            font-size: 60px;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .qte-timer {
-            width: 100%;
-            height: 10px;
-            background: #333;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .qte-timer-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #ffd700, #ff6b35);
-            transition: width linear;
-        }
-
-        /* Notifications */
-        .notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .notification {
-            background: rgba(30, 30, 50, 0.95);
-            border: 2px solid #4361ee;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            animation: slideIn 0.3s ease;
-            min-width: 250px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .notification.success {
-            border-color: #10b981;
-        }
-
-        .notification.error {
-            border-color: #ef4444;
-        }
-
-        .notification.inbox {
-            border-color: #ffd700;
-        }
-
-        /* Wheelspin */
-        .wheelspin-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        .wheelspin-overlay.active {
-            display: flex;
-        }
-
-        .wheel-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-        }
-
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(
-                from 0deg,
-                #ff6b35 0deg 45deg,
-                #f72585 45deg 90deg,
-                #7209b7 90deg 135deg,
-                #4361ee 135deg 180deg,
-                #3a0ca3 180deg 225deg,
-                #560bad 225deg 270deg,
-                #b5179e 270deg 315deg,
-                #f72585 315deg 360deg
-            );
-            animation: none;
-            border: 10px solid #ffd700;
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
-        }
-
-        .wheel.spinning {
-            animation: spin 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(2520deg); }
-        }
-
-        .wheel-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100px;
-            height: 100px;
-            background: #1a1a3e;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            border: 5px solid #ffd700;
-        }
-
-        .wheel-result {
-            position: absolute;
-            bottom: -80px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffd700;
-        }
-
-        /* Settings */
-        .setting-item {
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            background: rgba(40, 40, 60, 0.8);
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
-        .toggle-switch {
-            position: relative;
-            width: 60px;
-            height: 30px;
-            background: #333;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: background 0.3s ease;
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
         }
-
-        .toggle-switch.active {
-            background: #4361ee;
+        
+        .logo span {
+            color: var(--secondary);
         }
-
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            width: 26px;
-            height: 26px;
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--secondary);
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .search-box {
+            display: flex;
             background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: left 0.3s ease;
-        }
-
-        .toggle-switch.active::after {
-            left: 32px;
-        }
-
-        /* Level Progress */
-        .level-progress {
-            background: rgba(40, 40, 60, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 30px;
-            background: #333;
-            border-radius: 15px;
+            border-radius: 50px;
             overflow: hidden;
-            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4361ee, #7209b7);
-            transition: width 0.5s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        /* Battlepass */
-        .battlepass {
-            background: linear-gradient(135deg, #ffd700, #ff6b35);
-            padding: 2px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .battlepass-inner {
-            background: rgba(20, 20, 40, 0.95);
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-        .battlepass-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #ffd700;
-        }
-
-        .battlepass-rewards {
-            display: flex;
-            gap: 15px;
-            overflow-x: auto;
-        }
-
-        .reward-item {
-            min-width: 100px;
-            text-align: center;
-            padding: 10px;
-            background: rgba(40, 40, 60, 0.8);
-            border-radius: 10px;
-            position: relative;
-        }
-
-        .reward-item.claimed {
-            opacity: 0.5;
-        }
-
-        .reward-item.available {
-            border: 2px solid #ffd700;
-            animation: pulse 1s infinite;
-        }
-
-        /* New Features Styles */
-        .achievement-badge {
-            display: inline-block;
-            background: linear-gradient(45deg, #ffd700, #ff6b35);
-            color: #000;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-right: 5px;
-            margin-bottom: 5px;
-        }
-
-        .upgrade-option {
-            background: rgba(40, 40, 60, 0.8);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .upgrade-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .upgrade-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .upgrade-cost {
-            color: #ffd700;
-            font-weight: bold;
-        }
-
-        .tournament-card {
-            background: rgba(40, 40, 60, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .tournament-card:hover {
-            border-color: #4361ee;
-        }
-
-        .tournament-prize {
-            color: #ffd700;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .daily-reward {
-            background: rgba(40, 40, 60, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .daily-reward-title {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #ffd700;
-        }
-
-        .daily-reward-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .daily-reward-day {
-            background: rgba(30, 30, 50, 0.8);
-            padding: 15px 10px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .daily-reward-day.claimed {
-            background: linear-gradient(45deg, #10b981, #4361ee);
-        }
-
-        .daily-reward-day.available {
-            border: 2px solid #ffd700;
-            animation: pulse 1s infinite;
-        }
-
-        .daily-reward-value {
-            color: #ffd700;
-            font-weight: bold;
-        }
-
-        .crash-animation {
-            animation: shake 0.5s;
-            background: #ef4444 !important;
-        }
-
-        .boost-animation {
-            animation: pulse 0.3s infinite;
-            background: #10b981 !important;
-        }
-
-        .pit-stop-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 30px;
-            border-radius: 15px;
-            border: 3px solid #4361ee;
-            display: none;
-            z-index: 100;
-            text-align: center;
-        }
-
-        .pit-stop-overlay.active {
-            display: block;
-        }
-
-        .pit-stop-timer {
-            font-size: 48px;
-            font-weight: bold;
-            margin: 20px 0;
-            color: #4361ee;
-        }
-
-        .fuel-gauge {
-            width: 100%;
-            height: 20px;
-            background: #333;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-
-        .fuel-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #ffd700, #ff6b35);
-            transition: width 0.3s ease;
-        }
-
-        /* Race Start Animation */
-        .race-start-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        .race-start-overlay.active {
-            display: flex;
-        }
-
-        .countdown {
-            font-size: 120px;
-            font-weight: bold;
-            color: #ffd700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
-            animation: countdown 1s ease;
-        }
-
-        .race-start-text {
-            font-size: 60px;
-            font-weight: bold;
-            color: #ff6b35;
-            text-shadow: 0 0 20px rgba(255, 107, 53, 0.7);
-            animation: raceStart 1s infinite;
-        }
-
-        /* New Settings Styles */
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .slider {
+        
+        .search-box input {
             flex: 1;
-            -webkit-appearance: none;
-            height: 10px;
-            background: #333;
-            border-radius: 5px;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
             outline: none;
         }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            background: #4361ee;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .dropdown {
-            background: rgba(30, 30, 50, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+        
+        .search-box button {
+            background: var(--secondary);
             color: white;
-            padding: 8px 15px;
-            font-size: 16px;
+            border: none;
+            padding: 1rem 1.5rem;
             cursor: pointer;
+            transition: background 0.3s;
         }
-
-        /* Leaderboard */
-        .leaderboard {
-            background: rgba(40, 40, 60, 0.8);
+        
+        .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .section-title {
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--primary);
+        }
+        
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .company-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .company-card {
+            background: white;
             border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-
-        .leaderboard-title {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #ffd700;
+        
+        .company-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-
-        .leaderboard-entry {
+        
+        .company-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .company-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .company-industry {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .company-stats {
+            padding: 1.5rem;
+        }
+        
+        .stat {
             display: flex;
             justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
         }
-
-        .leaderboard-position {
-            font-weight: bold;
-            color: #4361ee;
+        
+        .stat-label {
+            color: #777;
         }
-
-        /* Sponsors */
-        .sponsor-card {
-            background: rgba(40, 40, 60, 0.8);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        
+        .fixscore {
+            font-weight: 600;
+            color: var(--success);
         }
-
-        .sponsor-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
+        
+        .fixscore.low {
+            color: var(--danger);
         }
-
-        .sponsor-reward {
-            color: #ffd700;
-            font-weight: bold;
+        
+        .fixscore.medium {
+            color: var(--warning);
         }
-
-        /* Multiplayer */
-        .multiplayer-room {
-            background: rgba(40, 40, 60, 0.8);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        
+        .response-time {
+            font-weight: 600;
         }
-
-        .room-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
+        
+        .company-actions {
+            padding: 1.5rem;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
         }
-
-        .room-players {
-            color: #888;
-            margin-bottom: 10px;
+        
+        .btn {
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
         }
-
-        /* Dynamic Background */
-        .dynamic-bg {
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .message-modal {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            overflow: hidden;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
         }
-
-        .bg-element {
-            position: absolute;
-            background: rgba(67, 97, 238, 0.1);
-            border-radius: 50%;
-            animation: float 20s infinite linear;
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
-
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-1000px) rotate(720deg); }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-section p {
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .company-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="dynamic-bg" id="dynamicBg"></div>
-    <div class="notification-container" id="notifications"></div>
-    
-    <!-- Start Screen -->
-    <div class="screen active" id="startScreen">
-        <div class="start-menu">
-            <h1 class="game-title">PRO RACING SIMULATOR</h1>
-            <div class="game-subtitle">ULTIMATE EDITION</div>
-            <p style="color: #888; font-size: 18px; margin: 20px 0;">Experience the ultimate racing management thrill</p>
-            <div class="start-buttons">
-                <button class="btn" onclick="startGame()">Start Game</button>
-                <button class="btn" onclick="showSettings()">Settings</button>
-                <button class="btn" onclick="showCredits()">Credits</button>
-                <button class="btn" onclick="showLeaderboard()">Leaderboard</button>
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">Consumer<span>.</span></a>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Companies</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Find Dutch Companies with the Best FixScores</h1>
+            <p>See how companies handle customer issues and contact managers directly</p>
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" placeholder="Search for companies...">
+                    <button>Search</button>
+                </div>
             </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">Dutch Companies</h2>
+        
+        <div class="filters">
+            <button class="filter-btn active">All Industries</button>
+            <button class="filter-btn">Retail</button>
+            <button class="filter-btn">Technology</button>
+            <button class="filter-btn">Services</button>
+            <button class="filter-btn">Food & Beverage</button>
+            <button class="filter-btn">Healthcare</button>
+        </div>
+        
+        <div class="company-grid" id="companyGrid">
+            <!-- Companies will be dynamically inserted here -->
         </div>
     </div>
 
-    <!-- Main Menu -->
-    <div class="screen" id="mainMenu">
-        <div class="main-menu">
-            <div class="sidebar">
-                <button class="nav-btn active" onclick="showTab('garage')">🏎️ Garage</button>
-                <button class="nav-btn" onclick="showTab('race')">🏁 Race</button>
-                <button class="nav-btn" onclick="showTab('upgrades')">🔧 Upgrades</button>
-                <button class="nav-btn" onclick="showTab('sponsors')">💼 Sponsors</button>
-                <button class="nav-btn" onclick="showTab('achievements')">🏆 Achievements</button>
-                <button class="nav-btn" onclick="showTab('tournaments')">🏆 Tournaments</button>
-                <button class="nav-btn" onclick="showTab('multiplayer')">🌐 Multiplayer</button>
-                <button class="nav-btn" onclick="showTab('daily')">📅 Daily Rewards</button>
-                <button class="nav-btn" onclick="showTab('battlepass')">⭐ Battlepass</button>
-                <button class="nav-btn" onclick="showTab('settings')">⚙️ Settings</button>
-                <button class="nav-btn" onclick="backToStart()">🏠 Main Menu</button>
+    <div class="message-modal" id="messageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Message Manager</h3>
+                <button class="close-modal">&times;</button>
             </div>
-            
-            <div class="content-area" id="contentArea">
-                <!-- Content will be dynamically loaded here -->
-            </div>
+            <form id="messageForm">
+                <div class="form-group">
+                    <label for="companyName">Company</label>
+                    <input type="text" id="companyName" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="managerName">Manager</label>
+                    <input type="text" id="managerName" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="userName">Your Name</label>
+                    <input type="text" id="userName" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Your Email</label>
+                    <input type="email" id="userEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
         </div>
     </div>
 
-    <!-- Simulation Screen -->
-    <div class="screen" id="simulationScreen">
-        <div style="width: 100%; max-width: 1200px;">
-            <div class="stats-bar">
-                <div class="stat-box">
-                    <div class="stat-label">Money</div>
-                    <div class="stat-value" id="raceMoney">$0</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Speed</div>
-                    <div class="stat-value" id="raceSpeed">0 mph</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Lap Time</div>
-                    <div class="stat-value" id="lapTime">0.0s</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Position</div>
-                    <div class="stat-value" id="position">0%</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Fuel</div>
-                    <div class="stat-value" id="fuel">100%</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Tire Wear</div>
-                    <div class="stat-value" id="tireWear">100%</div>
-                </div>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Consumer</h3>
+                <p>Consumer helps customers make informed decisions by providing transparent information about how companies handle issues and complaints.</p>
             </div>
-
-            <div class="fuel-gauge">
-                <div class="fuel-fill" id="fuelFill"></div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <p><a href="#" style="color: white;">Home</a></p>
+                <p><a href="#" style="color: white;">Companies</a></p>
+                <p><a href="#" style="color: white;">Submit a Review</a></p>
+                <p><a href="#" style="color: white;">Contact Us</a></p>
             </div>
-
-            <div class="battlepass" id="raceBattlepass" style="display: none;">
-                <div class="battlepass-inner">
-                    <div class="battlepass-title">🏆 Battlepass Progress</div>
-                    <div class="battlepass-rewards" id="raceBattlepassRewards"></div>
-                </div>
-            </div>
-
-            <div class="circuit-container">
-                <svg class="circuit" viewBox="0 0 800 600">
-                    <!-- Small Circuit -->
-                    <path class="track" id="smallTrack" d="M 100 300 Q 100 100, 400 100 T 700 300 Q 700 500, 400 500 T 100 300" style="display: block;"/>
-                    <path class="track-center" id="smallTrackCenter" d="M 100 300 Q 100 100, 400 100 T 700 300 Q 700 500, 400 500 T 100 300" style="display: block;"/>
-                    
-                    <!-- Large Circuit -->
-                    <path class="track" id="largeTrack" d="M 50 300 Q 50 50, 200 50 L 600 50 Q 750 50, 750 200 L 750 400 Q 750 550, 600 550 L 200 550 Q 50 550, 50 400 Z" style="display: none;"/>
-                    <path class="track-center" id="largeTrackCenter" d="M 50 300 Q 50 50, 200 50 L 600 50 Q 750 50, 750 200 L 750 400 Q 750 550, 600 550 L 200 550 Q 50 550, 50 400 Z" style="display: none;"/>
-                </svg>
-                <div class="car-icon" id="carIcon"></div>
-                
-                <!-- QTE Overlay -->
-                <div class="qte-overlay" id="qteOverlay">
-                    <div class="qte-prompt">QUICK! Press the key!</div>
-                    <div class="qte-arrow" id="qteArrow">⬆</div>
-                    <div class="qte-timer">
-                        <div class="qte-timer-bar" id="qteTimerBar"></div>
-                    </div>
-                </div>
-
-                <!-- Pit Stop Overlay -->
-                <div class="pit-stop-overlay" id="pitStopOverlay">
-                    <div class="qte-prompt">PIT STOP IN PROGRESS</div>
-                    <div class="pit-stop-timer" id="pitStopTimer">3.0s</div>
-                    <div class="qte-prompt">Refueling and changing tires...</div>
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="btn" onclick="pitStop()" id="pitStopBtn" style="margin-right: 10px;">Pit Stop</button>
-                <button class="btn" onclick="useBoost()" id="boostBtn" style="margin-right: 10px;">Use Boost (3)</button>
-                <button class="btn" onclick="useNitro()" id="nitroBtn" style="margin-right: 10px;">Use Nitro (2)</button>
-                <button class="btn" onclick="endRace()">End Race</button>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <p>Email: info@consumer.nl</p>
+                <p>Phone: +31 20 123 4567</p>
+                <p>Address: Keizersgracht 123, Amsterdam</p>
             </div>
         </div>
-    </div>
-
-    <!-- Race Start Overlay -->
-    <div class="race-start-overlay" id="raceStartOverlay">
-        <div id="countdownDisplay"></div>
-    </div>
-
-    <!-- Wheelspin Overlay -->
-    <div class="wheelspin-overlay" id="wheelspinOverlay">
-        <div>
-            <h2 style="text-align: center; margin-bottom: 30px; color: #ffd700;">🎊 LEVEL UP WHEELSPIN! 🎊</h2>
-            <div class="wheel-container">
-                <div class="wheel" id="wheel"></div>
-                <div class="wheel-center">SPIN!</div>
-                <div class="wheel-result" id="wheelResult"></div>
-            </div>
-            <div style="text-align: center; margin-top: 30px;">
-                <button class="btn" id="spinBtn" onclick="spinWheel()">SPIN THE WHEEL!</button>
-            </div>
+        <div class="copyright">
+            <p>&copy; 2023 Consumer. All rights reserved.</p>
         </div>
-    </div>
+    </footer>
 
     <script>
-        // Game State
-        let gameState = {
-            money: 1000,
-            level: 1,
-            xp: 0,
-            xpNeeded: 100,
-            currentCar: 0,
-            ownedCars: [0],
-            settings: {
-                crashesEnabled: true,
-                musicVolume: 50,
-                sfxVolume: 70,
-                difficulty: "normal",
-                graphicsQuality: "high",
-                showFPS: false,
-                language: "english",
-                controlScheme: "keyboard",
-                screenMode: "windowed",
-                vSync: true,
-                motionBlur: true,
-                // New settings
-                tireWear: true,
-                weatherEffects: true,
-                dynamicCamera: true,
-                raceAssists: false,
-                damageVisuals: true,
-                opponentCount: 5,
-                dayNightCycle: false,
-                postProcessing: true,
-                uiScale: 100,
-                colorBlindMode: "none"
-            },
-            battlepass: {
-                tier: 0,
-                rewards: []
-            },
-            insaneDifficulty: 90,
-            raceMode: 'normal',
-            circuitType: 'small',
-            difficultyMode: 'easy',
-            // New features
-            achievements: [],
-            upgrades: {},
-            dailyRewards: {
-                streak: 0,
-                lastClaim: null
-            },
-            tournaments: [],
-            boosts: 3,
-            nitros: 2,
-            fuel: 100,
-            tireWear: 100,
-            pitStopAvailable: true,
-            sponsors: [],
-            multiplayer: {
-                username: "Player" + Math.floor(Math.random() * 1000),
-                rank: 1500,
-                matches: 0
-            },
-            leaderboard: [],
-            // New features
-            season: 1,
-            reputation: 50,
-            teamMembers: [],
-            researchPoints: 0,
-            customizations: {},
-            challenges: [],
-            replayMode: false,
-            ghostRacer: null,
-            stats: {
-                racesCompleted: 0,
-                totalEarnings: 0,
-                bestLapTime: 0,
-                crashes: 0,
-                perfectQTEs: 0
-            }
-        };
-
-        // Car Database (40 real cars)
-        const cars = [
-            { name: "Honda Civic", speed: 50, acceleration: 60, handling: 70, price: 0, level: 0 },
-            { name: "Toyota Corolla", speed: 55, acceleration: 58, handling: 72, price: 5000, level: 1 },
-            { name: "Mazda MX-5", speed: 60, acceleration: 65, handling: 85, price: 8000, level: 2 },
-            { name: "Volkswagen Golf GTI", speed: 70, acceleration: 75, handling: 80, price: 12000, level: 3 },
-            { name: "Ford Mustang", speed: 80, acceleration: 82, handling: 70, price: 18000, level: 4 },
-            { name: "Subaru WRX", speed: 85, acceleration: 88, handling: 82, price: 25000, level: 5 },
-            { name: "BMW M3", speed: 90, acceleration: 91, handling: 85, price: 35000, level: 6 },
-            { name: "Audi RS5", speed: 92, acceleration: 93, handling: 86, price: 45000, level: 7 },
-            { name: "Mercedes C63 AMG", speed: 94, acceleration: 94, handling: 84, price: 55000, level: 8 },
-            { name: "Nissan GT-R", speed: 95, acceleration: 96, handling: 88, price: 65000, level: 9 },
-            { name: "Chevrolet Corvette", speed: 96, acceleration: 95, handling: 85, price: 75000, level: 10 },
-            { name: "Porsche 911", speed: 97, acceleration: 97, handling: 92, price: 85000, level: 11 },
-            { name: "Dodge Viper", speed: 98, acceleration: 96, handling: 83, price: 95000, level: 12 },
-            { name: "Jaguar F-Type", speed: 93, acceleration: 92, handling: 87, price: 72000, level: 10 },
-            { name: "Alfa Romeo Giulia", speed: 88, acceleration: 89, handling: 86, price: 48000, level: 8 },
-            { name: "Tesla Model S", speed: 95, acceleration: 99, handling: 82, price: 78000, level: 11 },
-            { name: "Lexus LC500", speed: 91, acceleration: 90, handling: 84, price: 62000, level: 9 },
-            { name: "Maserati GranTurismo", speed: 94, acceleration: 92, handling: 83, price: 82000, level: 12 },
-            { name: "Aston Martin Vantage", speed: 96, acceleration: 94, handling: 87, price: 92000, level: 13 },
-            { name: "McLaren 570S", speed: 98, acceleration: 98, handling: 90, price: 120000, level: 15 },
-            { name: "Ferrari 488", speed: 99, acceleration: 99, handling: 91, price: 150000, level: 17 },
-            { name: "Lamborghini Huracan", speed: 99, acceleration: 99, handling: 89, price: 180000, level: 19 },
-            { name: "Lotus Evora", speed: 87, acceleration: 86, handling: 93, price: 52000, level: 8 },
-            { name: "Acura NSX", speed: 94, acceleration: 95, handling: 88, price: 88000, level: 12 },
-            { name: "Bentley Continental GT", speed: 95, acceleration: 93, handling: 81, price: 110000, level: 14 },
-            { name: "Rolls-Royce Wraith", speed: 90, acceleration: 88, handling: 78, price: 200000, level: 20 },
-            { name: "Pagani Huayra", speed: 100, acceleration: 100, handling: 92, price: 300000, level: 25 },
-            { name: "Koenigsegg Agera", speed: 100, acceleration: 100, handling: 94, price: 500000, level: 30 },
-            { name: "Bugatti Chiron", speed: 100, acceleration: 100, handling: 95, price: 1000000, level: 35 },
-            { name: "Mini Cooper S", speed: 65, acceleration: 68, handling: 82, price: 15000, level: 3 },
-            { name: "Fiat 124 Spider", speed: 62, acceleration: 64, handling: 79, price: 13000, level: 3 },
-            { name: "Hyundai Veloster N", speed: 72, acceleration: 74, handling: 78, price: 20000, level: 4 },
-            { name: "Kia Stinger GT", speed: 82, acceleration: 83, handling: 80, price: 32000, level: 6 },
-            { name: "Genesis G70", speed: 84, acceleration: 85, handling: 82, price: 38000, level: 7 },
-            { name: "Infiniti Q60", speed: 86, acceleration: 87, handling: 81, price: 42000, level: 7 },
-            { name: "Cadillac CTS-V", speed: 95, acceleration: 94, handling: 83, price: 70000, level: 10 },
-            { name: "Lincoln Continental", speed: 78, acceleration: 76, handling: 75, price: 28000, level: 5 },
-            { name: "Chrysler 300", speed: 76, acceleration: 75, handling: 73, price: 24000, level: 5 },
-            { name: "Jeep Grand Cherokee SRT", speed: 80, acceleration: 82, handling: 71, price: 30000, level: 6 },
-            { name: "Range Rover Sport SVR", speed: 88, acceleration: 86, handling: 74, price: 58000, level: 9 }
+        // Dutch companies data
+        const companies = [
+            { id: 1, name: "Albert Heijn", industry: "Retail", fixScore: 8.2, reviews: 1245, responseTime: "1.5 days", manager: "Pieter van Dijk" },
+            { id: 2, name: "Bol.com", industry: "E-commerce", fixScore: 7.8, reviews: 892, responseTime: "2 days", manager: "Marieke Jansen" },
+            { id: 3, name: "Philips", industry: "Electronics", fixScore: 8.5, reviews: 756, responseTime: "3 days", manager: "Thomas de Vries" },
+            { id: 4, name: "ING Bank", industry: "Finance", fixScore: 7.2, reviews: 1103, responseTime: "4 days", manager: "Sanne Bakker" },
+            { id: 5, name: "KLM", industry: "Aviation", fixScore: 6.9, reviews: 987, responseTime: "5 days", manager: "Lars van der Berg" },
+            { id: 6, name: "Heineken", industry: "Beverage", fixScore: 8.7, reviews: 543, responseTime: "2 days", manager: "Eva Smit" },
+            { id: 7, name: "ASML", industry: "Technology", fixScore: 9.1, reviews: 321, responseTime: "3 days", manager: "David Meijer" },
+            { id: 8, name: "Jumbo", industry: "Retail", fixScore: 8.0, reviews: 765, responseTime: "1 day", manager: "Lisa de Boer" },
+            { id: 9, name: "Rabobank", industry: "Finance", fixScore: 7.5, reviews: 832, responseTime: "3 days", manager: "Jeroen van Leeuwen" },
+            { id: 10, name: "Shell", industry: "Energy", fixScore: 6.5, reviews: 654, responseTime: "5 days", manager: "Anna Mulder" },
+            { id: 11, name: "Unilever", industry: "Consumer Goods", fixScore: 8.3, reviews: 432, responseTime: "2 days", manager: "Mark de Groot" },
+            { id: 12, name: "Ahold Delhaize", industry: "Retail", fixScore: 8.1, reviews: 567, responseTime: "1.5 days", manager: "Femke Visser" },
+            { id: 13, name: "ASN Bank", industry: "Finance", fixScore: 9.0, reviews: 298, responseTime: "2 days", manager: "Rik van Dam" },
+            { id: 14, name: "Booking.com", industry: "Travel", fixScore: 7.7, reviews: 876, responseTime: "1 day", manager: "Sofia van den Brink" },
+            { id: 15, name: "TomTom", industry: "Technology", fixScore: 8.4, reviews: 345, responseTime: "3 days", manager: "Kevin Peters" },
+            { id: 16, name: "NS", industry: "Transportation", fixScore: 6.8, reviews: 1209, responseTime: "4 days", manager: "Laura van der Meer" },
+            { id: 17, name: "Zalando", industry: "E-commerce", fixScore: 7.9, reviews: 678, responseTime: "2 days", manager: "Niels de Jong" },
+            { id: 18, name: "Aegon", industry: "Insurance", fixScore: 7.1, reviews: 543, responseTime: "5 days", manager: "Julia van der Linden" },
+            { id: 19, name: "AkzoNobel", industry: "Chemicals", fixScore: 8.6, reviews: 234, responseTime: "3 days", manager: "Maarten van der Velden" },
+            { id: 20, name: "Adyen", industry: "Fintech", fixScore: 9.2, reviews: 187, responseTime: "1 day", manager: "Emma de Ruiter" },
+            { id: 21, name: "Coolblue", industry: "Retail", fixScore: 8.8, reviews: 765, responseTime: "1 day", manager: "Tim van der Heijden" },
+            { id: 22, name: "Bunq", industry: "Banking", fixScore: 8.5, reviews: 432, responseTime: "1 day", manager: "Sara van der Wal" },
+            { id: 23, name: "Takeaway.com", industry: "Food Delivery", fixScore: 7.4, reviews: 654, responseTime: "2 days", manager: "Daan van der Laan" },
+            { id: 24, name: "Miele", industry: "Appliances", fixScore: 8.9, reviews: 321, responseTime: "3 days", manager: "Lotte van der Horst" },
+            { id: 25, name: "Tony's Chocolonely", industry: "Food", fixScore: 9.3, reviews: 298, responseTime: "1 day", manager: "Jasper van der Veen" },
+            { id: 26, name: "Tikkie", industry: "Fintech", fixScore: 8.7, reviews: 543, responseTime: "1 day", manager: "Nina van der Pol" },
+            { id: 27, name: "VanMoof", industry: "Transportation", fixScore: 7.6, reviews: 432, responseTime: "4 days", manager: "Ruben van der Berg" },
+            { id: 28, name: "Bolletje", industry: "Food", fixScore: 8.2, reviews: 198, responseTime: "2 days", manager: "Iris van der Zee" },
+            { id: 29, name: "G-Star RAW", industry: "Fashion", fixScore: 7.8, reviews: 345, responseTime: "3 days", manager: "Milan van der Sman" },
+            { id: 30, name: "Bugaboo", industry: "Baby Products", fixScore: 8.4, reviews: 267, responseTime: "2 days", manager: "Fenna van der Stap" },
+            { id: 31, name: "Miffy", industry: "Toys", fixScore: 9.0, reviews: 154, responseTime: "1 day", manager: "Stijn van der Ploeg" },
+            { id: 32, name: "Rituals", industry: "Cosmetics", fixScore: 8.6, reviews: 543, responseTime: "2 days", manager: "Luna van der Hee" },
+            { id: 33, name: "Hema", industry: "Retail", fixScore: 7.9, reviews: 876, responseTime: "2 days", manager: "Thijs van der Beek" },
+            { id: 34, name: "Blokker", industry: "Retail", fixScore: 6.9, reviews: 654, responseTime: "4 days", manager: "Roos van der Weide" },
+            { id: 35, name: "Pathe", industry: "Entertainment", fixScore: 7.5, reviews: 432, responseTime: "3 days", manager: "Sem van der Plas" },
+            { id: 36, name: "Basic-Fit", industry: "Fitness", fixScore: 7.2, reviews: 567, responseTime: "4 days", manager: "Noa van der Kooi" },
+            { id: 37, name: "Gamma", industry: "Home Improvement", fixScore: 8.1, reviews: 345, responseTime: "2 days", manager: "Lars van der Aa" },
+            { id: 38, name: "Dyson", industry: "Electronics", fixScore: 8.7, reviews: 432, responseTime: "3 days", manager: "Evi van der Brug" },
+            { id: 39, name: "Action", industry: "Retail", fixScore: 7.3, reviews: 987, responseTime: "3 days", manager: "Finn van der Gouw" },
+            { id: 40, name: "TUI", industry: "Travel", fixScore: 6.7, reviews: 654, responseTime: "5 days", manager: "Lieve van der Ham" }
         ];
 
-        // Achievement Database
-        const achievements = [
-            { id: 'first_race', name: 'First Race', description: 'Complete your first race', reward: 500, unlocked: false },
-            { id: 'car_collector', name: 'Car Collector', description: 'Own 5 different cars', reward: 2000, unlocked: false },
-            { id: 'millionaire', name: 'Millionaire', description: 'Earn $1,000,000', reward: 5000, unlocked: false },
-            { id: 'speed_demon', name: 'Speed Demon', description: 'Reach 200 mph in a race', reward: 1500, unlocked: false },
-            { id: 'qte_master', name: 'QTE Master', description: 'Complete 50 QTEs successfully', reward: 1000, unlocked: false },
-            { id: 'insane_racer', name: 'Insane Racer', description: 'Complete 10 races on insane difficulty', reward: 5000, unlocked: false },
-            { id: 'level_20', name: 'Racing Veteran', description: 'Reach level 20', reward: 3000, unlocked: false },
-            { id: 'garage_king', name: 'Garage King', description: 'Own all cars', reward: 10000, unlocked: false },
-            { id: 'sponsor_magnet', name: 'Sponsor Magnet', description: 'Sign 5 sponsors', reward: 2000, unlocked: false },
-            { id: 'tournament_champ', name: 'Tournament Champion', description: 'Win 3 tournaments', reward: 5000, unlocked: false }
-        ];
+        // DOM elements
+        const companyGrid = document.getElementById('companyGrid');
+        const messageModal = document.getElementById('messageModal');
+        const messageForm = document.getElementById('messageForm');
+        const closeModal = document.querySelector('.close-modal');
+        const companyNameInput = document.getElementById('companyName');
+        const managerNameInput = document.getElementById('managerName');
 
-        // Upgrade Database
-        const upgrades = {
-            engine: { name: 'Engine Tuning', levels: 5, costMultiplier: 1000, effect: 'speed' },
-            turbo: { name: 'Turbo Charger', levels: 3, costMultiplier: 2000, effect: 'acceleration' },
-            suspension: { name: 'Sport Suspension', levels: 4, costMultiplier: 1500, effect: 'handling' },
-            brakes: { name: 'Performance Brakes', levels: 3, costMultiplier: 1200, effect: 'handling' },
-            tires: { name: 'Racing Tires', levels: 4, costMultiplier: 800, effect: 'handling' },
-            nitro: { name: 'Nitro System', levels: 2, costMultiplier: 3000, effect: 'nitro' },
-            aero: { name: 'Aerodynamics', levels: 3, costMultiplier: 1800, effect: 'handling' },
-            transmission: { name: 'Race Transmission', levels: 3, costMultiplier: 1600, effect: 'acceleration' }
-        };
-
-        // Tournament Database
-        const tournaments = [
-            { id: 1, name: 'Beginner Cup', entryFee: 500, prize: 2000, levelReq: 1, carReq: 0 },
-            { id: 2, name: 'Amateur League', entryFee: 2000, prize: 8000, levelReq: 5, carReq: 3 },
-            { id: 3, name: 'Pro Championship', entryFee: 5000, prize: 20000, levelReq: 10, carReq: 8 },
-            { id: 4, name: 'Elite Series', entryFee: 10000, prize: 50000, levelReq: 15, carReq: 12 },
-            { id: 5, name: 'Master Grand Prix', entryFee: 25000, prize: 100000, levelReq: 20, carReq: 15 }
-        ];
-
-        // Sponsor Database
-        const sponsors = [
-            { id: 1, name: 'Speed Fuel', reward: 1000, requirement: 'Complete 5 races', active: false },
-            { id: 2, name: 'Turbo Tires', reward: 2000, requirement: 'Reach level 5', active: false },
-            { id: 3, name: 'Performance Parts Co.', reward: 3000, requirement: 'Own 3 cars', active: false },
-            { id: 4, name: 'Racing Gear Pro', reward: 5000, requirement: 'Win a tournament', active: false },
-            { id: 5, name: 'Elite Motors', reward: 10000, requirement: 'Reach level 15', active: false }
-        ];
-
-        // Initialize battlepass rewards
-        function initBattlepass() {
-            gameState.battlepass.rewards = [
-                { tier: 1, type: 'money', value: 500, claimed: false },
-                { tier: 2, type: 'car', value: 1, claimed: false },
-                { tier: 3, type: 'money', value: 1000, claimed: false },
-                { tier: 5, type: 'car', value: 3, claimed: false },
-                { tier: 7, type: 'money', value: 2000, claimed: false },
-                { tier: 10, type: 'car', value: 5, claimed: false },
-                { tier: 15, type: 'money', value: 5000, claimed: false },
-                { tier: 20, type: 'car', value: 10, claimed: false }
-            ];
-        }
-
-        // Initialize upgrades
-        function initUpgrades() {
-            for (let upgrade in upgrades) {
-                if (!gameState.upgrades[upgrade]) {
-                    gameState.upgrades[upgrade] = 0;
-                }
-            }
-        }
-
-        // Initialize sponsors
-        function initSponsors() {
-            gameState.sponsors = JSON.parse(JSON.stringify(sponsors));
-        }
-
-        // Initialize leaderboard
-        function initLeaderboard() {
-            if (gameState.leaderboard.length === 0) {
-                gameState.leaderboard = [
-                    { name: 'SpeedRacer99', level: 35, money: 1250000 },
-                    { name: 'DriftKing42', level: 28, money: 850000 },
-                    { name: 'TurboMaster', level: 25, money: 620000 },
-                    { name: 'RacePro', level: 22, money: 480000 },
-                    { name: 'Velocity', level: 20, money: 350000 },
-                    { name: gameState.multiplayer.username, level: gameState.level, money: gameState.money }
-                ].sort((a, b) => b.level - a.level);
-            }
-        }
-
-        // Create dynamic background
-        function createDynamicBackground() {
-            const bg = document.getElementById('dynamicBg');
-            bg.innerHTML = '';
+        // Render companies
+        function renderCompanies(companiesToRender) {
+            companyGrid.innerHTML = '';
             
-            for (let i = 0; i < 20; i++) {
-                const element = document.createElement('div');
-                element.className = 'bg-element';
-                element.style.width = `${Math.random() * 100 + 50}px`;
-                element.style.height = element.style.width;
-                element.style.left = `${Math.random() * 100}%`;
-                element.style.top = `${Math.random() * 100 + 100}%`;
-                element.style.animationDuration = `${Math.random() * 30 + 20}s`;
-                element.style.animationDelay = `${Math.random() * 5}s`;
-                bg.appendChild(element);
-            }
-        }
-
-        // Show notification
-        function showNotification(message, type = 'info') {
-            const container = document.getElementById('notifications');
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            container.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'fadeOut 0.3s ease';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        // Screen management
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
+            companiesToRender.forEach(company => {
+                const fixscoreClass = company.fixScore >= 8.5 ? '' : 
+                                     company.fixScore >= 7 ? 'medium' : 'low';
+                
+                const companyCard = document.createElement('div');
+                companyCard.className = 'company-card';
+                companyCard.innerHTML = `
+                    <div class="company-header">
+                        <h3 class="company-name">${company.name}</h3>
+                        <p class="company-industry">${company.industry}</p>
+                    </div>
+                    <div class="company-stats">
+                        <div class="stat">
+                            <span class="stat-label">FixScore</span>
+                            <span class="fixscore ${fixscoreClass}">${company.fixScore}/10</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Reviews</span>
+                            <span>${company.reviews}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Avg. Response Time</span>
+                            <span class="response-time">${company.responseTime}</span>
+                        </div>
+                    </div>
+                    <div class="company-actions">
+                        <button class="btn btn-outline view-reviews">View Reviews</button>
+                        <button class="btn btn-primary message-manager" data-id="${company.id}">Message Manager</button>
+                    </div>
+                `;
+                
+                companyGrid.appendChild(companyCard);
             });
-            document.getElementById(screenId).classList.add('active');
-        }
-
-        function startGame() {
-            initBattlepass();
-            initUpgrades();
-            initSponsors();
-            initLeaderboard();
-            checkDailyRewards();
-            createDynamicBackground();
-            showScreen('mainMenu');
-            showTab('garage');
-        }
-
-        function backToStart() {
-            showScreen('startScreen');
-        }
-
-        function showSettings() {
-            showScreen('mainMenu');
-            showTab('settings');
-        }
-
-        function showCredits() {
-            showNotification('Created by Pro Racing Studios\nSpecial thanks to our beta testers!', 'info');
-        }
-
-        function showLeaderboard() {
-            showScreen('mainMenu');
-            showTab('leaderboard');
-        }
-
-        // Tab management
-        function showTab(tab) {
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            event.target?.classList.add('active');
             
-            const content = document.getElementById('contentArea');
-            
-            switch(tab) {
-                case 'garage':
-                    showGarage(content);
-                    break;
-                case 'race':
-                    showRaceSetup(content);
-                    break;
-                case 'upgrades':
-                    showUpgradesTab(content);
-                    break;
-                case 'sponsors':
-                    showSponsors(content);
-                    break;
-                case 'achievements':
-                    showAchievements(content);
-                    break;
-                case 'tournaments':
-                    showTournaments(content);
-                    break;
-                case 'multiplayer':
-                    showMultiplayer(content);
-                    break;
-                case 'daily':
-                    showDailyRewards(content);
-                    break;
-                case 'battlepass':
-                    showBattlepass(content);
-                    break;
-                case 'settings':
-                    showSettingsTab(content);
-                    break;
-                case 'leaderboard':
-                    showLeaderboardTab(content);
-                    break;
+            // Add event listeners to message buttons
+            document.querySelectorAll('.message-manager').forEach(button => {
+                button.addEventListener('click', function() {
+                    const companyId = parseInt(this.getAttribute('data-id'));
+                    openMessageModal(companyId);
+                });
+            });
+        }
+
+        // Open message modal
+        function openMessageModal(companyId) {
+            const company = companies.find(c => c.id === companyId);
+            if (company) {
+                companyNameInput.value = company.name;
+                managerNameInput.value = company.manager;
+                messageModal.style.display = 'flex';
             }
         }
 
-        function showGarage(content) {
-            content.innerHTML = `
-                <div class="stats-bar">
-                    <div class="stat-box">
-                        <div class="stat-label">Money</div>
-                        <div class="stat-value">$${gameState.money.toLocaleString()}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Level</div>
-                        <div class="stat-value">${gameState.level}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Cars Owned</div>
-                        <div class="stat-value">${gameState.ownedCars.length}/40</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Reputation</div>
-                        <div class="stat-value">${gameState.reputation}</div>
-                    </div>
-                </div>
-                
-                <div class="level-progress" onclick="showLevelDetails()">
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>Level ${gameState.level}</span>
-                        <span>Click for details</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${(gameState.xp / gameState.xpNeeded) * 100}%">
-                            ${gameState.xp} / ${gameState.xpNeeded} XP
-                        </div>
-                    </div>
-                </div>
-                
-                <h2>Your Garage</h2>
-                <div class="cars-grid">
-                    ${cars.map((car, index) => `
-                        <div class="car-card ${gameState.ownedCars.includes(index) ? 'owned' : ''} ${gameState.currentCar === index ? 'selected' : ''} ${!gameState.ownedCars.includes(index) && (car.level > gameState.level || car.price > gameState.money) ? 'locked' : ''}"
-                             onclick="selectCar(${index})">
-                            ${car.level > 0 ? `<div class="car-level">Lvl ${car.level}</div>` : ''}
-                            <div class="car-name">${car.name}</div>
-                            <div class="car-stats">
-                                Speed: ${car.speed} | Acc: ${car.acceleration}<br>
-                                Handling: ${car.handling}
-                            </div>
-                            <div class="car-price">
-                                ${gameState.ownedCars.includes(index) ? 'OWNED' : `$${car.price.toLocaleString()}`}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
+        // Close modal
+        closeModal.addEventListener('click', function() {
+            messageModal.style.display = 'none';
+        });
 
-        function showLevelDetails() {
-            const xpMultipliers = {
-                'easy': 1,
-                'normal': 1.5,
-                'hard': 2,
-                'insane': 3
-            };
-            
-            showNotification(`Level ${gameState.level} Progress: ${gameState.xp}/${gameState.xpNeeded} XP. Higher difficulties give more XP!`, 'info');
-        }
+        // Handle form submission
+        messageForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Your message has been sent to the manager. Thank you!');
+            messageModal.style.display = 'none';
+            messageForm.reset();
+        });
 
-        function selectCar(index) {
-            const car = cars[index];
-            
-            if (gameState.ownedCars.includes(index)) {
-                gameState.currentCar = index;
-                showNotification(`Selected: ${car.name}`, 'success');
-                showTab('garage');
-            } else if (car.level > gameState.level) {
-                showNotification(`Requires Level ${car.level}!`, 'error');
-            } else if (car.price > gameState.money) {
-                showNotification(`Not enough money! Need $${(car.price - gameState.money).toLocaleString()} more`, 'error');
-            } else {
-                // Buy car
-                gameState.money -= car.price;
-                gameState.ownedCars.push(index);
-                gameState.currentCar = index;
-                showNotification(`Purchased ${car.name}!`, 'success');
-                
-                // Check achievement
-                checkAchievement('car_collector', gameState.ownedCars.length >= 5);
-                
-                showTab('garage');
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === messageModal) {
+                messageModal.style.display = 'none';
             }
-        }
+        });
 
-        function showRaceSetup(content) {
-            content.innerHTML = `
-                <div class="race-setup">
-                    <div class="setup-section">
-                        <div class="setup-title">Select Circuit</div>
-                        <div class="mode-buttons">
-                            <button class="mode-btn ${gameState.circuitType === 'small' ? 'selected' : ''}" onclick="selectCircuit('small')">
-                                Small Circuit<br>
-                                <small>3 max QTEs</small>
-                            </button>
-                            <button class="mode-btn ${gameState.circuitType === 'large' ? 'selected' : ''}" onclick="selectCircuit('large')">
-                                Large Circuit<br>
-                                <small>6 max QTEs</small>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="setup-section">
-                        <div class="setup-title">Driver Instructions</div>
-                        <div class="mode-buttons">
-                            <button class="mode-btn ${gameState.raceMode === 'slow' ? 'selected' : ''}" onclick="selectRaceMode('slow')">
-                                Take Time<br>
-                                <small>Low risk, low reward</small>
-                            </button>
-                            <button class="mode-btn ${gameState.raceMode === 'normal' ? 'selected' : ''}" onclick="selectRaceMode('normal')">
-                                Normal Pace<br>
-                                <small>Balanced approach</small>
-                            </button>
-                            <button class="mode-btn ${gameState.raceMode === 'fast' ? 'selected' : ''}" onclick="selectRaceMode('fast')">
-                                Push Hard<br>
-                                <small>High risk, high reward</small>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="setup-section">
-                        <div class="setup-title">Difficulty</div>
-                        <div class="mode-buttons">
-                            <button class="mode-btn ${gameState.difficultyMode === 'easy' ? 'selected' : ''}" onclick="selectDifficulty('easy')">
-                                Easy<br>
-                                <small>1x XP</small>
-                            </button>
-                            <button class="mode-btn ${gameState.difficultyMode === 'normal' ? 'selected' : ''}" onclick="selectDifficulty('normal')">
-                                Normal<br>
-                                <small>1.5x XP</small>
-                            </button>
-                            <button class="mode-btn ${gameState.difficultyMode === 'hard' ? 'selected' : ''}" onclick="selectDifficulty('hard')">
-                                Hard<br>
-                                <small>2x XP</small>
-                            </button>
-                            <button class="mode-btn ${gameState.difficultyMode === 'insane' ? 'selected' : ''}" onclick="selectDifficulty('insane')">
-                                INSANE<br>
-                                <small>${gameState.insaneDifficulty}% crash chance<br>Instant level + $2000</small>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center;">
-                        <button class="btn" onclick="startRaceWithCountdown()" style="font-size: 24px; padding: 20px 60px;">
-                            🏁 START RACE 🏁
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function selectCircuit(type) {
-            gameState.circuitType = type;
-            showTab('race');
-        }
-
-        function selectRaceMode(mode) {
-            gameState.raceMode = mode;
-            showTab('race');
-        }
-
-        function selectDifficulty(difficulty) {
-            gameState.difficultyMode = difficulty;
-            showTab('race');
-        }
-
-        function showUpgradesTab(content) {
-            const currentCar = cars[gameState.currentCar];
-            content.innerHTML = `
-                <h2>Car Upgrades - ${currentCar.name}</h2>
-                <p style="margin-bottom: 20px; color: #888;">Upgrade your car to improve performance in races</p>
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
                 
-                ${Object.keys(upgrades).map(upgrade => {
-                    const upgradeData = upgrades[upgrade];
-                    const currentLevel = gameState.upgrades[upgrade] || 0;
-                    const nextLevel = currentLevel + 1;
-                    const cost = nextLevel * upgradeData.costMultiplier;
-                    const canUpgrade = nextLevel <= upgradeData.levels && gameState.money >= cost;
-                    
-                    return `
-                        <div class="upgrade-option">
-                            <div class="upgrade-name">${upgradeData.name}</div>
-                            <div class="upgrade-stats">
-                                <span>Level: ${currentLevel}/${upgradeData.levels}</span>
-                                <span class="upgrade-cost">$${cost.toLocaleString()}</span>
-                            </div>
-                            <div style="margin-bottom: 10px;">
-                                <small>Improves: ${upgradeData.effect}</small>
-                            </div>
-                            <button class="btn" ${!canUpgrade ? 'disabled' : ''} onclick="purchaseUpgrade('${upgrade}')" 
-                                    style="padding: 10px 20px; font-size: 14px;">
-                                ${nextLevel > upgradeData.levels ? 'MAX LEVEL' : `Upgrade to Level ${nextLevel}`}
-                            </button>
-                        </div>
-                    `;
-                }).join('')}
-            `;
-        }
-
-        function purchaseUpgrade(upgradeType) {
-            const upgradeData = upgrades[upgradeType];
-            const currentLevel = gameState.upgrades[upgradeType] || 0;
-            const nextLevel = currentLevel + 1;
-            const cost = nextLevel * upgradeData.costMultiplier;
-            
-            if (nextLevel <= upgradeData.levels && gameState.money >= cost) {
-                gameState.money -= cost;
-                gameState.upgrades[upgradeType] = nextLevel;
-                showNotification(`${upgradeData.name} upgraded to level ${nextLevel}!`, 'success');
-                showTab('upgrades');
-            }
-        }
-
-        function showSponsors(content) {
-            const activeSponsors = gameState.sponsors.filter(s => s.active);
-            content.innerHTML = `
-                <h2>Sponsors</h2>
-                <p style="margin-bottom: 20px; color: #888;">Sign sponsors to earn extra money and reputation</p>
-                
-                <div class="stats-bar">
-                    <div class="stat-box">
-                        <div class="stat-label">Active Sponsors</div>
-                        <div class="stat-value">${activeSponsors.length}/5</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Total Earnings</div>
-                        <div class="stat-value">$${activeSponsors.reduce((sum, s) => sum + s.reward, 0).toLocaleString()}</div>
-                    </div>
-                </div>
-                
-                ${gameState.sponsors.map(sponsor => {
-                    const canSign = !sponsor.active && 
-                        (sponsor.requirement.includes('level') ? gameState.level >= parseInt(sponsor.requirement.match(/\d+/)[0]) :
-                         sponsor.requirement.includes('races') ? gameState.stats.racesCompleted >= 5 :
-                         sponsor.requirement.includes('cars') ? gameState.ownedCars.length >= 3 :
-                         sponsor.requirement.includes('tournament') ? gameState.tournamentsWon >= 1 : true);
-                    
-                    return `
-                        <div class="sponsor-card" style="${sponsor.active ? 'border-color: #10b981;' : ''}">
-                            <div class="sponsor-name">${sponsor.name}</div>
-                            <div style="margin-bottom: 10px;">
-                                <div>Requirement: ${sponsor.requirement}</div>
-                                <div class="sponsor-reward">Reward: $${sponsor.reward.toLocaleString()}</div>
-                            </div>
-                            <button class="btn" ${!canSign ? 'disabled' : ''} onclick="signSponsor(${sponsor.id})" 
-                                    style="padding: 10px 20px; font-size: 14px;">
-                                ${sponsor.active ? 'Signed' : canSign ? 'Sign Sponsor' : 'Requirements Not Met'}
-                            </button>
-                        </div>
-                    `;
-                }).join('')}
-            `;
-        }
-
-        function signSponsor(sponsorId) {
-            const sponsor = gameState.sponsors.find(s => s.id === sponsorId);
-            if (sponsor && !sponsor.active) {
-                sponsor.active = true;
-                gameState.money += sponsor.reward;
-                gameState.reputation += 10;
-                showNotification(`Signed ${sponsor.name}! +$${sponsor.reward} and +10 reputation`, 'success');
-                
-                // Check achievement
-                checkAchievement('sponsor_magnet', gameState.sponsors.filter(s => s.active).length >= 5);
-                
-                showTab('sponsors');
-            }
-        }
-
-        function showAchievements(content) {
-            const unlockedCount = achievements.filter(a => a.unlocked).length;
-            content.innerHTML = `
-                <h2>Achievements</h2>
-                <p style="margin-bottom: 20px; color: #888;">${unlockedCount}/${achievements.length} achievements unlocked</p>
-                
-                <div class="stats-bar">
-                    <div class="stat-box">
-                        <div class="stat-label">Total Rewards</div>
-                        <div class="stat-value">$${achievements.filter(a => a.unlocked).reduce((sum, a) => sum + a.reward, 0).toLocaleString()}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Available</div>
-                        <div class="stat-value">$${achievements.filter(a => !a.unlocked).reduce((sum, a) => sum + a.reward, 0).toLocaleString()}</div>
-                    </div>
-                </div>
-                
-                ${achievements.map(achievement => `
-                    <div class="upgrade-option" style="${achievement.unlocked ? 'border-color: #10b981;' : ''}">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-size: 18px; font-weight: bold;">${achievement.name}</div>
-                                <div style="color: #888; margin-top: 5px;">${achievement.description}</div>
-                            </div>
-                            <div style="text-align: right;">
-                                ${achievement.unlocked ? 
-                                    '<span class="achievement-badge">UNLOCKED</span>' : 
-                                    `<span style="color: #ffd700;">$${achievement.reward}</span>`
-                                }
-                            </div>
-                        </div>
-                    </div>
-                `).join('')}
-            `;
-        }
-
-        function showTournaments(content) {
-            content.innerHTML = `
-                <h2>Tournaments</h2>
-                <p style="margin-bottom: 20px; color: #888;">Compete in tournaments for big prizes!</p>
-                
-                ${tournaments.map(tournament => {
-                    const canEnter = gameState.level >= tournament.levelReq && 
-                                   Math.max(...gameState.ownedCars) >= tournament.carReq;
-                    
-                    return `
-                        <div class="tournament-card">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <div style="font-size: 20px; font-weight: bold;">${tournament.name}</div>
-                                    <div style="color: #888; margin-top: 5px;">
-                                        Level ${tournament.levelReq}+ | Car Level ${tournament.carReq}+
-                                    </div>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div class="tournament-prize">$${tournament.prize.toLocaleString()}</div>
-                                    <div style="color: #888;">Entry: $${tournament.entryFee.toLocaleString()}</div>
-                                </div>
-                            </div>
-                            <div style="margin-top: 15px; text-align: center;">
-                                <button class="btn" ${!canEnter ? 'disabled' : ''} onclick="enterTournament(${tournament.id})" 
-                                        style="padding: 10px 20px; font-size: 14px;">
-                                    ${canEnter ? 'Enter Tournament' : 'Requirements Not Met'}
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }).join('')}
-            `;
-        }
-
-        function enterTournament(tournamentId) {
-            const tournament = tournaments.find(t => t.id === tournamentId);
-            if (gameState.money >= tournament.entryFee) {
-                gameState.money -= tournament.entryFee;
-                showNotification(`Entered ${tournament.name}! Starting race...`, 'success');
-                
-                // Set up tournament race
-                gameState.difficultyMode = 'hard';
-                gameState.circuitType = 'large';
-                startRaceWithCountdown();
-            } else {
-                showNotification(`Not enough money for entry fee!`, 'error');
-            }
-        }
-
-        function showMultiplayer(content) {
-            content.innerHTML = `
-                <h2>Multiplayer</h2>
-                <p style="margin-bottom: 20px; color: #888;">Race against other players online</p>
-                
-                <div class="stats-bar">
-                    <div class="stat-box">
-                        <div class="stat-label">Username</div>
-                        <div class="stat-value">${gameState.multiplayer.username}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Rank</div>
-                        <div class="stat-value">${gameState.multiplayer.rank}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Matches</div>
-                        <div class="stat-value">${gameState.multiplayer.matches}</div>
-                    </div>
-                </div>
-                
-                <div style="margin: 20px 0;">
-                    <button class="btn" onclick="findMatch()" style="margin-right: 10px;">Find Match</button>
-                    <button class="btn" onclick="createRoom()">Create Room</button>
-                </div>
-                
-                <h3 style="margin: 20px 0;">Available Rooms</h3>
-                <div class="multiplayer-room">
-                    <div class="room-name">Pro Racers Lobby</div>
-                    <div class="room-players">3/8 players</div>
-                    <button class="btn" style="padding: 8px 15px; font-size: 14px;">Join Room</button>
-                </div>
-                
-                <div class="multiplayer-room">
-                    <div class="room-name">Beginner Friendly</div>
-                    <div class="room-players">5/8 players</div>
-                    <button class="btn" style="padding: 8px 15px; font-size: 14px;">Join Room</button>
-                </div>
-            `;
-        }
-
-        function findMatch() {
-            showNotification('Searching for opponents...', 'info');
-            setTimeout(() => {
-                showNotification('Match found! Starting race...', 'success');
-                startRaceWithCountdown();
-            }, 2000);
-        }
-
-        function createRoom() {
-            showNotification('Room created! Share code: RACE' + Math.floor(Math.random() * 10000), 'success');
-        }
-
-        function showDailyRewards(content) {
-            const today = new Date().toDateString();
-            const lastClaim = gameState.dailyRewards.lastClaim;
-            const canClaim = lastClaim !== today;
-            
-            content.innerHTML = `
-                <div class="daily-reward">
-                    <div class="daily-reward-title">Daily Rewards</div>
-                    <div style="margin-bottom: 15px;">
-                        Current Streak: ${gameState.dailyRewards.streak} days
-                    </div>
-                    
-                    <div class="daily-reward-grid">
-                        ${[100, 200, 300, 500, 750, 1000, 2000].map((reward, index) => {
-                            const day = index + 1;
-                            const isClaimed = day <= gameState.dailyRewards.streak;
-                            const isAvailable = canClaim && day === gameState.dailyRewards.streak + 1;
-                            
-                            return `
-                                <div class="daily-reward-day ${isClaimed ? 'claimed' : ''} ${isAvailable ? 'available' : ''}">
-                                    <div>Day ${day}</div>
-                                    <div class="daily-reward-value">$${reward}</div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                    
-                    <button class="btn" ${!canClaim ? 'disabled' : ''} onclick="claimDailyReward()">
-                        ${canClaim ? 'Claim Daily Reward' : 'Already Claimed Today'}
-                    </button>
-                </div>
-            `;
-        }
-
-        function checkDailyRewards() {
-            const today = new Date().toDateString();
-            const lastClaim = gameState.dailyRewards.lastClaim;
-            
-            if (lastClaim && lastClaim !== today) {
-                const yesterday = new Date();
-                yesterday.setDate(yesterday.getDate() - 1);
-                
-                // Reset streak if not consecutive
-                if (lastClaim !== yesterday.toDateString()) {
-                    gameState.dailyRewards.streak = 0;
-                }
-            }
-        }
-
-        function claimDailyReward() {
-            const today = new Date().toDateString();
-            const lastClaim = gameState.dailyRewards.lastClaim;
-            
-            if (lastClaim !== today) {
-                gameState.dailyRewards.streak++;
-                gameState.dailyRewards.lastClaim = today;
-                
-                const rewards = [100, 200, 300, 500, 750, 1000, 2000];
-                const reward = rewards[Math.min(gameState.dailyRewards.streak - 1, 6)];
-                
-                gameState.money += reward;
-                showNotification(`Daily reward claimed! +$${reward} (Streak: ${gameState.dailyRewards.streak})`, 'success');
-                
-                showTab('daily');
-            }
-        }
-
-        function showBattlepass(content) {
-            content.innerHTML = `
-                <h2>🏆 Battlepass - Tier ${gameState.battlepass.tier}</h2>
-                <div class="battlepass-rewards" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; margin-top: 30px;">
-                    ${gameState.battlepass.rewards.map(reward => `
-                        <div class="reward-item ${reward.claimed ? 'claimed' : ''} ${reward.tier <= gameState.battlepass.tier && !reward.claimed ? 'available' : ''}">
-                            <div style="font-size: 30px;">${reward.type === 'money' ? '💰' : '🏎️'}</div>
-                            <div>Tier ${reward.tier}</div>
-                            <div style="font-weight: bold;">
-                                ${reward.type === 'money' ? `$${reward.value}` : cars[reward.value].name}
-                            </div>
-                            ${reward.tier <= gameState.battlepass.tier && !reward.claimed ? 
-                                `<button class="btn" style="margin-top: 10px; padding: 5px 10px; font-size: 12px;" onclick="claimReward(${gameState.battlepass.rewards.indexOf(reward)})">Claim</button>` : 
-                                reward.claimed ? '<div style="color: #10b981;">✓ Claimed</div>' : ''}
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        function claimReward(index) {
-            const reward = gameState.battlepass.rewards[index];
-            if (!reward.claimed && reward.tier <= gameState.battlepass.tier) {
-                reward.claimed = true;
-                
-                if (reward.type === 'money') {
-                    gameState.money += reward.value;
-                    showNotification(`Claimed $${reward.value}!`, 'success');
+                const filter = this.textContent;
+                if (filter === 'All Industries') {
+                    renderCompanies(companies);
                 } else {
-                    if (!gameState.ownedCars.includes(reward.value)) {
-                        gameState.ownedCars.push(reward.value);
-                        showNotification(`Unlocked ${cars[reward.value].name}!`, 'success');
-                    } else {
-                        gameState.money += cars[reward.value].price / 2;
-                        showNotification(`Already owned! Received $${cars[reward.value].price / 2}`, 'success');
-                    }
+                    const filteredCompanies = companies.filter(company => 
+                        company.industry === filter
+                    );
+                    renderCompanies(filteredCompanies);
                 }
-                
-                showTab('battlepass');
-            }
-        }
+            });
+        });
 
-        function showSettingsTab(content) {
-            content.innerHTML = `
-                <h2>Settings</h2>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Enable Crashes</div>
-                        <div style="color: #888; font-size: 14px;">Cars can crash during races</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.crashesEnabled ? 'active' : ''}" onclick="toggleSetting('crashesEnabled')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Music Volume</div>
-                        <div style="color: #888; font-size: 14px;">Adjust background music volume</div>
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" min="0" max="100" value="${gameState.settings.musicVolume}" class="slider" onchange="updateSetting('musicVolume', this.value)">
-                        <span>${gameState.settings.musicVolume}%</span>
-                    </div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">SFX Volume</div>
-                        <div style="color: #888; font-size: 14px;">Adjust sound effects volume</div>
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" min="0" max="100" value="${gameState.settings.sfxVolume}" class="slider" onchange="updateSetting('sfxVolume', this.value)">
-                        <span>${gameState.settings.sfxVolume}%</span>
-                    </div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Graphics Quality</div>
-                        <div style="color: #888; font-size: 14px;">Adjust visual quality and performance</div>
-                    </div>
-                    <select class="dropdown" onchange="updateSetting('graphicsQuality', this.value)">
-                        <option value="low" ${gameState.settings.graphicsQuality === 'low' ? 'selected' : ''}>Low</option>
-                        <option value="medium" ${gameState.settings.graphicsQuality === 'medium' ? 'selected' : ''}>Medium</option>
-                        <option value="high" ${gameState.settings.graphicsQuality === 'high' ? 'selected' : ''}>High</option>
-                        <option value="ultra" ${gameState.settings.graphicsQuality === 'ultra' ? 'selected' : ''}>Ultra</option>
-                    </select>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Show FPS</div>
-                        <div style="color: #888; font-size: 14px;">Display frames per second counter</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.showFPS ? 'active' : ''}" onclick="toggleSetting('showFPS')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Control Scheme</div>
-                        <div style="color: #888; font-size: 14px;">Choose your preferred control method</div>
-                    </div>
-                    <select class="dropdown" onchange="updateSetting('controlScheme', this.value)">
-                        <option value="keyboard" ${gameState.settings.controlScheme === 'keyboard' ? 'selected' : ''}>Keyboard</option>
-                        <option value="gamepad" ${gameState.settings.controlScheme === 'gamepad' ? 'selected' : ''}>Gamepad</option>
-                        <option value="touch" ${gameState.settings.controlScheme === 'touch' ? 'selected' : ''}>Touch</option>
-                    </select>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Screen Mode</div>
-                        <div style="color: #888; font-size: 14px;">Choose windowed or fullscreen mode</div>
-                    </div>
-                    <select class="dropdown" onchange="updateSetting('screenMode', this.value)">
-                        <option value="windowed" ${gameState.settings.screenMode === 'windowed' ? 'selected' : ''}>Windowed</option>
-                        <option value="fullscreen" ${gameState.settings.screenMode === 'fullscreen' ? 'selected' : ''}>Fullscreen</option>
-                    </select>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">V-Sync</div>
-                        <div style="color: #888; font-size: 14px;">Enable vertical synchronization</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.vSync ? 'active' : ''}" onclick="toggleSetting('vSync')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Motion Blur</div>
-                        <div style="color: #888; font-size: 14px;">Add motion blur effects during races</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.motionBlur ? 'active' : ''}" onclick="toggleSetting('motionBlur')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Tire Wear</div>
-                        <div style="color: #888; font-size: 14px;">Enable realistic tire degradation</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.tireWear ? 'active' : ''}" onclick="toggleSetting('tireWear')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Weather Effects</div>
-                        <div style="color: #888; font-size: 14px;">Enable dynamic weather during races</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.weatherEffects ? 'active' : ''}" onclick="toggleSetting('weatherEffects')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Dynamic Camera</div>
-                        <div style="color: #888; font-size: 14px;">Camera follows car movement dynamically</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.dynamicCamera ? 'active' : ''}" onclick="toggleSetting('dynamicCamera')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Race Assists</div>
-                        <div style="color: #888; font-size: 14px;">Enable driving assists for beginners</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.raceAssists ? 'active' : ''}" onclick="toggleSetting('raceAssists')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Damage Visuals</div>
-                        <div style="color: #888; font-size: 14px;">Show visual damage on cars</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.damageVisuals ? 'active' : ''}" onclick="toggleSetting('damageVisuals')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Opponent Count</div>
-                        <div style="color: #888; font-size: 14px;">Number of AI opponents in races</div>
-                    </div>
-                    <select class="dropdown" onchange="updateSetting('opponentCount', this.value)">
-                        <option value="3" ${gameState.settings.opponentCount === 3 ? 'selected' : ''}>3</option>
-                        <option value="5" ${gameState.settings.opponentCount === 5 ? 'selected' : ''}>5</option>
-                        <option value="8" ${gameState.settings.opponentCount === 8 ? 'selected' : ''}>8</option>
-                        <option value="12" ${gameState.settings.opponentCount === 12 ? 'selected' : ''}>12</option>
-                    </select>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Day/Night Cycle</div>
-                        <div style="color: #888; font-size: 14px;">Enable dynamic time of day changes</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.dayNightCycle ? 'active' : ''}" onclick="toggleSetting('dayNightCycle')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Post-Processing</div>
-                        <div style="color: #888; font-size: 14px;">Enable advanced visual effects</div>
-                    </div>
-                    <div class="toggle-switch ${gameState.settings.postProcessing ? 'active' : ''}" onclick="toggleSetting('postProcessing')"></div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">UI Scale</div>
-                        <div style="color: #888; font-size: 14px;">Adjust the size of interface elements</div>
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" min="80" max="120" value="${gameState.settings.uiScale}" class="slider" onchange="updateSetting('uiScale', this.value)">
-                        <span>${gameState.settings.uiScale}%</span>
-                    </div>
-                </div>
-                
-                <div class="setting-item">
-                    <div>
-                        <div style="font-size: 18px;">Color Blind Mode</div>
-                        <div style="color: #888; font-size: 14px;">Adjust colors for color vision deficiency</div>
-                    </div>
-                    <select class="dropdown" onchange="updateSetting('colorBlindMode', this.value)">
-                        <option value="none" ${gameState.settings.colorBlindMode === 'none' ? 'selected' : ''}>None</option>
-                        <option value="protanopia" ${gameState.settings.colorBlindMode === 'protanopia' ? 'selected' : ''}>Protanopia</option>
-                        <option value="deuteranopia" ${gameState.settings.colorBlindMode === 'deuteranopia' ? 'selected' : ''}>Deuteranopia</option>
-                        <option value="tritanopia" ${gameState.settings.colorBlindMode === 'tritanopia' ? 'selected' : ''}>Tritanopia</option>
-                    </select>
-                </div>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <button class="btn" onclick="resetSettings()">Reset to Defaults</button>
-                </div>
-            `;
-        }
-
-        function toggleSetting(setting) {
-            gameState.settings[setting] = !gameState.settings[setting];
-            showTab('settings');
-        }
-
-        function updateSetting(setting, value) {
-            gameState.settings[setting] = value;
-            showTab('settings');
-        }
-
-        function resetSettings() {
-            gameState.settings = {
-                crashesEnabled: true,
-                musicVolume: 50,
-                sfxVolume: 70,
-                difficulty: "normal",
-                graphicsQuality: "high",
-                showFPS: false,
-                language: "english",
-                controlScheme: "keyboard",
-                screenMode: "windowed",
-                vSync: true,
-                motionBlur: true,
-                tireWear: true,
-                weatherEffects: true,
-                dynamicCamera: true,
-                raceAssists: false,
-                damageVisuals: true,
-                opponentCount: 5,
-                dayNightCycle: false,
-                postProcessing: true,
-                uiScale: 100,
-                colorBlindMode: "none"
-            };
-            showTab('settings');
-            showNotification('Settings reset to defaults!', 'success');
-        }
-
-        function showLeaderboardTab(content) {
-            // Update current player stats
-            const playerIndex = gameState.leaderboard.findIndex(entry => entry.name === gameState.multiplayer.username);
-            if (playerIndex !== -1) {
-                gameState.leaderboard[playerIndex].level = gameState.level;
-                gameState.leaderboard[playerIndex].money = gameState.money;
-            }
-            
-            // Sort by level
-            gameState.leaderboard.sort((a, b) => b.level - a.level);
-            
-            content.innerHTML = `
-                <h2>Global Leaderboard</h2>
-                <p style="margin-bottom: 20px; color: #888;">Compete with players worldwide</p>
-                
-                <div class="leaderboard">
-                    ${gameState.leaderboard.map((entry, index) => `
-                        <div class="leaderboard-entry" style="${entry.name === gameState.multiplayer.username ? 'background: rgba(67, 97, 238, 0.2);' : ''}">
-                            <div>
-                                <span class="leaderboard-position">#${index + 1}</span>
-                                <span style="margin-left: 10px;">${entry.name}</span>
-                                ${entry.name === gameState.multiplayer.username ? ' (You)' : ''}
-                            </div>
-                            <div>
-                                <span>Level ${entry.level}</span>
-                                <span style="margin-left: 15px; color: #ffd700;">$${entry.money.toLocaleString()}</span>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-                
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="btn" onclick="refreshLeaderboard()">Refresh</button>
-                </div>
-            `;
-        }
-
-        function refreshLeaderboard() {
-            showNotification('Leaderboard updated!', 'success');
-            showTab('leaderboard');
-        }
-
-        function checkAchievement(achievementId, condition) {
-            const achievement = achievements.find(a => a.id === achievementId);
-            if (achievement && !achievement.unlocked && condition) {
-                achievement.unlocked = true;
-                gameState.money += achievement.reward;
-                showNotification(`Achievement Unlocked: ${achievement.name}! +$${achievement.reward}`, 'success');
-            }
-        }
-
-        // Racing System
-        let raceActive = false;
-        let raceData = {
-            progress: 0,
-            speed: 0,
-            lapTime: 0,
-            qteActive: false,
-            qteCount: 0,
-            earnings: 0,
-            maxSpeed: 0
-        };
-
-        // Enhanced race start with countdown
-        function startRaceWithCountdown() {
-            if (gameState.money < 0 && gameState.currentCar !== 0) {
-                showNotification("Can't race with negative balance unless using starter car!", 'error');
+        // Search functionality
+        const searchInput = document.querySelector('.search-box input');
+        const searchButton = document.querySelector('.search-box button');
+        
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase();
+            if (searchTerm.trim() === '') {
+                renderCompanies(companies);
                 return;
             }
             
-            const overlay = document.getElementById('raceStartOverlay');
-            const countdownDisplay = document.getElementById('countdownDisplay');
-            overlay.classList.add('active');
+            const filteredCompanies = companies.filter(company => 
+                company.name.toLowerCase().includes(searchTerm) || 
+                company.industry.toLowerCase().includes(searchTerm)
+            );
             
-            let count = 3;
-            countdownDisplay.textContent = count;
-            countdownDisplay.className = 'countdown';
-            
-            const countdownInterval = setInterval(() => {
-                count--;
-                if (count > 0) {
-                    countdownDisplay.textContent = count;
-                    countdownDisplay.className = 'countdown';
-                } else if (count === 0) {
-                    countdownDisplay.textContent = "GO!";
-                    countdownDisplay.className = 'race-start-text';
-                } else {
-                    clearInterval(countdownInterval);
-                    overlay.classList.remove('active');
-                    startRace();
-                }
-            }, 1000);
+            renderCompanies(filteredCompanies);
         }
+        
+        searchButton.addEventListener('click', performSearch);
+        searchInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
 
-        function startRace() {
-            showScreen('simulationScreen');
-            raceActive = true;
-            raceData = {
-                progress: 0,
-                speed: 0,
-                lapTime: 0,
-                qteActive: false,
-                qteCount: 0,
-                earnings: 0,
-                maxSpeed: 0
-            };
-            
-            // Reset fuel and tires
-            gameState.fuel = 100;
-            gameState.tireWear = 100;
-            gameState.pitStopAvailable = true;
-            
-            // Show/hide tracks based on circuit type
-            if (gameState.circuitType === 'large') {
-                document.getElementById('smallTrack').style.display = 'none';
-                document.getElementById('smallTrackCenter').style.display = 'none';
-                document.getElementById('largeTrack').style.display = 'block';
-                document.getElementById('largeTrackCenter').style.display = 'block';
-            } else {
-                document.getElementById('smallTrack').style.display = 'block';
-                document.getElementById('smallTrackCenter').style.display = 'block';
-                document.getElementById('largeTrack').style.display = 'none';
-                document.getElementById('largeTrackCenter').style.display = 'none';
-            }
-            
-            updateRaceBattlepass();
-            runRace();
-        }
-
-        function updateRaceBattlepass() {
-            const container = document.getElementById('raceBattlepass');
-            const rewardsContainer = document.getElementById('raceBattlepassRewards');
-            
-            if (gameState.battlepass.rewards.some(r => r.tier <= gameState.battlepass.tier && !r.claimed)) {
-                container.style.display = 'block';
-                showNotification('📬 You have unclaimed Battlepass rewards!', 'inbox');
-            }
-            
-            rewardsContainer.innerHTML = gameState.battlepass.rewards
-                .filter(r => r.tier <= gameState.battlepass.tier + 3)
-                .map(reward => `
-                    <div class="reward-item ${reward.claimed ? 'claimed' : ''} ${reward.tier <= gameState.battlepass.tier && !reward.claimed ? 'available' : ''}">
-                        <div>${reward.type === 'money' ? '💰' : '🏎️'} Tier ${reward.tier}</div>
-                    </div>
-                `).join('');
-        }
-
-        async function runRace() {
-            const car = cars[gameState.currentCar];
-            const maxQTE = gameState.circuitType === 'large' ? 6 : 3;
-            const qteInterval = 100 / (maxQTE + 1);
-            
-            // Apply upgrades
-            const upgradedCar = {...car};
-            if (gameState.upgrades.engine) {
-                upgradedCar.speed += gameState.upgrades.engine * 2;
-            }
-            if (gameState.upgrades.turbo) {
-                upgradedCar.acceleration += gameState.upgrades.turbo * 3;
-            }
-            if (gameState.upgrades.suspension || gameState.upgrades.brakes || gameState.upgrades.tires) {
-                const handlingUpgrades = (gameState.upgrades.suspension || 0) + 
-                                       (gameState.upgrades.brakes || 0) + 
-                                       (gameState.upgrades.tires || 0);
-                upgradedCar.handling += handlingUpgrades * 2;
-            }
-            
-            // Calculate crash chance
-            let crashChance = 0;
-            if (gameState.settings.crashesEnabled) {
-                if (gameState.difficultyMode === 'insane') {
-                    crashChance = gameState.insaneDifficulty;
-                } else {
-                    crashChance = gameState.raceMode === 'fast' ? 20 : gameState.raceMode === 'normal' ? 10 : 5;
-                }
-            }
-            
-            // Check for immediate crash in insane mode
-            if (gameState.difficultyMode === 'insane' && Math.random() * 100 < crashChance) {
-                await handleCrash();
-                return;
-            }
-            
-            const raceInterval = setInterval(async () => {
-                if (!raceActive) {
-                    clearInterval(raceInterval);
-                    return;
-                }
-                
-                // Update fuel and tire wear
-                gameState.fuel -= (raceData.speed / 100) * 0.5;
-                if (gameState.settings.tireWear) {
-                    gameState.tireWear -= (raceData.speed / 100) * 0.3;
-                }
-                
-                if (gameState.fuel <= 0) {
-                    gameState.fuel = 0;
-                    showNotification('Out of fuel! Performance reduced.', 'error');
-                }
-                
-                if (gameState.tireWear <= 0) {
-                    gameState.tireWear = 0;
-                    showNotification('Tires worn out! Handling reduced.', 'error');
-                }
-                
-                const fuelMultiplier = gameState.fuel > 0 ? 1 : 0.5;
-                const tireMultiplier = gameState.tireWear > 30 ? 1 : Math.max(0.5, gameState.tireWear / 60);
-                
-                // Update progress
-                let speedMultiplier = 1;
-                if (gameState.raceMode === 'fast') speedMultiplier = 1.3;
-                if (gameState.raceMode === 'slow') speedMultiplier = 0.7;
-                
-                raceData.speed = (upgradedCar.speed * speedMultiplier * fuelMultiplier * tireMultiplier) + Math.random() * 10;
-                raceData.maxSpeed = Math.max(raceData.maxSpeed, raceData.speed);
-                raceData.progress += (raceData.speed / 100) * 2;
-                raceData.lapTime += 0.1;
-                
-                // Update car position
-                updateCarPosition();
-                
-                // Update UI
-                document.getElementById('raceSpeed').textContent = `${Math.round(raceData.speed * 2)} mph`;
-                document.getElementById('lapTime').textContent = `${raceData.lapTime.toFixed(1)}s`;
-                document.getElementById('position').textContent = `${Math.round(raceData.progress)}%`;
-                document.getElementById('fuel').textContent = `${Math.round(gameState.fuel)}%`;
-                document.getElementById('fuelFill').style.width = `${gameState.fuel}%`;
-                document.getElementById('tireWear').textContent = `${Math.round(gameState.tireWear)}%`;
-                
-                // Calculate earnings
-                const baseEarnings = (raceData.speed * 10) / (raceData.lapTime + 1);
-                raceData.earnings = Math.round(baseEarnings * speedMultiplier);
-                document.getElementById('raceMoney').textContent = `$${raceData.earnings}`;
-                
-                // Update boost and nitro buttons
-                document.getElementById('boostBtn').textContent = `Use Boost (${gameState.boosts})`;
-                document.getElementById('boostBtn').disabled = gameState.boosts <= 0;
-                document.getElementById('nitroBtn').textContent = `Use Nitro (${gameState.nitros})`;
-                document.getElementById('nitroBtn').disabled = gameState.nitros <= 0;
-                
-                // Check for QTE
-                if (!raceData.qteActive && raceData.qteCount < maxQTE) {
-                    const nextQTE = (raceData.qteCount + 1) * qteInterval;
-                    if (raceData.progress >= nextQTE) {
-                        triggerQTE();
-                    }
-                }
-                
-                // Check for random crash
-                if (gameState.settings.crashesEnabled && Math.random() * 1000 < crashChance) {
-                    await handleCrash();
-                    clearInterval(raceInterval);
-                    return;
-                }
-                
-                // Check if race complete
-                if (raceData.progress >= 100) {
-                    clearInterval(raceInterval);
-                    finishRace();
-                }
-            }, 100);
-        }
-
-        function updateCarPosition() {
-            const car = document.getElementById('carIcon');
-            const track = gameState.circuitType === 'large' ? 
-                document.getElementById('largeTrackCenter') : 
-                document.getElementById('smallTrackCenter');
-            
-            const path = track;
-            const pathLength = path.getTotalLength();
-            const point = path.getPointAtLength((raceData.progress / 100) * pathLength);
-            
-            car.style.left = `${point.x - 10}px`;
-            car.style.top = `${point.y - 5}px`;
-            
-            // Calculate rotation
-            const point2 = path.getPointAtLength(((raceData.progress + 1) / 100) * pathLength);
-            const angle = Math.atan2(point2.y - point.y, point2.x - point.x) * 180 / Math.PI;
-            car.style.transform = `rotate(${angle}deg)`;
-        }
-
-        function triggerQTE() {
-            raceData.qteActive = true;
-            raceData.qteCount++;
-            
-            const arrows = ['⬆', '⬇', '⬅', '➡'];
-            const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
-            const randomIndex = Math.floor(Math.random() * 4);
-            
-            const overlay = document.getElementById('qteOverlay');
-            const arrowDisplay = document.getElementById('qteArrow');
-            const timerBar = document.getElementById('qteTimerBar');
-            
-            overlay.classList.add('active');
-            arrowDisplay.textContent = arrows[randomIndex];
-            
-            const timeLimit = 1300; // 1.3 seconds
-            let timeLeft = timeLimit;
-            timerBar.style.width = '100%';
-            
-            const expectedKey = keys[randomIndex];
-            let completed = false;
-            
-            const keyHandler = (e) => {
-                if (e.key === expectedKey && !completed) {
-                    completed = true;
-                    document.removeEventListener('keydown', keyHandler);
-                    overlay.classList.remove('active');
-                    showNotification('Perfect!', 'success');
-                    raceData.qteActive = false;
-                    
-                    // Check achievement
-                    gameState.stats.perfectQTEs++;
-                    checkAchievement('qte_master', gameState.stats.perfectQTEs >= 50);
-                }
-            };
-            
-            document.addEventListener('keydown', keyHandler);
-            
-            const timerInterval = setInterval(() => {
-                timeLeft -= 50;
-                timerBar.style.width = `${(timeLeft / timeLimit) * 100}%`;
-                
-                if (timeLeft <= 0 && !completed) {
-                    clearInterval(timerInterval);
-                    document.removeEventListener('keydown', keyHandler);
-                    overlay.classList.remove('active');
-                    
-                    // QTE failure - lose $500
-                    gameState.money -= 500;
-                    showNotification('QTE Failed! -$500', 'error');
-                    raceData.qteActive = false;
-                }
-            }, 50);
-        }
-
-        function pitStop() {
-            if (!gameState.pitStopAvailable) {
-                showNotification('Pit stop already used this race!', 'error');
-                return;
-            }
-            
-            raceActive = false;
-            gameState.pitStopAvailable = false;
-            
-            const overlay = document.getElementById('pitStopOverlay');
-            const timer = document.getElementById('pitStopTimer');
-            overlay.classList.add('active');
-            
-            let timeLeft = 3.0;
-            const pitInterval = setInterval(() => {
-                timeLeft -= 0.1;
-                timer.textContent = timeLeft.toFixed(1) + 's';
-                
-                if (timeLeft <= 0) {
-                    clearInterval(pitInterval);
-                    overlay.classList.remove('active');
-                    
-                    // Refuel and change tires
-                    gameState.fuel = 100;
-                    gameState.tireWear = 100;
-                    showNotification('Pit stop complete! Fuel and tires refreshed.', 'success');
-                    raceActive = true;
-                }
-            }, 100);
-        }
-
-        function useBoost() {
-            if (gameState.boosts > 0) {
-                gameState.boosts--;
-                raceData.speed += 50;
-                showNotification('Boost activated! +50 speed', 'success');
-                
-                // Visual effect
-                const car = document.getElementById('carIcon');
-                car.classList.add('boost-animation');
-                setTimeout(() => car.classList.remove('boost-animation'), 1000);
-            }
-        }
-
-        function useNitro() {
-            if (gameState.nitros > 0) {
-                gameState.nitros--;
-                raceData.speed += 100;
-                showNotification('Nitro activated! +100 speed', 'success');
-                
-                // Visual effect
-                const car = document.getElementById('carIcon');
-                car.style.background = '#4361ee';
-                setTimeout(() => car.style.background = 'red', 1000);
-            }
-        }
-
-        async function handleCrash() {
-            raceActive = false;
-            
-            // Visual effect
-            const car = document.getElementById('carIcon');
-            car.classList.add('crash-animation');
-            
-            showNotification('💥 CRASH! You lost everything!', 'error');
-            
-            if (gameState.currentCar !== 0) {
-                // Remove car from owned
-                const index = gameState.ownedCars.indexOf(gameState.currentCar);
-                if (index > -1) gameState.ownedCars.splice(index, 1);
-                gameState.currentCar = 0;
-            }
-            
-            gameState.money = 0;
-            gameState.stats.crashes++;
-            
-            // Increase insane difficulty
-            if (gameState.difficultyMode === 'insane') {
-                gameState.insaneDifficulty = Math.min(100, gameState.insaneDifficulty + 2);
-            }
-            
-            setTimeout(() => {
-                showScreen('mainMenu');
-                showTab('garage');
-            }, 2000);
-        }
-
-        function finishRace() {
-            raceActive = false;
-            
-            // Award money
-            gameState.money += raceData.earnings;
-            gameState.stats.totalEarnings += raceData.earnings;
-            gameState.stats.racesCompleted++;
-            
-            // Update best lap time
-            if (gameState.stats.bestLapTime === 0 || raceData.lapTime < gameState.stats.bestLapTime) {
-                gameState.stats.bestLapTime = raceData.lapTime;
-            }
-            
-            // Calculate XP
-            const xpMultipliers = {
-                'easy': 1,
-                'normal': 1.5,
-                'hard': 2,
-                'insane': 3
-            };
-            
-            let xpGained = Math.round(50 * xpMultipliers[gameState.difficultyMode]);
-            
-            // Special rewards for insane mode - FIXED
-            if (gameState.difficultyMode === 'insane') {
-                gameState.money += 2000;
-                levelUp();
-                showNotification('🎊 INSANE MODE COMPLETED! +1 Level +$2000!', 'success');
-                gameState.insaneDifficulty = 90; // Reset difficulty
-                
-                // Track insane races for achievement
-                if (!gameState.insaneRaces) gameState.insaneRaces = 0;
-                gameState.insaneRaces++;
-                checkAchievement('insane_racer', gameState.insaneRaces >= 10);
-            } else {
-                gameState.xp += xpGained;
-                
-                // Check for level up
-                if (gameState.xp >= gameState.xpNeeded) {
-                    levelUp();
-                }
-            }
-            
-            // Check achievements
-            checkAchievement('first_race', true);
-            checkAchievement('speed_demon', raceData.maxSpeed * 2 >= 200);
-            checkAchievement('millionaire', gameState.money >= 1000000);
-            
-            showNotification(`Race Complete! Earned $${raceData.earnings} and ${xpGained} XP!`, 'success');
-            
-            setTimeout(() => {
-                showScreen('mainMenu');
-                showTab('garage');
-            }, 2000);
-        }
-
-        function levelUp() {
-            gameState.level++;
-            gameState.xp = 0;
-            gameState.xpNeeded = Math.round(gameState.xpNeeded * 1.2);
-            gameState.battlepass.tier++;
-            
-            // Reduce insane difficulty by 10%
-            gameState.insaneDifficulty = Math.max(50, gameState.insaneDifficulty - 10);
-            
-            // Add boost on level up
-            gameState.boosts += 2;
-            gameState.nitros += 1;
-            
-            showNotification(`🎉 LEVEL UP! You are now level ${gameState.level}! +2 boosts +1 nitro`, 'success');
-            showNotification('📬 New Battlepass rewards available!', 'inbox');
-            
-            // Check level achievement
-            checkAchievement('level_20', gameState.level >= 20);
-            
-            // Show wheelspin every 5 levels
-            if (gameState.level % 5 === 0) {
-                setTimeout(() => showWheelspin(), 500);
-            }
-        }
-
-        function endRace() {
-            raceActive = false;
-            showScreen('mainMenu');
-            showTab('garage');
-        }
-
-        // Wheelspin System
-        function showWheelspin() {
-            document.getElementById('wheelspinOverlay').classList.add('active');
-            document.getElementById('spinBtn').disabled = false;
-            document.getElementById('wheelResult').textContent = '';
-        }
-
-        function spinWheel() {
-            const wheel = document.getElementById('wheel');
-            const btn = document.getElementById('spinBtn');
-            const result = document.getElementById('wheelResult');
-            
-            btn.disabled = true;
-            wheel.classList.add('spinning');
-            
-            setTimeout(() => {
-                wheel.classList.remove('spinning');
-                
-                // Get random car under 100k
-                const eligibleCars = cars.filter(c => c.price < 100000 && c.price > 0);
-                const wonCar = eligibleCars[Math.floor(Math.random() * eligibleCars.length)];
-                const carIndex = cars.indexOf(wonCar);
-                
-                if (gameState.ownedCars.includes(carIndex)) {
-                    gameState.money += Math.round(wonCar.price / 2);
-                    result.textContent = `Already owned! +$${Math.round(wonCar.price / 2)}`;
-                } else {
-                    gameState.ownedCars.push(carIndex);
-                    result.textContent = `Won: ${wonCar.name}!`;
-                    
-                    // Check garage achievement
-                    checkAchievement('garage_king', gameState.ownedCars.length >= cars.length);
-                }
-                
-                setTimeout(() => {
-                    document.getElementById('wheelspinOverlay').classList.remove('active');
-                }, 3000);
-            }, 3000);
-        }
-
-        // Initialize game
-        window.onload = () => {
-            initBattlepass();
-            initUpgrades();
-            initSponsors();
-            initLeaderboard();
-            checkDailyRewards();
-            createDynamicBackground();
-            
-            // Check for saved game
-            const savedGame = localStorage.getItem('proRacingSimulator');
-            if (savedGame) {
-                const loadedState = JSON.parse(savedGame);
-                Object.assign(gameState, loadedState);
-                showNotification('Game loaded successfully!', 'success');
-            }
-            
-            // Auto-save every 30 seconds
-            setInterval(() => {
-                localStorage.setItem('proRacingSimulator', JSON.stringify(gameState));
-            }, 30000);
-        };
+        // Initial render
+        renderCompanies(companies);
     </script>
 </body>
 </html>
