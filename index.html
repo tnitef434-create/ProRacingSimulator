@@ -84,6 +84,38 @@
             100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
 
+        /* Persistent Header */
+        .persistent-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(20, 20, 40, 0.9);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(67, 97, 238, 0.5);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .header-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 16px;
+        }
+
+        .header-value {
+            color: #4361ee;
+            font-weight: bold;
+        }
+
         /* Start Menu */
         .start-menu {
             text-align: center;
@@ -168,6 +200,7 @@
             gap: 30px;
             border: 2px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 30px rgba(67, 97, 238, 0.3);
+            margin-top: 60px;
         }
 
         .sidebar {
@@ -201,6 +234,11 @@
         .nav-btn.active {
             background: linear-gradient(45deg, #4361ee, #7209b7);
             border-color: transparent;
+        }
+
+        .nav-btn.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .content-area {
@@ -311,6 +349,16 @@
             font-size: 11px;
         }
 
+        .car-requirement {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #4361ee;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+        }
+
         /* Race Setup */
         .race-setup {
             display: flex;
@@ -356,6 +404,11 @@
             border-color: transparent;
         }
 
+        .mode-btn.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         /* Circuit View */
         .circuit-container {
             position: relative;
@@ -398,56 +451,118 @@
             transform-origin: center;
         }
 
-        /* QTE Overlay */
+        /* Improved QTE Overlay */
         .qte-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             padding: 30px;
             border-radius: 15px;
             border: 3px solid #ff6b35;
             display: none;
             z-index: 100;
-            box-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+            box-shadow: 0 0 40px rgba(255, 107, 53, 0.7);
+            backdrop-filter: blur(5px);
         }
 
         .qte-overlay.active {
             display: block;
-            animation: pulse 0.3s ease;
+            animation: pulse 0.5s ease;
         }
 
         .qte-prompt {
             font-size: 24px;
             margin-bottom: 20px;
             text-align: center;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
 
         .qte-arrow {
-            font-size: 60px;
+            font-size: 80px;
             text-align: center;
             margin: 20px 0;
+            filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.7));
+            transition: transform 0.2s ease;
+        }
+
+        .qte-arrow.highlight {
+            transform: scale(1.2);
+            color: #ffd700;
         }
 
         .qte-timer {
             width: 100%;
-            height: 10px;
+            height: 15px;
             background: #333;
-            border-radius: 5px;
+            border-radius: 10px;
             overflow: hidden;
+            margin-top: 20px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
         .qte-timer-bar {
             height: 100%;
             background: linear-gradient(90deg, #10b981, #ffd700, #ff6b35);
-            transition: width linear;
+            width: 100%;
+            transition: width 0.05s linear;
+            border-radius: 10px;
+        }
+
+        /* Manual Control Display */
+        .manual-control {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #4361ee;
+            z-index: 50;
+        }
+
+        .speed-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .speed-bars {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .speed-bar {
+            width: 20px;
+            height: 30px;
+            background: #333;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .speed-bar.active {
+            background: #10b981;
+        }
+
+        .speed-bar.max {
+            background: #ff6b35;
+        }
+
+        .control-instructions {
+            font-size: 12px;
+            color: #888;
+            text-align: center;
         }
 
         /* Notifications */
         .notification-container {
             position: fixed;
-            top: 20px;
+            top: 70px;
             right: 20px;
             z-index: 1000;
         }
@@ -963,6 +1078,29 @@
     </style>
 </head>
 <body>
+    <div class="persistent-header">
+        <div class="header-stats">
+            <div class="header-stat">
+                <span>Money:</span>
+                <span class="header-value" id="headerMoney">$1,000</span>
+            </div>
+            <div class="header-stat">
+                <span>Level:</span>
+                <span class="header-value" id="headerLevel">1</span>
+            </div>
+        </div>
+        <div class="header-stats">
+            <div class="header-stat">
+                <span>Legacy Races:</span>
+                <span class="header-value" id="headerLegacyRaces">0/10</span>
+            </div>
+            <div class="header-stat">
+                <span>Manual Races:</span>
+                <span class="header-value" id="headerManualRaces">0/10</span>
+            </div>
+        </div>
+    </div>
+
     <div class="dynamic-bg" id="dynamicBg"></div>
     <div class="notification-container" id="notifications"></div>
     
@@ -986,6 +1124,7 @@
             <div class="sidebar">
                 <button class="nav-btn active" onclick="showTab('garage')">🏎️ Garage</button>
                 <button class="nav-btn" onclick="showTab('race')">🏁 Race</button>
+                <button class="nav-btn" id="manualModeBtn" onclick="showTab('manualRace')">🎮 Manual Mode</button>
                 <button class="nav-btn" onclick="showTab('upgrades')">🔧 Upgrades</button>
                 <button class="nav-btn" onclick="showTab('achievements')">🏆 Achievements</button>
                 <button class="nav-btn" onclick="showTab('tournaments')">🏆 Tournaments</button>
@@ -1003,7 +1142,7 @@
 
     <!-- Simulation Screen -->
     <div class="screen" id="simulationScreen">
-        <div style="width: 100%; max-width: 1200px;">
+        <div style="width: 100%; max-width: 1200px; margin-top: 60px;">
             <div class="stats-bar">
                 <div class="stat-box">
                     <div class="stat-label">Money</div>
@@ -1054,9 +1193,24 @@
                 </svg>
                 <div class="car-icon" id="carIcon"></div>
                 
-                <!-- QTE Overlay -->
+                <!-- Manual Control Display -->
+                <div class="manual-control" id="manualControl" style="display: none;">
+                    <div class="speed-display" id="speedDisplay">Speed: 3</div>
+                    <div class="speed-bars">
+                        <div class="speed-bar" id="speedBar1"></div>
+                        <div class="speed-bar" id="speedBar2"></div>
+                        <div class="speed-bar" id="speedBar3"></div>
+                        <div class="speed-bar" id="speedBar4"></div>
+                        <div class="speed-bar" id="speedBar5"></div>
+                    </div>
+                    <div class="control-instructions">
+                        Up: Faster | Down: Slower
+                    </div>
+                </div>
+                
+                <!-- Improved QTE Overlay -->
                 <div class="qte-overlay" id="qteOverlay">
-                    <div class="qte-prompt">QUICK! Press the key!</div>
+                    <div class="qte-prompt">QUICK! Press the correct arrow!</div>
                     <div class="qte-arrow" id="qteArrow">⬆</div>
                     <div class="qte-timer">
                         <div class="qte-timer-bar" id="qteTimerBar"></div>
@@ -1141,7 +1295,18 @@
                 totalEarnings: 0,
                 bestLapTime: 0,
                 crashes: 0,
-                perfectQTEs: 0
+                perfectQTEs: 0,
+                legacyRaces: 0,
+                manualRaces: 0
+            },
+            // Manual control mode
+            manualSpeed: 3, // 1-5
+            manualModeUnlocked: false,
+            // Special unlockable cars
+            unlockableCars: [25, 28, 35, 38], // Pagani, Koenigsegg, Cadillac, Range Rover
+            unlockRequirements: {
+                legacyRaces: 10,
+                manualRaces: 10
             }
         };
 
@@ -1173,8 +1338,8 @@
             { name: "Acura NSX", speed: 94, acceleration: 95, handling: 88, price: 88000, level: 12 },
             { name: "Bentley Continental GT", speed: 95, acceleration: 93, handling: 81, price: 110000, level: 14 },
             { name: "Rolls-Royce Wraith", speed: 90, acceleration: 88, handling: 78, price: 200000, level: 20 },
-            { name: "Pagani Huayra", speed: 100, acceleration: 100, handling: 92, price: 300000, level: 25 },
-            { name: "Koenigsegg Agera", speed: 100, acceleration: 100, handling: 94, price: 500000, level: 30 },
+            { name: "Pagani Huayra", speed: 100, acceleration: 100, handling: 92, price: 300000, level: 25, requirement: "Complete 10 Legacy and 10 Manual races" },
+            { name: "Koenigsegg Agera", speed: 100, acceleration: 100, handling: 94, price: 500000, level: 30, requirement: "Complete 10 Legacy and 10 Manual races" },
             { name: "Bugatti Chiron", speed: 100, acceleration: 100, handling: 95, price: 1000000, level: 35 },
             { name: "Mini Cooper S", speed: 65, acceleration: 68, handling: 82, price: 15000, level: 3 },
             { name: "Fiat 124 Spider", speed: 62, acceleration: 64, handling: 79, price: 13000, level: 3 },
@@ -1182,11 +1347,11 @@
             { name: "Kia Stinger GT", speed: 82, acceleration: 83, handling: 80, price: 32000, level: 6 },
             { name: "Genesis G70", speed: 84, acceleration: 85, handling: 82, price: 38000, level: 7 },
             { name: "Infiniti Q60", speed: 86, acceleration: 87, handling: 81, price: 42000, level: 7 },
-            { name: "Cadillac CTS-V", speed: 95, acceleration: 94, handling: 83, price: 70000, level: 10 },
+            { name: "Cadillac CTS-V", speed: 95, acceleration: 94, handling: 83, price: 70000, level: 10, requirement: "Complete 10 Legacy and 10 Manual races" },
             { name: "Lincoln Continental", speed: 78, acceleration: 76, handling: 75, price: 28000, level: 5 },
             { name: "Chrysler 300", speed: 76, acceleration: 75, handling: 73, price: 24000, level: 5 },
             { name: "Jeep Grand Cherokee SRT", speed: 80, acceleration: 82, handling: 71, price: 30000, level: 6 },
-            { name: "Range Rover Sport SVR", speed: 88, acceleration: 86, handling: 74, price: 58000, level: 9 }
+            { name: "Range Rover Sport SVR", speed: 88, acceleration: 86, handling: 74, price: 58000, level: 9, requirement: "Complete 10 Legacy and 10 Manual races" }
         ];
 
         // Achievement Database
@@ -1198,7 +1363,9 @@
             { id: 'qte_master', name: 'QTE Master', description: 'Complete 50 QTEs successfully', reward: 1000, unlocked: false },
             { id: 'insane_racer', name: 'Insane Racer', description: 'Complete 10 races on insane difficulty', reward: 5000, unlocked: false },
             { id: 'level_20', name: 'Racing Veteran', description: 'Reach level 20', reward: 3000, unlocked: false },
-            { id: 'garage_king', name: 'Garage King', description: 'Own all cars', reward: 10000, unlocked: false }
+            { id: 'garage_king', name: 'Garage King', description: 'Own all cars', reward: 10000, unlocked: false },
+            { id: 'manual_master', name: 'Manual Master', description: 'Complete 10 manual control races', reward: 3000, unlocked: false },
+            { id: 'dual_champion', name: 'Dual Champion', description: 'Complete 10 races in both modes', reward: 5000, unlocked: false }
         ];
 
         // Upgrade Database
@@ -1260,6 +1427,24 @@
             }
         }
 
+        // Update persistent header
+        function updatePersistentHeader() {
+            document.getElementById('headerMoney').textContent = `$${gameState.money.toLocaleString()}`;
+            document.getElementById('headerLevel').textContent = gameState.level;
+            document.getElementById('headerLegacyRaces').textContent = `${gameState.stats.legacyRaces}/10`;
+            document.getElementById('headerManualRaces').textContent = `${gameState.stats.manualRaces}/10`;
+            
+            // Update manual mode button
+            const manualBtn = document.getElementById('manualModeBtn');
+            if (gameState.level >= 15) {
+                manualBtn.classList.remove('locked');
+                gameState.manualModeUnlocked = true;
+            } else {
+                manualBtn.classList.add('locked');
+                gameState.manualModeUnlocked = false;
+            }
+        }
+
         // Show notification
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notifications');
@@ -1288,6 +1473,7 @@
             checkDailyRewards();
             createDynamicBackground();
             applyDisplayScale();
+            updatePersistentHeader();
             showScreen('mainMenu');
             showTab('garage');
         }
@@ -1324,6 +1510,14 @@
                     break;
                 case 'race':
                     showRaceSetup(content);
+                    break;
+                case 'manualRace':
+                    if (gameState.manualModeUnlocked) {
+                        showManualRaceSetup(content);
+                    } else {
+                        showNotification('Manual Control Mode unlocks at Level 15!', 'error');
+                        showTab('garage');
+                    }
                     break;
                 case 'upgrades':
                     showUpgradesTab(content);
@@ -1380,22 +1574,39 @@
                 
                 <h2>Your Garage</h2>
                 <div class="cars-grid">
-                    ${cars.map((car, index) => `
-                        <div class="car-card ${gameState.ownedCars.includes(index) ? 'owned' : ''} ${gameState.currentCar === index ? 'selected' : ''} ${!gameState.ownedCars.includes(index) && (car.level > gameState.level || car.price > gameState.money) ? 'locked' : ''}"
-                             onclick="selectCar(${index})">
-                            ${car.level > 0 ? `<div class="car-level">Lvl ${car.level}</div>` : ''}
-                            <div class="car-name">${car.name}</div>
-                            <div class="car-stats">
-                                Speed: ${car.speed} | Acc: ${car.acceleration}<br>
-                                Handling: ${car.handling}
+                    ${cars.map((car, index) => {
+                        const isOwned = gameState.ownedCars.includes(index);
+                        const isSelected = gameState.currentCar === index;
+                        const isLocked = !isOwned && (car.level > gameState.level || car.price > gameState.money || 
+                                      (car.requirement && !checkUnlockRequirement()));
+                        
+                        let requirementText = '';
+                        if (car.requirement && !checkUnlockRequirement()) {
+                            requirementText = `<div class="car-requirement">Requirement</div>`;
+                        }
+                        
+                        return `
+                            <div class="car-card ${isOwned ? 'owned' : ''} ${isSelected ? 'selected' : ''} ${isLocked ? 'locked' : ''}"
+                                 onclick="selectCar(${index})">
+                                ${car.level > 0 ? `<div class="car-level">Lvl ${car.level}</div>` : ''}
+                                ${requirementText}
+                                <div class="car-name">${car.name}</div>
+                                <div class="car-stats">
+                                    Speed: ${car.speed} | Acc: ${car.acceleration}<br>
+                                    Handling: ${car.handling}
+                                </div>
+                                <div class="car-price">
+                                    ${isOwned ? 'OWNED' : `$${car.price.toLocaleString()}`}
+                                </div>
                             </div>
-                            <div class="car-price">
-                                ${gameState.ownedCars.includes(index) ? 'OWNED' : `$${car.price.toLocaleString()}`}
-                            </div>
-                        </div>
-                    `).join('')}
+                        `;
+                    }).join('')}
                 </div>
             `;
+        }
+
+        function checkUnlockRequirement() {
+            return gameState.stats.legacyRaces >= 10 && gameState.stats.manualRaces >= 10;
         }
 
         function showLevelDetails() {
@@ -1411,6 +1622,12 @@
 
         function selectCar(index) {
             const car = cars[index];
+            
+            // Check if car has special requirements
+            if (car.requirement && !checkUnlockRequirement()) {
+                showNotification(`This car requires completing 10 Legacy races and 10 Manual races!`, 'error');
+                return;
+            }
             
             if (gameState.ownedCars.includes(index)) {
                 gameState.currentCar = index;
@@ -1514,14 +1731,66 @@
             `;
         }
 
+        function showManualRaceSetup(content) {
+            content.innerHTML = `
+                <div class="race-setup">
+                    <div class="setup-section">
+                        <div class="setup-title">Manual Control Mode</div>
+                        <p style="margin-bottom: 15px; color: #888;">
+                            Control your speed with UP and DOWN arrows. Go too fast in corners and you'll crash!
+                            Higher speeds give more money and XP, but increase crash risk.
+                        </p>
+                    </div>
+                    
+                    <div class="setup-section">
+                        <div class="setup-title">Laps</div>
+                        <div class="mode-buttons">
+                            <button class="mode-btn ${gameState.laps === 6 ? 'selected' : ''}" onclick="selectLaps(6)">
+                                6 Laps<br>
+                                <small>Standard manual race</small>
+                            </button>
+                            <button class="mode-btn ${gameState.laps === 9 ? 'selected' : ''}" onclick="selectLaps(9)">
+                                9 Laps<br>
+                                <small>Longer race, higher rewards</small>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="setup-section">
+                        <div class="setup-title">Circuit</div>
+                        <div class="mode-buttons">
+                            <button class="mode-btn ${gameState.circuitType === 'large' ? 'selected' : ''}" onclick="selectCircuit('large')">
+                                Large Circuit<br>
+                                <small>More corners, more challenge</small>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <button class="btn" onclick="startManualRaceWithCountdown()" style="font-size: 24px; padding: 20px 60px;">
+                            🎮 START MANUAL RACE 🎮
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
         function selectCircuit(type) {
             gameState.circuitType = type;
-            showTab('race');
+            if (event.target.closest('.mode-btn').parentElement.parentElement.querySelector('.setup-title').textContent === 'Manual Control Mode') {
+                showTab('manualRace');
+            } else {
+                showTab('race');
+            }
         }
 
         function selectLaps(laps) {
             gameState.laps = laps;
-            showTab('race');
+            if (event.target.closest('.mode-btn').parentElement.parentElement.querySelector('.setup-title').textContent === 'Manual Control Mode') {
+                showTab('manualRace');
+            } else {
+                showTab('race');
+            }
         }
 
         function selectRaceMode(mode) {
@@ -1871,7 +2140,8 @@
             qteCount: 0,
             earnings: 0,
             maxSpeed: 0,
-            currentLap: 1
+            currentLap: 1,
+            isManualMode: false
         };
 
         // Enhanced race start with countdown
@@ -1905,6 +2175,36 @@
             }, 1000);
         }
 
+        function startManualRaceWithCountdown() {
+            if (gameState.money < 0 && gameState.currentCar !== 0) {
+                showNotification("Can't race with negative balance unless using starter car!", 'error');
+                return;
+            }
+            
+            const overlay = document.getElementById('raceStartOverlay');
+            const countdownDisplay = document.getElementById('countdownDisplay');
+            overlay.classList.add('active');
+            
+            let count = 3;
+            countdownDisplay.textContent = count;
+            countdownDisplay.className = 'countdown';
+            
+            const countdownInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownDisplay.textContent = count;
+                    countdownDisplay.className = 'countdown';
+                } else if (count === 0) {
+                    countdownDisplay.textContent = "GO!";
+                    countdownDisplay.className = 'race-start-text';
+                } else {
+                    clearInterval(countdownInterval);
+                    overlay.classList.remove('active');
+                    startManualRace();
+                }
+            }, 1000);
+        }
+
         function startRace() {
             showScreen('simulationScreen');
             raceActive = true;
@@ -1916,8 +2216,12 @@
                 qteCount: 0,
                 earnings: 0,
                 maxSpeed: 0,
-                currentLap: 1
+                currentLap: 1,
+                isManualMode: false
             };
+            
+            // Hide manual control
+            document.getElementById('manualControl').style.display = 'none';
             
             // Reset fuel
             gameState.fuel = 100;
@@ -1939,6 +2243,69 @@
             updateRaceBattlepass();
             runRace();
         }
+
+        function startManualRace() {
+            showScreen('simulationScreen');
+            raceActive = true;
+            raceData = {
+                progress: 0,
+                speed: 0,
+                lapTime: 0,
+                qteActive: false,
+                qteCount: 0,
+                earnings: 0,
+                maxSpeed: 0,
+                currentLap: 1,
+                isManualMode: true
+            };
+            
+            // Show manual control
+            document.getElementById('manualControl').style.display = 'block';
+            updateManualSpeedDisplay();
+            
+            // Reset fuel
+            gameState.fuel = 100;
+            gameState.pitStopAvailable = true;
+            
+            // Always use large circuit for manual mode
+            document.getElementById('smallTrack').style.display = 'none';
+            document.getElementById('smallTrackCenter').style.display = 'none';
+            document.getElementById('largeTrack').style.display = 'block';
+            document.getElementById('largeTrackCenter').style.display = 'block';
+            
+            updateRaceBattlepass();
+            runManualRace();
+        }
+
+        function updateManualSpeedDisplay() {
+            document.getElementById('speedDisplay').textContent = `Speed: ${gameState.manualSpeed}`;
+            
+            // Update speed bars
+            for (let i = 1; i <= 5; i++) {
+                const bar = document.getElementById(`speedBar${i}`);
+                bar.classList.remove('active', 'max');
+                
+                if (i <= gameState.manualSpeed) {
+                    bar.classList.add('active');
+                    if (i === 5) {
+                        bar.classList.add('max');
+                    }
+                }
+            }
+        }
+
+        // Manual control key handler
+        document.addEventListener('keydown', function(e) {
+            if (!raceActive || !raceData.isManualMode) return;
+            
+            if (e.key === 'ArrowUp' && gameState.manualSpeed < 5) {
+                gameState.manualSpeed++;
+                updateManualSpeedDisplay();
+            } else if (e.key === 'ArrowDown' && gameState.manualSpeed > 1) {
+                gameState.manualSpeed--;
+                updateManualSpeedDisplay();
+            }
+        });
 
         function updateRaceBattlepass() {
             const container = document.getElementById('raceBattlepass');
@@ -2039,10 +2406,11 @@
                 document.getElementById('boostBtn').textContent = `Use Boost (${gameState.boosts})`;
                 document.getElementById('boostBtn').disabled = gameState.boosts <= 0;
                 
-                // Check for QTE
-                if (!raceData.qteActive && raceData.qteCount < maxQTE) {
-                    const nextQTE = (raceData.qteCount + 1) * qteInterval;
-                    if (raceData.progress >= nextQTE) {
+                // Check for QTE (in any lap)
+                if (!raceData.qteActive && raceData.qteCount < maxQTE * gameState.laps) {
+                    const lapProgress = raceData.progress + ((raceData.currentLap - 1) * 100);
+                    const nextQTE = (raceData.qteCount + 1) * (100 / (maxQTE + 1));
+                    if (lapProgress >= nextQTE) {
                         triggerQTE();
                     }
                 }
@@ -2065,6 +2433,115 @@
                         // Race complete
                         clearInterval(raceInterval);
                         finishRace();
+                    }
+                }
+            }, 100);
+        }
+
+        async function runManualRace() {
+            const car = cars[gameState.currentCar];
+            const maxQTE = 9; // More QTEs for manual mode
+            const qteInterval = 100 / (maxQTE + 1);
+            
+            // Apply upgrades
+            const upgradedCar = {...car};
+            if (gameState.upgrades.engine) {
+                upgradedCar.speed += gameState.upgrades.engine * 2;
+            }
+            if (gameState.upgrades.turbo) {
+                upgradedCar.acceleration += gameState.upgrades.turbo * 3;
+            }
+            if (gameState.upgrades.suspension || gameState.upgrades.brakes || gameState.upgrades.tires) {
+                const handlingUpgrades = (gameState.upgrades.suspension || 0) + 
+                                       (gameState.upgrades.brakes || 0) + 
+                                       (gameState.upgrades.tires || 0);
+                upgradedCar.handling += handlingUpgrades * 2;
+            }
+            
+            // Define corner sections (progress percentages where corners occur)
+            const corners = [
+                { start: 15, end: 30, maxSafeSpeed: 3 },
+                { start: 45, end: 60, maxSafeSpeed: 2 },
+                { start: 75, end: 90, maxSafeSpeed: 3 }
+            ];
+            
+            const raceInterval = setInterval(async () => {
+                if (!raceActive) {
+                    clearInterval(raceInterval);
+                    return;
+                }
+                
+                // Update fuel
+                gameState.fuel -= (raceData.speed / 100) * 0.5;
+                if (gameState.fuel <= 0) {
+                    gameState.fuel = 0;
+                    showNotification('Out of fuel! Performance reduced.', 'error');
+                }
+                
+                const fuelMultiplier = gameState.fuel > 0 ? 1 : 0.5;
+                
+                // Calculate speed based on manual control
+                const speedLevels = [30, 60, 90, 120, 150];
+                raceData.speed = speedLevels[gameState.manualSpeed - 1] * fuelMultiplier;
+                raceData.maxSpeed = Math.max(raceData.maxSpeed, raceData.speed);
+                raceData.progress += (raceData.speed / 100) * 2;
+                raceData.lapTime += 0.1;
+                
+                // Update car position
+                updateCarPosition();
+                
+                // Update UI
+                document.getElementById('raceSpeed').textContent = `${Math.round(raceData.speed * 2)} mph`;
+                document.getElementById('lapTime').textContent = `${raceData.lapTime.toFixed(1)}s`;
+                document.getElementById('position').textContent = `${Math.round(raceData.progress)}%`;
+                document.getElementById('fuel').textContent = `${Math.round(gameState.fuel)}%`;
+                document.getElementById('fuelFill').style.width = `${gameState.fuel}%`;
+                document.getElementById('currentLap').textContent = `${raceData.currentLap}/${gameState.laps}`;
+                
+                // Calculate earnings (based on speed and lap time)
+                const speedBonus = gameState.manualSpeed * 20;
+                const timePenalty = Math.max(0, raceData.lapTime - 50) * 2;
+                raceData.earnings = Math.round((speedBonus * gameState.laps) - timePenalty);
+                document.getElementById('raceMoney').textContent = `$${raceData.earnings}`;
+                
+                // Update boost button
+                document.getElementById('boostBtn').textContent = `Use Boost (${gameState.boosts})`;
+                document.getElementById('boostBtn').disabled = gameState.boosts <= 0;
+                
+                // Check for corner crashes
+                if (gameState.settings.crashesEnabled) {
+                    for (const corner of corners) {
+                        if (raceData.progress >= corner.start && raceData.progress <= corner.end) {
+                            if (gameState.manualSpeed > corner.maxSafeSpeed) {
+                                showNotification(`Too fast in corner! Crashed at speed ${gameState.manualSpeed}`, 'error');
+                                await handleCrash();
+                                clearInterval(raceInterval);
+                                return;
+                            }
+                        }
+                    }
+                }
+                
+                // Check for QTE (in any lap)
+                if (!raceData.qteActive && raceData.qteCount < maxQTE * gameState.laps) {
+                    const lapProgress = raceData.progress + ((raceData.currentLap - 1) * 100);
+                    const nextQTE = (raceData.qteCount + 1) * (100 / (maxQTE + 1));
+                    if (lapProgress >= nextQTE) {
+                        triggerQTE();
+                    }
+                }
+                
+                // Check if lap complete
+                if (raceData.progress >= 100) {
+                    if (raceData.currentLap < gameState.laps) {
+                        // Start next lap
+                        raceData.currentLap++;
+                        raceData.progress = 0;
+                        showNotification(`Lap ${raceData.currentLap}/${gameState.laps}`, 'info');
+                    } else {
+                        // Race complete
+                        clearInterval(raceInterval);
+                        finishManualRace();
                     }
                 }
             }, 100);
@@ -2103,8 +2580,14 @@
             
             overlay.classList.add('active');
             arrowDisplay.textContent = arrows[randomIndex];
+            arrowDisplay.classList.remove('highlight');
             
-            const timeLimit = 1300; // 1.3 seconds
+            // Add highlight effect after a short delay
+            setTimeout(() => {
+                arrowDisplay.classList.add('highlight');
+            }, 100);
+            
+            const timeLimit = 2000; // 2 seconds for manual mode, slightly longer
             let timeLeft = timeLimit;
             timerBar.style.width = '100%';
             
@@ -2122,6 +2605,12 @@
                     // Check achievement
                     gameState.stats.perfectQTEs++;
                     checkAchievement('qte_master', gameState.stats.perfectQTEs >= 50);
+                } else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key) && e.key !== expectedKey && !completed) {
+                    // Wrong key pressed - crash!
+                    completed = true;
+                    document.removeEventListener('keydown', keyHandler);
+                    overlay.classList.remove('active');
+                    handleQTEFailure();
                 }
             };
             
@@ -2135,13 +2624,15 @@
                     clearInterval(timerInterval);
                     document.removeEventListener('keydown', keyHandler);
                     overlay.classList.remove('active');
-                    
-                    // QTE failure - lose $500
-                    gameState.money -= 500;
-                    showNotification('QTE Failed! -$500', 'error');
-                    raceData.qteActive = false;
+                    handleQTEFailure();
                 }
             }, 50);
+        }
+
+        async function handleQTEFailure() {
+            // QTE failure - crash!
+            showNotification('QTE Failed! Crashed!', 'error');
+            await handleCrash();
         }
 
         function pitStop() {
@@ -2177,8 +2668,18 @@
         function useBoost() {
             if (gameState.boosts > 0) {
                 gameState.boosts--;
-                raceData.speed += 50;
-                showNotification('Boost activated! +50 speed', 'success');
+                if (raceData.isManualMode) {
+                    // In manual mode, boost increases speed by one level temporarily
+                    gameState.manualSpeed = Math.min(5, gameState.manualSpeed + 1);
+                    updateManualSpeedDisplay();
+                    setTimeout(() => {
+                        gameState.manualSpeed = Math.max(1, gameState.manualSpeed - 1);
+                        updateManualSpeedDisplay();
+                    }, 3000);
+                } else {
+                    raceData.speed += 50;
+                }
+                showNotification('Boost activated!', 'success');
                 
                 // Visual effect
                 const car = document.getElementById('carIcon');
@@ -2225,6 +2726,10 @@
             gameState.money += totalEarnings;
             gameState.stats.totalEarnings += totalEarnings;
             gameState.stats.racesCompleted++;
+            gameState.stats.legacyRaces++;
+            
+            // Update persistent header
+            updatePersistentHeader();
             
             // Update best lap time
             if (gameState.stats.bestLapTime === 0 || raceData.lapTime < gameState.stats.bestLapTime) {
@@ -2274,6 +2779,55 @@
             }, 2000);
         }
 
+        function finishManualRace() {
+            raceActive = false;
+            
+            // Award money (based on performance)
+            const totalEarnings = Math.max(0, raceData.earnings);
+            gameState.money += totalEarnings;
+            gameState.stats.totalEarnings += totalEarnings;
+            gameState.stats.racesCompleted++;
+            gameState.stats.manualRaces++;
+            
+            // Update persistent header
+            updatePersistentHeader();
+            
+            // Check for unlockable cars
+            if (checkUnlockRequirement()) {
+                for (const carIndex of gameState.unlockableCars) {
+                    if (!gameState.ownedCars.includes(carIndex)) {
+                        gameState.ownedCars.push(carIndex);
+                        showNotification(`Unlocked ${cars[carIndex].name}!`, 'success');
+                    }
+                }
+            }
+            
+            // Update best lap time
+            if (gameState.stats.bestLapTime === 0 || raceData.lapTime < gameState.stats.bestLapTime) {
+                gameState.stats.bestLapTime = raceData.lapTime;
+            }
+            
+            // Calculate XP (based on performance)
+            const xpGained = Math.round((gameState.manualSpeed * 10 + (raceData.maxSpeed / 10)) * gameState.laps);
+            gameState.xp += xpGained;
+            
+            // Check for level up
+            if (gameState.xp >= gameState.xpNeeded) {
+                levelUp();
+            }
+            
+            // Check achievements
+            checkAchievement('manual_master', gameState.stats.manualRaces >= 10);
+            checkAchievement('dual_champion', gameState.stats.legacyRaces >= 10 && gameState.stats.manualRaces >= 10);
+            
+            showNotification(`Manual Race Complete! Earned $${totalEarnings} and ${xpGained} XP!`, 'success');
+            
+            setTimeout(() => {
+                showScreen('mainMenu');
+                showTab('garage');
+            }, 2000);
+        }
+
         function levelUp() {
             gameState.level++;
             gameState.xp = 0;
@@ -2288,6 +2842,9 @@
             
             showNotification(`🎉 LEVEL UP! You are now level ${gameState.level}! +2 boosts`, 'success');
             showNotification('📬 New Battlepass rewards available!', 'inbox');
+            
+            // Update persistent header
+            updatePersistentHeader();
             
             // Check level achievement
             checkAchievement('level_20', gameState.level >= 20);
@@ -2372,6 +2929,7 @@
             checkDailyRewards();
             createDynamicBackground();
             applyDisplayScale();
+            updatePersistentHeader();
             
             // Check for saved game
             const savedGame = localStorage.getItem('proRacingSimulator');
@@ -2379,6 +2937,7 @@
                 const loadedState = JSON.parse(savedGame);
                 Object.assign(gameState, loadedState);
                 showNotification('Game loaded successfully!', 'success');
+                updatePersistentHeader();
             }
             
             // Auto-save every 30 seconds
