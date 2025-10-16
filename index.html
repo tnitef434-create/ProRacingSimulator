@@ -3,20 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ULTIMATE RACING SIMULATOR</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Racing Simulator</title>
     <style>
-        :root {
-            --neon-blue: #00f3ff;
-            --neon-purple: #b967ff;
-            --neon-pink: #ff2a6d;
-            --neon-green: #00ff88;
-            --dark-bg: #0a0a16;
-            --darker-bg: #050510;
-            --card-bg: rgba(15, 15, 35, 0.9);
-            --accent: #00ff88;
-        }
-        
         * {
             margin: 0;
             padding: 0;
@@ -24,390 +12,154 @@
         }
 
         body {
-            font-family: 'Exo 2', sans-serif;
-            background: var(--dark-bg);
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a16, #1a1a2e);
             color: white;
-            overflow-x: hidden;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 42, 109, 0.1) 0%, transparent 20%),
-                linear-gradient(to bottom, var(--darker-bg), var(--dark-bg));
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00f3ff;
+            margin-bottom: 30px;
+            font-size: 36px;
         }
 
         .screen {
             display: none;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            min-height: 100vh;
         }
 
         .screen.active {
             display: block;
-            animation: screenFadeIn 0.5s ease;
         }
 
-        @keyframes screenFadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .header {
+            background: rgba(30, 30, 50, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
         }
 
-        .game-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 64px;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-            margin: 40px 0 20px;
-            text-shadow: 0 0 30px rgba(185, 103, 255, 0.5);
-            letter-spacing: 2px;
-            position: relative;
+        .stat {
+            font-size: 18px;
         }
 
-        .game-title::after {
-            content: 'SIMPLIFIED EDITION';
-            position: absolute;
-            bottom: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 24px;
-            font-weight: 400;
-            color: var(--accent);
-            text-shadow: 0 0 15px rgba(0, 255, 136, 0.7);
-            letter-spacing: 4px;
+        .stat span {
+            color: #00ff88;
+            font-weight: bold;
         }
 
         .btn {
-            padding: 18px 30px;
-            font-size: 20px;
-            font-family: 'Orbitron', sans-serif;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, rgba(0, 243, 255, 0.2), rgba(185, 103, 255, 0.2));
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.3), rgba(185, 103, 255, 0.3));
+            border: 1px solid #00f3ff;
             color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            letter-spacing: 1px;
-            margin: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
         }
 
         .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 243, 255, 0.4);
-            border-color: var(--neon-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
         }
 
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .main-menu {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .sidebar {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .nav-btn {
-            padding: 15px;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
-            font-family: 'Exo 2', sans-serif;
-            font-size: 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-btn:hover {
-            background: rgba(0, 243, 255, 0.1);
-            border-color: var(--neon-blue);
-            transform: translateX(5px);
-        }
-
-        .nav-btn.active {
-            background: linear-gradient(135deg, rgba(0, 243, 255, 0.3), rgba(185, 103, 255, 0.3));
-            border-color: transparent;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
-        }
-
-        .content-area {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 30px;
-            min-height: 600px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .content-area::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
-        }
-
-        /* Car Grid */
-        .car-search-container {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .search-input {
-            flex: 1;
-            min-width: 200px;
-            padding: 12px 15px;
-            background: rgba(30, 30, 50, 0.6);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 8px;
-            color: white;
-            font-family: 'Exo 2', sans-serif;
-            font-size: 16px;
         }
 
         .cars-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-            max-height: 600px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .cars-grid::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .cars-grid::-webkit-scrollbar-track {
-            background: rgba(30, 30, 50, 0.6);
-            border-radius: 4px;
-        }
-
-        .cars-grid::-webkit-scrollbar-thumb {
-            background: var(--neon-blue);
-            border-radius: 4px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
         }
 
         .car-card {
             background: rgba(40, 40, 60, 0.6);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
             border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s;
         }
 
         .car-card:hover {
-            border-color: var(--neon-blue);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 243, 255, 0.2);
-        }
-
-        .car-card.owned {
-            border-color: var(--accent);
+            border-color: #00f3ff;
+            transform: translateY(-3px);
         }
 
         .car-card.selected {
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 20px rgba(255, 42, 109, 0.5);
+            border-color: #ff2a6d;
+            box-shadow: 0 0 15px rgba(255, 42, 109, 0.5);
         }
 
         .car-card.locked {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .car-name {
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 18px;
-            font-family: 'Orbitron', sans-serif;
-            color: white;
+            opacity: 0.5;
         }
 
         .car-stats {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
+            justify-content: space-around;
+            margin: 10px 0;
             font-size: 12px;
-            color: #aaa;
-        }
-
-        .car-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .car-price {
-            font-size: 20px;
-            color: var(--accent);
-            font-weight: bold;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .car-level {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--neon-purple);
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-box {
-            background: rgba(30, 30, 50, 0.6);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #aaa;
-            margin-bottom: 8px;
-            font-family: 'Exo 2', sans-serif;
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: bold;
-            color: var(--neon-blue);
-            font-family: 'Orbitron', sans-serif;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-        }
-
-        /* Race Setup */
-        .race-setup {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .setup-section {
-            background: rgba(40, 40, 60, 0.6);
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 243, 255, 0.2);
-        }
-
-        .setup-title {
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: var(--neon-blue);
-            font-family: 'Orbitron', sans-serif;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
 
         .mode-buttons {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
+            margin: 20px 0;
         }
 
         .mode-btn {
-            padding: 20px;
             background: rgba(30, 30, 50, 0.6);
             border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
             color: white;
+            padding: 20px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Exo 2', sans-serif;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s;
         }
 
         .mode-btn:hover {
-            border-color: var(--neon-blue);
-            transform: translateY(-3px);
+            border-color: #00f3ff;
         }
 
         .mode-btn.selected {
-            background: linear-gradient(135deg, rgba(0, 243, 255, 0.3), rgba(185, 103, 255, 0.3));
-            border-color: transparent;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
         }
 
-        /* Circuit */
         .circuit-container {
             width: 100%;
-            height: 500px;
+            height: 400px;
             background: #111;
             border-radius: 15px;
-            overflow: hidden;
-            margin: 30px 0;
+            margin: 20px 0;
             position: relative;
-            border: 2px solid rgba(0, 243, 255, 0.3);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .circuit {
-            width: 100%;
-            height: 100%;
+            border: 2px solid #00f3ff;
         }
 
         .track {
             stroke: #333;
-            stroke-width: 100;
+            stroke-width: 80;
             fill: none;
         }
 
         .track-center {
-            stroke: #444;
+            stroke: #555;
             stroke-width: 2;
             fill: none;
             stroke-dasharray: 10, 10;
@@ -415,1313 +167,419 @@
 
         .car-icon {
             position: absolute;
-            width: 24px;
-            height: 12px;
-            background: var(--neon-pink);
-            border-radius: 3px;
-            transition: all 0.1s linear;
-            transform-origin: center;
-            box-shadow: 0 0 10px rgba(255, 42, 109, 0.7);
-            z-index: 10;
-        }
-
-        .car-icon::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            right: 2px;
-            bottom: 2px;
+            width: 20px;
+            height: 10px;
             background: #ff2a6d;
-            border-radius: 2px;
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(255, 42, 109, 0.7);
         }
 
-        /* Manual Control */
+        .race-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: rgba(30, 30, 50, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            color: #00f3ff;
+            font-weight: bold;
+        }
+
         .manual-control {
             position: absolute;
-            top: 30px;
-            left: 30px;
-            background: rgba(10, 10, 22, 0.8);
-            padding: 20px;
-            border-radius: 12px;
-            border: 2px solid var(--neon-blue);
-            z-index: 50;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
-        }
-
-        .speed-display {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--neon-blue);
-            text-align: center;
-            margin-bottom: 15px;
-            font-family: 'Orbitron', sans-serif;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
+            top: 20px;
+            left: 20px;
+            background: rgba(10, 10, 22, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #00f3ff;
         }
 
         .speed-bars {
             display: flex;
             gap: 5px;
-            margin-bottom: 15px;
+            margin-top: 10px;
         }
 
         .speed-bar {
-            width: 20px;
-            height: 30px;
+            width: 15px;
+            height: 25px;
             background: #333;
             border-radius: 3px;
-            transition: all 0.3s ease;
         }
 
         .speed-bar.active {
-            background: var(--accent);
-            box-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+            background: #00ff88;
         }
 
-        .speed-bar.max {
-            background: var(--neon-pink);
-            box-shadow: 0 0 10px rgba(255, 42, 109, 0.7);
-        }
-
-        .control-instructions {
-            font-size: 12px;
-            color: #aaa;
-            text-align: center;
-        }
-
-        /* QTE Overlay */
-        .qte-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(10, 10, 22, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            border: 3px solid var(--neon-pink);
-            display: none;
-            z-index: 100;
-            text-align: center;
-            min-width: 300px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px rgba(255, 42, 109, 0.7);
-        }
-
-        .qte-overlay.active {
-            display: block;
-            animation: pulse 0.5s ease;
-        }
-
-        .qte-prompt {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: var(--accent);
-            font-family: 'Orbitron', sans-serif;
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-        }
-
-        .qte-arrow {
-            font-size: 80px;
-            margin: 20px 0;
-            filter: drop-shadow(0 0 10px rgba(255, 42, 109, 0.7));
-            transition: transform 0.2s ease;
-        }
-
-        .qte-arrow.highlight {
-            transform: scale(1.2);
-            color: var(--accent);
-        }
-
-        .qte-timer {
-            width: 100%;
-            height: 15px;
-            background: #333;
-            border-radius: 10px;
-            overflow: hidden;
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
             margin-top: 20px;
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
-        }
-
-        .qte-timer-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--neon-pink));
-            width: 100%;
-            transition: width 0.05s linear;
-            border-radius: 10px;
-        }
-
-        /* Fuel Gauge */
-        .fuel-gauge {
-            width: 100%;
-            height: 20px;
-            background: #333;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 15px 0;
-            position: relative;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-        }
-
-        .fuel-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--neon-pink));
-            transition: width 0.3s ease;
-            box-shadow: 0 0 10px rgba(255, 42, 109, 0.5);
-        }
-
-        .fuel-label {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 12px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-        }
-
-        /* Race Start Overlay */
-        .race-start-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(5, 5, 16, 0.95);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            flex-direction: column;
-        }
-
-        .race-start-overlay.active {
-            display: flex;
-        }
-
-        .countdown {
-            font-size: 140px;
-            font-weight: bold;
-            color: var(--neon-blue);
-            text-shadow: 0 0 30px rgba(0, 243, 255, 0.7);
-            font-family: 'Orbitron', sans-serif;
-            animation: countdownPulse 1s ease;
-            margin-bottom: 30px;
-        }
-
-        @keyframes countdownPulse {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .race-start-text {
-            font-size: 60px;
-            font-weight: bold;
-            color: var(--neon-pink);
-            text-shadow: 0 0 20px rgba(255, 42, 109, 0.7);
-            font-family: 'Orbitron', sans-serif;
-            animation: raceStartPulse 1s infinite;
-        }
-
-        @keyframes raceStartPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .main-menu {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                order: 2;
-            }
-            
-            .content-area {
-                order: 1;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .game-title {
-                font-size: 48px;
-            }
-            
-            .stats-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .cars-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .mode-buttons {
-                grid-template-columns: 1fr;
-            }
-            
-            .car-search-container {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Start Screen -->
-    <div class="screen active" id="startScreen">
-        <h1 class="game-title">ULTIMATE RACING SIMULATOR</h1>
-        <div style="display: flex; flex-direction: column; gap: 20px; max-width: 400px; margin: 60px auto;">
-            <button class="btn" onclick="startGame()">START GAME</button>
-        </div>
-    </div>
-
-    <!-- Main Menu -->
-    <div class="screen" id="mainMenu">
-        <div class="main-menu">
-            <div class="sidebar">
-                <button class="nav-btn active" onclick="showTab('garage')">🏎️ GARAGE</button>
-                <button class="nav-btn" onclick="showTab('race')">🏁 QUICK RACE</button>
-                <button class="nav-btn" id="manualModeBtn" onclick="showTab('manualRace')">🎮 MANUAL CONTROL</button>
-                <button class="nav-btn" onclick="backToStart()">🏠 MAIN MENU</button>
-            </div>
-            
-            <div class="content-area" id="contentArea">
-                <!-- Content will be dynamically loaded here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Simulation Screen -->
-    <div class="screen" id="simulationScreen">
-        <div class="stats-bar">
-            <div class="stat-box">
-                <div class="stat-label">CREDITS</div>
-                <div class="stat-value" id="raceMoney">$0</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">SPEED</div>
-                <div class="stat-value" id="raceSpeed">0 MPH</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">LAP TIME</div>
-                <div class="stat-value" id="lapTime">0.0s</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">POSITION</div>
-                <div class="stat-value" id="position">0%</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">FUEL</div>
-                <div class="stat-value" id="fuel">100%</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">LAP</div>
-                <div class="stat-value" id="currentLap">1/1</div>
+    <div class="container">
+        <!-- Start Screen -->
+        <div class="screen active" id="startScreen">
+            <h1>🏎️ RACING SIMULATOR 🏎️</h1>
+            <div style="text-align: center; margin-top: 50px;">
+                <button class="btn" onclick="startGame()" style="font-size: 24px; padding: 20px 40px;">START GAME</button>
             </div>
         </div>
 
-        <div class="fuel-gauge">
-            <div class="fuel-fill" id="fuelFill" style="width: 100%"></div>
-            <div class="fuel-label">FUEL CAPACITY</div>
+        <!-- Garage Screen -->
+        <div class="screen" id="garageScreen">
+            <h1>GARAGE</h1>
+            <div class="header">
+                <div class="stat">Credits: <span id="money">$1,000</span></div>
+                <div class="stat">Level: <span id="level">1</span></div>
+            </div>
+
+            <h2 style="color: #00f3ff; margin: 20px 0;">SELECT YOUR CAR</h2>
+            <div class="cars-grid" id="carsGrid"></div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="showRaceSetup()">CONTINUE TO RACE SETUP</button>
+            </div>
         </div>
 
-        <div class="circuit-container">
-            <svg class="circuit" viewBox="0 0 800 600">
-                <!-- Small Circuit -->
-                <path class="track" id="smallTrack" d="M 100 300 Q 100 100, 400 100 T 700 300 Q 700 500, 400 500 T 100 300" style="display: block;"/>
-                <path class="track-center" id="smallTrackCenter" d="M 100 300 Q 100 100, 400 100 T 700 300 Q 700 500, 400 500 T 100 300" style="display: block;"/>
+        <!-- Race Setup Screen -->
+        <div class="screen" id="raceSetupScreen">
+            <h1>RACE SETUP</h1>
+            <div class="header">
+                <div class="stat">Selected Car: <span id="selectedCar">Honda Civic</span></div>
+            </div>
+
+            <h3 style="color: #00ff88; margin: 20px 0;">SELECT CIRCUIT</h3>
+            <div class="mode-buttons">
+                <button class="mode-btn selected" onclick="selectCircuit('small')">
+                    <div style="font-size: 18px; margin-bottom: 5px;">SMALL CIRCUIT</div>
+                    <div style="font-size: 12px; color: #aaa;">Quick race</div>
+                </button>
+                <button class="mode-btn" onclick="selectCircuit('large')">
+                    <div style="font-size: 18px; margin-bottom: 5px;">LARGE CIRCUIT</div>
+                    <div style="font-size: 12px; color: #aaa;">More challenging</div>
+                </button>
+                <button class="mode-btn" onclick="selectCircuit('oval')">
+                    <div style="font-size: 18px; margin-bottom: 5px;">OVAL CIRCUIT</div>
+                    <div style="font-size: 12px; color: #aaa;">High speed</div>
+                </button>
+            </div>
+
+            <h3 style="color: #00ff88; margin: 20px 0;">SELECT LAPS</h3>
+            <div class="mode-buttons">
+                <button class="mode-btn selected" onclick="selectLaps(1)">1 LAP</button>
+                <button class="mode-btn" onclick="selectLaps(3)">3 LAPS</button>
+                <button class="mode-btn" onclick="selectLaps(5)">5 LAPS</button>
+            </div>
+
+            <div class="controls">
+                <button class="btn" onclick="showGarage()">BACK TO GARAGE</button>
+                <button class="btn" onclick="startRace()" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.3), rgba(0, 243, 255, 0.3));">START RACE</button>
+                <button class="btn" onclick="startManualRace()" id="manualBtn" disabled>MANUAL CONTROL</button>
+            </div>
+        </div>
+
+        <!-- Race Screen -->
+        <div class="screen" id="raceScreen">
+            <h1>RACING</h1>
+            <div class="race-stats">
+                <div class="stat-box">
+                    <div class="stat-label">SPEED</div>
+                    <div class="stat-value" id="raceSpeed">0 MPH</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">LAP TIME</div>
+                    <div class="stat-value" id="lapTime">0.0s</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">PROGRESS</div>
+                    <div class="stat-value" id="progress">0%</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">LAP</div>
+                    <div class="stat-value" id="currentLap">1/1</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">EARNINGS</div>
+                    <div class="stat-value" id="earnings">$0</div>
+                </div>
+            </div>
+
+            <div class="circuit-container">
+                <svg class="circuit" viewBox="0 0 800 400">
+                    <path class="track" id="track" d="M 100 200 Q 100 50, 400 50 T 700 200 Q 700 350, 400 350 T 100 200"/>
+                    <path class="track-center" id="trackCenter" d="M 100 200 Q 100 50, 400 50 T 700 200 Q 700 350, 400 350 T 100 200"/>
+                </svg>
+                <div class="car-icon" id="carIcon"></div>
                 
-                <!-- Large Circuit -->
-                <path class="track" id="largeTrack" d="M 50 300 Q 50 50, 200 50 L 600 50 Q 750 50, 750 200 L 750 400 Q 750 550, 600 550 L 200 550 Q 50 550, 50 400 Z" style="display: none;"/>
-                <path class="track-center" id="largeTrackCenter" d="M 50 300 Q 50 50, 200 50 L 600 50 Q 750 50, 750 200 L 750 400 Q 750 550, 600 550 L 200 550 Q 50 550, 50 400 Z" style="display: none;"/>
-                
-                <!-- Oval Circuit -->
-                <path class="track" id="ovalTrack" d="M 150 300 A 250 100 0 1 1 650 300 A 250 100 0 1 1 150 300" style="display: none;"/>
-                <path class="track-center" id="ovalTrackCenter" d="M 150 300 A 250 100 0 1 1 650 300 A 250 100 0 1 1 150 300" style="display: none;"/>
-            </svg>
-            <div class="car-icon" id="carIcon"></div>
-            
-            <div class="manual-control" id="manualControl" style="display: none;">
-                <div class="speed-display" id="speedDisplay">SPEED: 3</div>
-                <div class="speed-bars">
-                    <div class="speed-bar" id="speedBar1"></div>
-                    <div class="speed-bar" id="speedBar2"></div>
-                    <div class="speed-bar" id="speedBar3"></div>
-                    <div class="speed-bar" id="speedBar4"></div>
-                    <div class="speed-bar" id="speedBar5"></div>
-                </div>
-                <div class="control-instructions">
-                    UP: INCREASE SPEED | DOWN: DECREASE SPEED
+                <div class="manual-control" id="manualControl" style="display: none;">
+                    <div style="font-weight: bold; margin-bottom: 10px;">MANUAL SPEED: <span id="speedDisplay">3</span></div>
+                    <div class="speed-bars">
+                        <div class="speed-bar" id="bar1"></div>
+                        <div class="speed-bar" id="bar2"></div>
+                        <div class="speed-bar" id="bar3"></div>
+                        <div class="speed-bar" id="bar4"></div>
+                        <div class="speed-bar" id="bar5"></div>
+                    </div>
+                    <div style="font-size: 11px; margin-top: 10px; color: #aaa;">↑ SPEED UP | ↓ SLOW DOWN</div>
                 </div>
             </div>
-            
-            <div class="qte-overlay" id="qteOverlay">
-                <div class="qte-prompt">QUICK! PRESS THE CORRECT ARROW!</div>
-                <div class="qte-arrow" id="qteArrow">⬆</div>
-                <div class="qte-timer">
-                    <div class="qte-timer-bar" id="qteTimerBar"></div>
-                </div>
-            </div>
-        </div>
-        
-        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
-            <button class="btn" onclick="useBoost()" id="boostBtn">ACTIVATE BOOST (3)</button>
-            <button class="btn" onclick="useNitro()" id="nitroBtn">ACTIVATE NITRO (2)</button>
-            <button class="btn" onclick="endRace()">ABORT RACE</button>
-        </div>
-    </div>
 
-    <!-- Race Start Overlay -->
-    <div class="race-start-overlay" id="raceStartOverlay">
-        <div id="countdownDisplay" class="countdown"></div>
-        <div id="raceStartText" class="race-start-text" style="display: none;">ENGAGE!</div>
+            <div class="controls">
+                <button class="btn" onclick="endRace()">END RACE</button>
+            </div>
+        </div>
     </div>
 
     <script>
         // Game State
-        let gameState = {
+        const gameState = {
             money: 1000,
             level: 1,
-            xp: 0,
-            xpNeeded: 100,
             currentCar: 0,
             ownedCars: [0],
-            raceMode: 'normal',
-            circuitType: 'small',
-            difficultyMode: 'easy',
+            circuit: 'small',
             laps: 1,
-            boosts: 3,
-            nitros: 2,
-            fuel: 100,
-            manualSpeed: 3,
-            manualModeUnlocked: true,
-            stats: {
-                racesCompleted: 0,
-                totalEarnings: 0,
-                bestLapTime: 0,
-                crashes: 0,
-                perfectQTEs: 0,
-                legacyRaces: 0,
-                manualRaces: 0
-            }
+            manualSpeed: 3
         };
 
-        // Car Database - 30+ Real Cars
+        // Cars
         const cars = [
-            // Economy Cars
-            { id: 1, name: "Honda Civic", brand: "Honda", type: "Sedan", year: 2022, speed: 50, acceleration: 60, handling: 70, price: 0, level: 0 },
-            { id: 2, name: "Toyota Corolla", brand: "Toyota", type: "Sedan", year: 2022, speed: 55, acceleration: 58, handling: 72, price: 5000, level: 1 },
-            { id: 3, name: "Mazda MX-5", brand: "Mazda", type: "Convertible", year: 2022, speed: 60, acceleration: 65, handling: 85, price: 8000, level: 2 },
-            { id: 4, name: "Volkswagen Golf GTI", brand: "Volkswagen", type: "Hatchback", year: 2022, speed: 70, acceleration: 75, handling: 80, price: 12000, level: 3 },
-            
-            // Sports Cars
-            { id: 5, name: "Ford Mustang", brand: "Ford", type: "Coupe", year: 2022, speed: 80, acceleration: 82, handling: 70, price: 18000, level: 4 },
-            { id: 6, name: "Subaru WRX", brand: "Subaru", type: "Sedan", year: 2022, speed: 85, acceleration: 88, handling: 82, price: 25000, level: 5 },
-            { id: 7, name: "BMW M3", brand: "BMW", type: "Sedan", year: 2022, speed: 90, acceleration: 91, handling: 85, price: 35000, level: 6 },
-            { id: 8, name: "Audi RS5", brand: "Audi", type: "Coupe", year: 2022, speed: 92, acceleration: 93, handling: 86, price: 45000, level: 7 },
-            { id: 9, name: "Mercedes C63 AMG", brand: "Mercedes", type: "Sedan", year: 2022, speed: 94, acceleration: 94, handling: 84, price: 55000, level: 8 },
-            { id: 10, name: "Nissan GT-R", brand: "Nissan", type: "Coupe", year: 2022, speed: 95, acceleration: 96, handling: 88, price: 65000, level: 9 },
-            
-            // Supercars
-            { id: 11, name: "Chevrolet Corvette", brand: "Chevrolet", type: "Coupe", year: 2022, speed: 96, acceleration: 95, handling: 85, price: 75000, level: 10 },
-            { id: 12, name: "Porsche 911", brand: "Porsche", type: "Coupe", year: 2022, speed: 97, acceleration: 97, handling: 92, price: 85000, level: 11 },
-            { id: 13, name: "Dodge Viper", brand: "Dodge", type: "Coupe", year: 2022, speed: 98, acceleration: 96, handling: 83, price: 95000, level: 12 },
-            { id: 14, name: "Aston Martin Vantage", brand: "Aston Martin", type: "Coupe", year: 2022, speed: 96, acceleration: 94, handling: 87, price: 92000, level: 13 },
-            { id: 15, name: "McLaren 570S", brand: "McLaren", type: "Coupe", year: 2022, speed: 98, acceleration: 98, handling: 90, price: 120000, level: 15 },
-            
-            // Hypercars
-            { id: 16, name: "Bugatti Chiron", brand: "Bugatti", type: "Hypercar", year: 2022, speed: 100, acceleration: 100, handling: 95, price: 3000000, level: 20 },
-            { id: 17, name: "Koenigsegg Jesko", brand: "Koenigsegg", type: "Hypercar", year: 2022, speed: 100, acceleration: 100, handling: 96, price: 3200000, level: 22 },
-            { id: 18, name: "Lamborghini Sian", brand: "Lamborghini", type: "Hypercar", year: 2022, speed: 99, acceleration: 99, handling: 94, price: 3600000, level: 24 },
-            { id: 19, name: "McLaren Speedtail", brand: "McLaren", type: "Hypercar", year: 2022, speed: 98, acceleration: 99, handling: 95, price: 2750000, level: 21 },
-            { id: 20, name: "Ferrari LaFerrari", brand: "Ferrari", type: "Hypercar", year: 2022, speed: 99, acceleration: 98, handling: 96, price: 2800000, level: 23 },
-            
-            // Additional cars
-            { id: 21, name: "Porsche 918 Spyder", brand: "Porsche", type: "Hypercar", year: 2022, speed: 97, acceleration: 98, handling: 97, price: 1750000, level: 19 },
-            { id: 22, name: "Aston Martin Valkyrie", brand: "Aston Martin", type: "Hypercar", year: 2022, speed: 100, acceleration: 99, handling: 98, price: 3500000, level: 25 },
-            { id: 23, name: "Rimac Nevera", brand: "Rimac", type: "Hypercar", year: 2022, speed: 99, acceleration: 100, handling: 96, price: 2800000, level: 24 },
-            { id: 24, name: "Pagani Huayra BC", brand: "Pagani", type: "Hypercar", year: 2022, speed: 98, acceleration: 97, handling: 99, price: 3400000, level: 26 },
-            { id: 25, name: "Hennessey Venom F5", brand: "Hennessey", type: "Hypercar", year: 2022, speed: 100, acceleration: 100, handling: 95, price: 3200000, level: 27 },
-            
-            // More cars
-            { id: 26, name: "Ford Focus RS", brand: "Ford", type: "Hatchback", year: 2022, speed: 75, acceleration: 80, handling: 78, price: 22000, level: 5 },
-            { id: 27, name: "Honda NSX", brand: "Honda", type: "Coupe", year: 2022, speed: 92, acceleration: 93, handling: 90, price: 98000, level: 14 },
-            { id: 28, name: "Lexus LC500", brand: "Lexus", type: "Coupe", year: 2022, speed: 91, acceleration: 90, handling: 84, price: 62000, level: 9 },
-            { id: 29, name: "Maserati GranTurismo", brand: "Maserati", type: "Coupe", year: 2022, speed: 94, acceleration: 92, handling: 83, price: 82000, level: 12 },
-            { id: 30, name: "Jaguar F-Type", brand: "Jaguar", type: "Convertible", year: 2022, speed: 93, acceleration: 92, handling: 87, price: 72000, level: 10 }
+            { id: 0, name: "Honda Civic", speed: 50, price: 0, level: 0 },
+            { id: 1, name: "Toyota Corolla", speed: 55, price: 5000, level: 1 },
+            { id: 2, name: "Mazda MX-5", speed: 60, price: 8000, level: 2 },
+            { id: 3, name: "VW Golf GTI", speed: 70, price: 12000, level: 3 },
+            { id: 4, name: "Ford Mustang", speed: 80, price: 18000, level: 4 },
+            { id: 5, name: "Subaru WRX", speed: 85, price: 25000, level: 5 },
+            { id: 6, name: "BMW M3", speed: 90, price: 35000, level: 6 },
+            { id: 7, name: "Audi RS5", speed: 92, price: 45000, level: 7 },
+            { id: 8, name: "Mercedes C63", speed: 94, price: 55000, level: 8 },
+            { id: 9, name: "Nissan GT-R", speed: 95, price: 65000, level: 9 },
+            { id: 10, name: "Corvette", speed: 96, price: 75000, level: 10 },
+            { id: 11, name: "Porsche 911", speed: 97, price: 85000, level: 11 },
+            { id: 12, name: "McLaren 570S", speed: 98, price: 120000, level: 15 },
+            { id: 13, name: "Ferrari LaFerrari", speed: 99, price: 2800000, level: 20 },
+            { id: 14, name: "Bugatti Chiron", speed: 100, price: 3000000, level: 25 }
         ];
 
-        // Screen management
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(screenId).classList.add('active');
-        }
+        // Race state
+        let raceActive = false;
+        let raceData = { progress: 0, speed: 0, time: 0, currentLap: 1, earnings: 0, isManual: false };
+        let raceInterval;
 
         function startGame() {
-            showScreen('mainMenu');
-            showTab('garage');
+            showScreen('garageScreen');
+            updateGarage();
         }
 
-        function backToStart() {
-            showScreen('startScreen');
-        }
+        function updateGarage() {
+            document.getElementById('money').textContent = `$${gameState.money.toLocaleString()}`;
+            document.getElementById('level').textContent = gameState.level;
 
-        // Tab management
-        function showTab(tab) {
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            const content = document.getElementById('contentArea');
-            
-            switch(tab) {
-                case 'garage':
-                    showGarage(content);
-                    break;
-                case 'race':
-                    showRaceSetup(content);
-                    break;
-                case 'manualRace':
-                    if (gameState.manualModeUnlocked) {
-                        showManualRaceSetup(content);
-                    } else {
-                        alert('MANUAL CONTROL MODE UNLOCKS AT LEVEL 5!');
-                        showTab('garage');
-                    }
-                    break;
-            }
-        }
+            const grid = document.getElementById('carsGrid');
+            grid.innerHTML = cars.map(car => {
+                const owned = gameState.ownedCars.includes(car.id);
+                const selected = gameState.currentCar === car.id;
+                const locked = !owned && (car.level > gameState.level || car.price > gameState.money);
 
-        function showGarage(content) {
-            // Get unique brands and types for filters
-            const brands = [...new Set(cars.map(car => car.brand))];
-            const types = [...new Set(cars.map(car => car.type))];
-            
-            content.innerHTML = `
-                <div class="stats-bar">
-                    <div class="stat-box">
-                        <div class="stat-label">CREDITS</div>
-                        <div class="stat-value">$${gameState.money.toLocaleString()}</div>
+                return `
+                    <div class="car-card ${selected ? 'selected' : ''} ${locked ? 'locked' : ''}" 
+                         onclick="selectCar(${car.id})">
+                        <div style="font-weight: bold; margin-bottom: 10px;">${car.name}</div>
+                        <div class="car-stats">
+                            <div>Speed<br>${car.speed}</div>
+                        </div>
+                        <div style="color: #00ff88; font-size: 18px; font-weight: bold;">
+                            ${owned ? 'OWNED' : `$${car.price.toLocaleString()}`}
+                        </div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-label">LEVEL</div>
-                        <div class="stat-value">${gameState.level}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">CARS OWNED</div>
-                        <div class="stat-value">${gameState.ownedCars.length}/${cars.length}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">BOOSTS</div>
-                        <div class="stat-value">${gameState.boosts}</div>
-                    </div>
-                </div>
-                
-                <h2 style="color: var(--neon-blue); font-family: 'Orbitron', sans-serif; margin-bottom: 20px; text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);">VEHICLE GARAGE</h2>
-                
-                <div class="car-search-container">
-                    <input type="text" class="search-input" id="carSearch" placeholder="Search cars..." onkeyup="filterCars()">
-                    <select class="search-input" id="brandFilter" onchange="filterCars()">
-                        <option value="">All Brands</option>
-                        ${brands.map(brand => `<option value="${brand}">${brand}</option>`).join('')}
-                    </select>
-                    <select class="search-input" id="typeFilter" onchange="filterCars()">
-                        <option value="">All Types</option>
-                        ${types.map(type => `<option value="${type}">${type}</option>`).join('')}
-                    </select>
-                </div>
-                
-                <div class="cars-grid" id="carsGrid">
-                    ${cars.map((car, index) => {
-                        const isOwned = gameState.ownedCars.includes(car.id);
-                        const isSelected = gameState.currentCar === car.id;
-                        const isLocked = !isOwned && (car.level > gameState.level || car.price > gameState.money);
-                        
-                        return `
-                            <div class="car-card ${isOwned ? 'owned' : ''} ${isSelected ? 'selected' : ''} ${isLocked ? 'locked' : ''}"
-                                 onclick="selectCar(${car.id})" data-brand="${car.brand}" data-type="${car.type}" data-name="${car.name.toLowerCase()}">
-                                ${car.level > 0 ? `<div class="car-level">LVL ${car.level}</div>` : ''}
-                                <div class="car-name">${car.name}</div>
-                                <div class="car-stats">
-                                    <div class="car-stat">
-                                        <div>SPEED</div>
-                                        <div>${car.speed}</div>
-                                    </div>
-                                    <div class="car-stat">
-                                        <div>ACCEL</div>
-                                        <div>${car.acceleration}</div>
-                                    </div>
-                                    <div class="car-stat">
-                                        <div>HANDL</div>
-                                        <div>${car.handling}</div>
-                                    </div>
-                                </div>
-                                <div class="car-price">
-                                    ${isOwned ? 'OWNED' : `$${car.price.toLocaleString()}`}
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
+                `;
+            }).join('');
         }
 
-        function filterCars() {
-            const searchTerm = document.getElementById('carSearch').value.toLowerCase();
-            const brandFilter = document.getElementById('brandFilter').value;
-            const typeFilter = document.getElementById('typeFilter').value;
-            
-            const carCards = document.querySelectorAll('.car-card');
-            
-            carCards.forEach(card => {
-                const brand = card.getAttribute('data-brand');
-                const type = card.getAttribute('data-type');
-                const name = card.getAttribute('data-name');
-                
-                const matchesSearch = name.includes(searchTerm);
-                const matchesBrand = !brandFilter || brand === brandFilter;
-                const matchesType = !typeFilter || type === typeFilter;
-                
-                if (matchesSearch && matchesBrand && matchesType) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        function selectCar(carId) {
-            const car = cars.find(c => c.id === carId);
-            
-            if (gameState.ownedCars.includes(carId)) {
-                gameState.currentCar = carId;
-                alert(`SELECTED: ${car.name}`);
-                showTab('garage');
+        function selectCar(id) {
+            const car = cars.find(c => c.id === id);
+            if (gameState.ownedCars.includes(id)) {
+                gameState.currentCar = id;
+                updateGarage();
             } else if (car.level > gameState.level) {
-                alert(`REQUIRES LEVEL ${car.level}!`);
+                alert(`Requires Level ${car.level}!`);
             } else if (car.price > gameState.money) {
-                alert(`INSUFFICIENT CREDITS! NEED $${(car.price - gameState.money).toLocaleString()} MORE`);
+                alert(`Need $${(car.price - gameState.money).toLocaleString()} more!`);
             } else {
                 gameState.money -= car.price;
-                gameState.ownedCars.push(carId);
-                gameState.currentCar = carId;
-                alert(`ACQUIRED ${car.name}!`);
-                showTab('garage');
+                gameState.ownedCars.push(id);
+                gameState.currentCar = id;
+                updateGarage();
             }
         }
 
-        function showRaceSetup(content) {
-            content.innerHTML = `
-                <div class="race-setup">
-                    <div class="setup-section">
-                        <div class="setup-title">SELECT CIRCUIT</div>
-                        <div class="mode-buttons">
-                            <button class="mode-btn ${gameState.circuitType === 'small' ? 'selected' : ''}" onclick="selectCircuit('small')">
-                                SMALL CIRCUIT
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">3 MAX QTES</div>
-                            </button>
-                            <button class="mode-btn ${gameState.circuitType === 'large' ? 'selected' : ''}" onclick="selectCircuit('large')">
-                                LARGE CIRCUIT
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">6 MAX QTES</div>
-                            </button>
-                            <button class="mode-btn ${gameState.circuitType === 'oval' ? 'selected' : ''}" onclick="selectCircuit('oval')">
-                                OVAL CIRCUIT
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">HIGH SPEEDS</div>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="setup-section">
-                        <div class="setup-title">LAPS</div>
-                        <div class="mode-buttons">
-                            <button class="mode-btn ${gameState.laps === 1 ? 'selected' : ''}" onclick="selectLaps(1)">
-                                1 LAP
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">STANDARD RACE</div>
-                            </button>
-                            <button class="mode-btn ${gameState.laps === 3 ? 'selected' : ''}" onclick="selectLaps(3)">
-                                3 LAPS
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">EXTENDED RACE</div>
-                            </button>
-                            <button class="mode-btn ${gameState.laps === 5 ? 'selected' : ''}" onclick="selectLaps(5)">
-                                5 LAPS
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">ENDURANCE TEST</div>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="setup-section">
-                        <div class="setup-title">DIFFICULTY</div>
-                        <div class="mode-buttons">
-                            <button class="mode-btn ${gameState.difficultyMode === 'easy' ? 'selected' : ''}" onclick="selectDifficulty('easy')">
-                                EASY
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">1X XP</div>
-                            </button>
-                            <button class="mode-btn ${gameState.difficultyMode === 'normal' ? 'selected' : ''}" onclick="selectDifficulty('normal')">
-                                NORMAL
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">1.5X XP</div>
-                            </button>
-                            <button class="mode-btn ${gameState.difficultyMode === 'hard' ? 'selected' : ''}" onclick="selectDifficulty('hard')">
-                                HARD
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">2X XP</div>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center; margin-top: 40px;">
-                        <button class="btn" onclick="startRaceWithCountdown()" style="padding: 25px 60px; font-size: 24px;">
-                            🏁 INITIATE RACE SEQUENCE 🏁
-                        </button>
-                    </div>
-                </div>
-            `;
+        function showGarage() {
+            showScreen('garageScreen');
+            updateGarage();
         }
 
-        function showManualRaceSetup(content) {
-            content.innerHTML = `
-                <div class="race-setup">
-                    <div class="setup-section">
-                        <div class="setup-title">MANUAL CONTROL MODE</div>
-                        <p style="margin-bottom: 20px; color: #aaa; line-height: 1.6;">
-                            CONTROL YOUR SPEED WITH UP AND DOWN ARROWS. GO TOO FAST IN CORNERS AND YOU'LL CRASH!
-                            HIGHER SPEEDS YIELD MORE CREDITS AND XP, BUT INCREASE CRASH PROBABILITY.
-                        </p>
-                    </div>
-                    
-                    <div class="setup-section">
-                        <div class="setup-title">LAPS</div>
-                        <div class="mode-buttons">
-                            <button class="mode-btn ${gameState.laps === 3 ? 'selected' : ''}" onclick="selectLaps(3)">
-                                3 LAPS
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">STANDARD MANUAL RACE</div>
-                            </button>
-                            <button class="mode-btn ${gameState.laps === 5 ? 'selected' : ''}" onclick="selectLaps(5)">
-                                5 LAPS
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">EXTENDED RACE, HIGHER REWARDS</div>
-                            </button>
-                            <button class="mode-btn ${gameState.laps === 8 ? 'selected' : ''}" onclick="selectLaps(8)">
-                                8 LAPS
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">ENDURANCE CHALLENGE</div>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="setup-section">
-                        <div class="setup-title">CIRCUIT</div>
-                        <div class="mode-buttons">
-                            <button class="mode-btn ${gameState.circuitType === 'large' ? 'selected' : ''}" onclick="selectCircuit('large')">
-                                LARGE CIRCUIT
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">MORE CORNERS, MORE CHALLENGE</div>
-                            </button>
-                            <button class="mode-btn ${gameState.circuitType === 'oval' ? 'selected' : ''}" onclick="selectCircuit('oval')">
-                                OVAL CIRCUIT
-                                <div style="font-size: 12px; color: #aaa; margin-top: 5px;">HIGH SPEED CHALLENGE</div>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center; margin-top: 40px;">
-                        <button class="btn" onclick="startManualRaceWithCountdown()" style="padding: 25px 60px; font-size: 24px;">
-                            🎮 ENGAGE MANUAL CONTROL 🎮
-                        </button>
-                    </div>
-                </div>
-            `;
+        function showRaceSetup() {
+            showScreen('raceSetupScreen');
+            const car = cars.find(c => c.id === gameState.currentCar);
+            document.getElementById('selectedCar').textContent = car.name;
+            document.getElementById('manualBtn').disabled = gameState.level < 5;
         }
 
         function selectCircuit(type) {
-            gameState.circuitType = type;
-            showTab('race');
+            gameState.circuit = type;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            
+            const tracks = {
+                small: 'M 100 200 Q 100 50, 400 50 T 700 200 Q 700 350, 400 350 T 100 200',
+                large: 'M 50 200 Q 50 30, 200 30 L 600 30 Q 750 30, 750 150 L 750 250 Q 750 370, 600 370 L 200 370 Q 50 370, 50 250 Z',
+                oval: 'M 150 200 A 200 80 0 1 1 650 200 A 200 80 0 1 1 150 200'
+            };
+            
+            document.getElementById('track').setAttribute('d', tracks[type]);
+            document.getElementById('trackCenter').setAttribute('d', tracks[type]);
         }
 
         function selectLaps(laps) {
             gameState.laps = laps;
-            showTab('race');
-        }
-
-        function selectDifficulty(difficulty) {
-            gameState.difficultyMode = difficulty;
-            showTab('race');
-        }
-
-        // Racing System
-        let raceActive = false;
-        let raceData = {
-            progress: 0,
-            speed: 0,
-            lapTime: 0,
-            qteActive: false,
-            qteCount: 0,
-            earnings: 0,
-            maxSpeed: 0,
-            currentLap: 1,
-            isManualMode: false
-        };
-
-        // Enhanced race start with futuristic countdown
-        function startRaceWithCountdown() {
-            const overlay = document.getElementById('raceStartOverlay');
-            const countdownDisplay = document.getElementById('countdownDisplay');
-            const raceStartText = document.getElementById('raceStartText');
-            overlay.classList.add('active');
-            
-            let count = 3;
-            countdownDisplay.textContent = count;
-            countdownDisplay.style.display = 'block';
-            raceStartText.style.display = 'none';
-            
-            const countdownInterval = setInterval(() => {
-                count--;
-                if (count > 0) {
-                    countdownDisplay.textContent = count;
-                } else if (count === 0) {
-                    countdownDisplay.textContent = "GO!";
-                } else {
-                    clearInterval(countdownInterval);
-                    countdownDisplay.style.display = 'none';
-                    raceStartText.style.display = 'block';
-                    
-                    setTimeout(() => {
-                        overlay.classList.remove('active');
-                        startRace();
-                    }, 1500);
-                }
-            }, 1000);
-        }
-
-        function startManualRaceWithCountdown() {
-            const overlay = document.getElementById('raceStartOverlay');
-            const countdownDisplay = document.getElementById('countdownDisplay');
-            const raceStartText = document.getElementById('raceStartText');
-            overlay.classList.add('active');
-            
-            let count = 3;
-            countdownDisplay.textContent = count;
-            countdownDisplay.style.display = 'block';
-            raceStartText.style.display = 'none';
-            
-            const countdownInterval = setInterval(() => {
-                count--;
-                if (count > 0) {
-                    countdownDisplay.textContent = count;
-                } else if (count === 0) {
-                    countdownDisplay.textContent = "GO!";
-                } else {
-                    clearInterval(countdownInterval);
-                    countdownDisplay.style.display = 'none';
-                    raceStartText.style.display = 'block';
-                    
-                    setTimeout(() => {
-                        overlay.classList.remove('active');
-                        startManualRace();
-                    }, 1500);
-                }
-            }, 1000);
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
         }
 
         function startRace() {
-            showScreen('simulationScreen');
+            showScreen('raceScreen');
             raceActive = true;
-            raceData = {
-                progress: 0,
-                speed: 0,
-                lapTime: 0,
-                qteActive: false,
-                qteCount: 0,
-                earnings: 0,
-                maxSpeed: 0,
-                currentLap: 1,
-                isManualMode: false
-            };
-            
-            // Hide manual control
+            raceData = { progress: 0, speed: 0, time: 0, currentLap: 1, earnings: 0, isManual: false };
             document.getElementById('manualControl').style.display = 'none';
-            
-            // Reset fuel and nitros
-            gameState.fuel = 100;
-            gameState.nitros = 2;
-            
-            // Show/hide tracks based on circuit type
-            document.getElementById('smallTrack').style.display = gameState.circuitType === 'small' ? 'block' : 'none';
-            document.getElementById('smallTrackCenter').style.display = gameState.circuitType === 'small' ? 'block' : 'none';
-            document.getElementById('largeTrack').style.display = gameState.circuitType === 'large' ? 'block' : 'none';
-            document.getElementById('largeTrackCenter').style.display = gameState.circuitType === 'large' ? 'block' : 'none';
-            document.getElementById('ovalTrack').style.display = gameState.circuitType === 'oval' ? 'block' : 'none';
-            document.getElementById('ovalTrackCenter').style.display = gameState.circuitType === 'oval' ? 'block' : 'none';
-            
             runRace();
         }
 
         function startManualRace() {
-            showScreen('simulationScreen');
+            if (gameState.level < 5) return;
+            showScreen('raceScreen');
             raceActive = true;
-            raceData = {
-                progress: 0,
-                speed: 0,
-                lapTime: 0,
-                qteActive: false,
-                qteCount: 0,
-                earnings: 0,
-                maxSpeed: 0,
-                currentLap: 1,
-                isManualMode: true
-            };
-            
-            // Show manual control
+            raceData = { progress: 0, speed: 0, time: 0, currentLap: 1, earnings: 0, isManual: true };
             document.getElementById('manualControl').style.display = 'block';
-            updateManualSpeedDisplay();
-            
-            // Reset fuel and nitros
-            gameState.fuel = 100;
-            gameState.nitros = 2;
-            
-            // Show/hide tracks based on circuit type
-            document.getElementById('smallTrack').style.display = 'none';
-            document.getElementById('smallTrackCenter').style.display = 'none';
-            document.getElementById('largeTrack').style.display = gameState.circuitType === 'large' ? 'block' : 'none';
-            document.getElementById('largeTrackCenter').style.display = gameState.circuitType === 'large' ? 'block' : 'none';
-            document.getElementById('ovalTrack').style.display = gameState.circuitType === 'oval' ? 'block' : 'none';
-            document.getElementById('ovalTrackCenter').style.display = gameState.circuitType === 'oval' ? 'block' : 'none';
-            
-            runManualRace();
+            gameState.manualSpeed = 3;
+            updateManualDisplay();
+            runRace();
         }
 
-        function updateManualSpeedDisplay() {
-            document.getElementById('speedDisplay').textContent = `SPEED: ${gameState.manualSpeed}`;
-            
-            // Update speed bars
-            for (let i = 1; i <= 5; i++) {
-                const bar = document.getElementById(`speedBar${i}`);
-                bar.classList.remove('active', 'max');
-                
-                if (i <= gameState.manualSpeed) {
-                    bar.classList.add('active');
-                    if (i === 5) {
-                        bar.classList.add('max');
-                    }
-                }
-            }
-        }
-
-        // Manual control key handler
-        document.addEventListener('keydown', function(e) {
-            if (!raceActive || !raceData.isManualMode) return;
-            
-            if (e.key === 'ArrowUp' && gameState.manualSpeed < 5) {
-                gameState.manualSpeed++;
-                updateManualSpeedDisplay();
-            } else if (e.key === 'ArrowDown' && gameState.manualSpeed > 1) {
-                gameState.manualSpeed--;
-                updateManualSpeedDisplay();
-            }
-        });
-
-        async function runRace() {
+        function runRace() {
             const car = cars.find(c => c.id === gameState.currentCar);
-            const maxQTE = gameState.circuitType === 'small' ? 3 : gameState.circuitType === 'large' ? 6 : 4;
             
-            const raceInterval = setInterval(async () => {
+            raceInterval = setInterval(() => {
                 if (!raceActive) {
                     clearInterval(raceInterval);
                     return;
                 }
+
+                raceData.time += 0.1;
                 
-                // Update fuel
-                gameState.fuel -= (raceData.speed / 100) * 0.5;
-                if (gameState.fuel <= 0) {
-                    gameState.fuel = 0;
+                if (raceData.isManual) {
+                    const speedLevels = [30, 60, 90, 120, 150];
+                    raceData.speed = speedLevels[gameState.manualSpeed - 1];
+                } else {
+                    raceData.speed = car.speed + Math.random() * 10;
                 }
                 
-                const fuelMultiplier = gameState.fuel > 0 ? 1 : 0.5;
-                
-                // Update progress
-                let speedMultiplier = 1;
-                if (gameState.difficultyMode === 'hard') speedMultiplier = 1.3;
-                if (gameState.difficultyMode === 'easy') speedMultiplier = 0.7;
-                
-                raceData.speed = (car.speed * speedMultiplier * fuelMultiplier) + Math.random() * 10;
-                raceData.maxSpeed = Math.max(raceData.maxSpeed, raceData.speed);
                 raceData.progress += (raceData.speed / 100) * 2;
-                raceData.lapTime += 0.1;
-                
-                // Update car position
+                raceData.earnings = Math.round((raceData.speed * 10) / (raceData.time + 1) * gameState.laps);
+
                 updateCarPosition();
                 
-                // Update UI
                 document.getElementById('raceSpeed').textContent = `${Math.round(raceData.speed * 2)} MPH`;
-                document.getElementById('lapTime').textContent = `${raceData.lapTime.toFixed(1)}s`;
-                document.getElementById('position').textContent = `${Math.round(raceData.progress)}%`;
-                document.getElementById('fuel').textContent = `${Math.round(gameState.fuel)}%`;
-                document.getElementById('fuelFill').style.width = `${gameState.fuel}%`;
+                document.getElementById('lapTime').textContent = `${raceData.time.toFixed(1)}s`;
+                document.getElementById('progress').textContent = `${Math.round(raceData.progress)}%`;
                 document.getElementById('currentLap').textContent = `${raceData.currentLap}/${gameState.laps}`;
-                
-                // Calculate earnings
-                const baseEarnings = (raceData.speed * 10) / (raceData.lapTime + 1);
-                raceData.earnings = Math.round(baseEarnings * speedMultiplier * gameState.laps);
-                document.getElementById('raceMoney').textContent = `$${raceData.earnings}`;
-                
-                // Update boost and nitro buttons
-                document.getElementById('boostBtn').textContent = `ACTIVATE BOOST (${gameState.boosts})`;
-                document.getElementById('boostBtn').disabled = gameState.boosts <= 0;
-                document.getElementById('nitroBtn').textContent = `ACTIVATE NITRO (${gameState.nitros})`;
-                document.getElementById('nitroBtn').disabled = gameState.nitros <= 0;
-                
-                // Check for QTE (in any lap)
-                if (!raceData.qteActive && raceData.qteCount < maxQTE * gameState.laps) {
-                    const lapProgress = raceData.progress + ((raceData.currentLap - 1) * 100);
-                    const nextQTE = (raceData.qteCount + 1) * (100 / (maxQTE + 1));
-                    if (lapProgress >= nextQTE) {
-                        triggerQTE();
-                    }
-                }
-                
-                // Check if lap complete
+                document.getElementById('earnings').textContent = `$${raceData.earnings}`;
+
                 if (raceData.progress >= 100) {
                     if (raceData.currentLap < gameState.laps) {
-                        // Start next lap
                         raceData.currentLap++;
                         raceData.progress = 0;
-                        alert(`LAP ${raceData.currentLap}/${gameState.laps}`);
                     } else {
-                        // Race complete
-                        clearInterval(raceInterval);
                         finishRace();
                     }
                 }
             }, 100);
         }
 
-        async function runManualRace() {
-            const car = cars.find(c => c.id === gameState.currentCar);
-            const maxQTE = gameState.circuitType === 'large' ? 6 : 4;
-            
-            // Define corner sections (progress percentages where corners occur)
-            const corners = [
-                { start: 20, end: 40, maxSafeSpeed: 3 },
-                { start: 60, end: 80, maxSafeSpeed: 2 }
-            ];
-            
-            const raceInterval = setInterval(async () => {
-                if (!raceActive) {
-                    clearInterval(raceInterval);
-                    return;
-                }
-                
-                // Update fuel
-                gameState.fuel -= (raceData.speed / 100) * 0.5;
-                if (gameState.fuel <= 0) {
-                    gameState.fuel = 0;
-                }
-                
-                const fuelMultiplier = gameState.fuel > 0 ? 1 : 0.5;
-                
-                // Calculate speed based on manual control
-                const speedLevels = [30, 60, 90, 120, 150];
-                raceData.speed = speedLevels[gameState.manualSpeed - 1] * fuelMultiplier;
-                raceData.maxSpeed = Math.max(raceData.maxSpeed, raceData.speed);
-                raceData.progress += (raceData.speed / 100) * 2;
-                raceData.lapTime += 0.1;
-                
-                // Update car position
-                updateCarPosition();
-                
-                // Update UI
-                document.getElementById('raceSpeed').textContent = `${Math.round(raceData.speed * 2)} MPH`;
-                document.getElementById('lapTime').textContent = `${raceData.lapTime.toFixed(1)}s`;
-                document.getElementById('position').textContent = `${Math.round(raceData.progress)}%`;
-                document.getElementById('fuel').textContent = `${Math.round(gameState.fuel)}%`;
-                document.getElementById('fuelFill').style.width = `${gameState.fuel}%`;
-                document.getElementById('currentLap').textContent = `${raceData.currentLap}/${gameState.laps}`;
-                
-                // Calculate earnings (based on speed and lap time)
-                const speedBonus = gameState.manualSpeed * 20;
-                const timePenalty = Math.max(0, raceData.lapTime - 50) * 2;
-                raceData.earnings = Math.round((speedBonus * gameState.laps) - timePenalty);
-                document.getElementById('raceMoney').textContent = `$${raceData.earnings}`;
-                
-                // Update boost and nitro buttons
-                document.getElementById('boostBtn').textContent = `ACTIVATE BOOST (${gameState.boosts})`;
-                document.getElementById('boostBtn').disabled = gameState.boosts <= 0;
-                document.getElementById('nitroBtn').textContent = `ACTIVATE NITRO (${gameState.nitros})`;
-                document.getElementById('nitroBtn').disabled = gameState.nitros <= 0;
-                
-                // Check for corner crashes
-                for (const corner of corners) {
-                    if (raceData.progress >= corner.start && raceData.progress <= corner.end) {
-                        if (gameState.manualSpeed > corner.maxSafeSpeed) {
-                            alert(`EXCESSIVE SPEED IN CORNER! CRASHED AT SPEED ${gameState.manualSpeed}`);
-                            await handleCrash();
-                            clearInterval(raceInterval);
-                            return;
-                        }
-                    }
-                }
-                
-                // Check for QTE (in any lap)
-                if (!raceData.qteActive && raceData.qteCount < maxQTE * gameState.laps) {
-                    const lapProgress = raceData.progress + ((raceData.currentLap - 1) * 100);
-                    const nextQTE = (raceData.qteCount + 1) * (100 / (maxQTE + 1));
-                    if (lapProgress >= nextQTE) {
-                        triggerQTE();
-                    }
-                }
-                
-                // Check if lap complete
-                if (raceData.progress >= 100) {
-                    if (raceData.currentLap < gameState.laps) {
-                        // Start next lap
-                        raceData.currentLap++;
-                        raceData.progress = 0;
-                        alert(`LAP ${raceData.currentLap}/${gameState.laps}`);
-                    } else {
-                        // Race complete
-                        clearInterval(raceInterval);
-                        finishManualRace();
-                    }
-                }
-            }, 100);
-        }
-
         function updateCarPosition() {
+            const track = document.getElementById('trackCenter');
             const car = document.getElementById('carIcon');
-            let track;
+            const length = track.getTotalLength();
+            const point = track.getPointAtLength((raceData.progress / 100) * length);
             
-            if (gameState.circuitType === 'small') {
-                track = document.getElementById('smallTrackCenter');
-            } else if (gameState.circuitType === 'large') {
-                track = document.getElementById('largeTrackCenter');
-            } else {
-                track = document.getElementById('ovalTrackCenter');
-            }
+            car.style.left = `${point.x - 10}px`;
+            car.style.top = `${point.y - 5}px`;
             
-            const path = track;
-            const pathLength = path.getTotalLength();
-            const point = path.getPointAtLength((raceData.progress / 100) * pathLength);
-            
-            car.style.left = `${point.x - 12}px`;
-            car.style.top = `${point.y - 6}px`;
-            
-            // Calculate rotation
-            const point2 = path.getPointAtLength(((raceData.progress + 1) / 100) * pathLength);
+            const point2 = track.getPointAtLength(((raceData.progress + 1) / 100) * length);
             const angle = Math.atan2(point2.y - point.y, point2.x - point.x) * 180 / Math.PI;
             car.style.transform = `rotate(${angle}deg)`;
         }
 
-        function triggerQTE() {
-            raceData.qteActive = true;
-            raceData.qteCount++;
-            
-            const arrows = ['⬆', '⬇', '⬅', '➡'];
-            const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
-            const randomIndex = Math.floor(Math.random() * 4);
-            
-            const overlay = document.getElementById('qteOverlay');
-            const arrowDisplay = document.getElementById('qteArrow');
-            const timerBar = document.getElementById('qteTimerBar');
-            
-            overlay.classList.add('active');
-            arrowDisplay.textContent = arrows[randomIndex];
-            arrowDisplay.classList.remove('highlight');
-            
-            // Add highlight effect after a short delay
-            setTimeout(() => {
-                arrowDisplay.classList.add('highlight');
-            }, 100);
-            
-            const timeLimit = 2000;
-            let timeLeft = timeLimit;
-            timerBar.style.width = '100%';
-            
-            const expectedKey = keys[randomIndex];
-            let completed = false;
-            
-            const keyHandler = (e) => {
-                if (e.key === expectedKey && !completed) {
-                    completed = true;
-                    document.removeEventListener('keydown', keyHandler);
-                    overlay.classList.remove('active');
-                    alert('PERFECT EXECUTION!');
-                    raceData.qteActive = false;
-                    gameState.stats.perfectQTEs++;
-                } else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key) && e.key !== expectedKey && !completed) {
-                    // Wrong key pressed - crash!
-                    completed = true;
-                    document.removeEventListener('keydown', keyHandler);
-                    overlay.classList.remove('active');
-                    handleQTEFailure();
-                }
-            };
-            
-            document.addEventListener('keydown', keyHandler);
-            
-            const timerInterval = setInterval(() => {
-                timeLeft -= 50;
-                timerBar.style.width = `${(timeLeft / timeLimit) * 100}%`;
-                
-                if (timeLeft <= 0 && !completed) {
-                    clearInterval(timerInterval);
-                    document.removeEventListener('keydown', keyHandler);
-                    overlay.classList.remove('active');
-                    handleQTEFailure();
-                }
-            }, 50);
-        }
-
-        async function handleQTEFailure() {
-            // QTE failure - crash!
-            alert('QTE FAILURE! CRITICAL IMPACT!');
-            await handleCrash();
-        }
-
-        function useBoost() {
-            if (gameState.boosts > 0) {
-                gameState.boosts--;
-                if (raceData.isManualMode) {
-                    // In manual mode, boost increases speed by one level temporarily
-                    gameState.manualSpeed = Math.min(5, gameState.manualSpeed + 1);
-                    updateManualSpeedDisplay();
-                    setTimeout(() => {
-                        gameState.manualSpeed = Math.max(1, gameState.manualSpeed - 1);
-                        updateManualSpeedDisplay();
-                    }, 3000);
-                } else {
-                    raceData.speed += 50;
-                }
-                alert('BOOST ACTIVATED!');
+        function updateManualDisplay() {
+            document.getElementById('speedDisplay').textContent = gameState.manualSpeed;
+            for (let i = 1; i <= 5; i++) {
+                const bar = document.getElementById(`bar${i}`);
+                bar.classList.toggle('active', i <= gameState.manualSpeed);
             }
         }
 
-        function useNitro() {
-            if (gameState.nitros > 0) {
-                gameState.nitros--;
-                if (raceData.isManualMode) {
-                    // In manual mode, nitro increases speed by two levels temporarily
-                    gameState.manualSpeed = Math.min(5, gameState.manualSpeed + 2);
-                    updateManualSpeedDisplay();
-                    setTimeout(() => {
-                        gameState.manualSpeed = Math.max(1, gameState.manualSpeed - 2);
-                        updateManualSpeedDisplay();
-                    }, 2000);
-                } else {
-                    raceData.speed += 100;
-                }
-                alert('NITRO ACTIVATED!');
+        document.addEventListener('keydown', (e) => {
+            if (!raceActive || !raceData.isManual) return;
+            
+            if (e.key === 'ArrowUp' && gameState.manualSpeed < 5) {
+                gameState.manualSpeed++;
+                updateManualDisplay();
+            } else if (e.key === 'ArrowDown' && gameState.manualSpeed > 1) {
+                gameState.manualSpeed--;
+                updateManualDisplay();
             }
-        }
-
-        async function handleCrash() {
-            raceActive = false;
-            
-            alert('💥 CRITICAL SYSTEMS FAILURE! ALL ASSETS LOST!');
-            
-            if (gameState.currentCar !== 0) {
-                // Remove car from owned
-                const index = gameState.ownedCars.indexOf(gameState.currentCar);
-                if (index > -1) gameState.ownedCars.splice(index, 1);
-                gameState.currentCar = 0;
-            }
-            
-            gameState.money = 0;
-            gameState.stats.crashes++;
-            
-            setTimeout(() => {
-                showScreen('mainMenu');
-                showTab('garage');
-            }, 2000);
-        }
+        });
 
         function finishRace() {
             raceActive = false;
+            clearInterval(raceInterval);
             
-            // Award money (multiplied by laps)
-            const totalEarnings = raceData.earnings * gameState.laps;
-            gameState.money += totalEarnings;
-            gameState.stats.totalEarnings += totalEarnings;
-            gameState.stats.racesCompleted++;
-            gameState.stats.legacyRaces++;
+            gameState.money += raceData.earnings;
+            gameState.level = Math.floor(gameState.money / 10000) + 1;
             
-            // Update best lap time
-            if (gameState.stats.bestLapTime === 0 || raceData.lapTime < gameState.stats.bestLapTime) {
-                gameState.stats.bestLapTime = raceData.lapTime;
-            }
+            alert(`Race Complete!\nEarned: $${raceData.earnings}\nTime: ${raceData.time.toFixed(1)}s`);
             
-            // Calculate XP
-            const xpMultipliers = {
-                'easy': 1,
-                'normal': 1.5,
-                'hard': 2
-            };
-            
-            let xpGained = Math.round(50 * xpMultipliers[gameState.difficultyMode] * gameState.laps);
-            gameState.xp += xpGained;
-            
-            // Check for level up
-            if (gameState.xp >= gameState.xpNeeded) {
-                levelUp();
-            }
-            
-            alert(`RACE COMPLETED! EARNED $${totalEarnings} CREDITS AND ${xpGained} XP!`);
-            
-            setTimeout(() => {
-                showScreen('mainMenu');
-                showTab('garage');
-            }, 2000);
-        }
-
-        function finishManualRace() {
-            raceActive = false;
-            
-            // Award money (based on performance)
-            const totalEarnings = Math.max(0, raceData.earnings);
-            gameState.money += totalEarnings;
-            gameState.stats.totalEarnings += totalEarnings;
-            gameState.stats.racesCompleted++;
-            gameState.stats.manualRaces++;
-            
-            // Update best lap time
-            if (gameState.stats.bestLapTime === 0 || raceData.lapTime < gameState.stats.bestLapTime) {
-                gameState.stats.bestLapTime = raceData.lapTime;
-            }
-            
-            // Calculate XP (based on performance)
-            const xpGained = Math.round((gameState.manualSpeed * 10 + (raceData.maxSpeed / 10)) * gameState.laps);
-            gameState.xp += xpGained;
-            
-            // Check for level up
-            if (gameState.xp >= gameState.xpNeeded) {
-                levelUp();
-            }
-            
-            alert(`MANUAL CONTROL RACE COMPLETED! EARNED $${totalEarnings} CREDITS AND ${xpGained} XP!`);
-            
-            setTimeout(() => {
-                showScreen('mainMenu');
-                showTab('garage');
-            }, 2000);
-        }
-
-        function levelUp() {
-            gameState.level++;
-            gameState.xp = 0;
-            gameState.xpNeeded = Math.round(gameState.xpNeeded * 1.2);
-            
-            // Add boost on level up
-            gameState.boosts += 2;
-            gameState.nitros += 1;
-            
-            alert(`🎉 LEVEL UP! YOU ARE NOW LEVEL ${gameState.level}! +2 BOOSTS, +1 NITRO`);
+            showGarage();
         }
 
         function endRace() {
             raceActive = false;
-            showScreen('mainMenu');
-            showTab('garage');
+            clearInterval(raceInterval);
+            showGarage();
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
         }
     </script>
 </body>
